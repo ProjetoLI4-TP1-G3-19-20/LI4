@@ -1,0 +1,6 @@
+Objetivos:
+-O stor quer algo como a marcação de visitas num hospital, basicamente existir na BD 
+uma tabela que guarde as vagas disponiveis e também as marcações feitas, até antes de a visita ser realizada.
+-Estas vagas e marcações vão variar dependendo do departamento da instituição, ou seja as vagas disponiveis 
+para visitar um departamento financeiro estarão disponiveis por exemplo só na parte da manhã das 10:00 ao 12:00
+e apenas podem existir 2 marcações nesse horário. 
