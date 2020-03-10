@@ -7,7 +7,7 @@ namespace Version
     {
         static void Main(string[] args)
         {
-            string cs = @"server=localhost;user id=root;database=trabalho; password=ZUhiza73#";
+            string cs = @"server=localhost;user id=root;database=trabalho; password=12345#";
 
             var bd = new MySqlConnection(cs);
             bd.Open();
