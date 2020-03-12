@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import NavBar from "./components/banner";
 import LoginForm from "./components/loginForm";
-import userLatNavBar from "./components/userLatNavBar";
-import userRegForm from "./components/userRegForm";
+import UserLatNavBar from "./components/userLatNavBar";
+import UserRegForm from "./components/userRegForm";
 
 class Teste extends Component {
   render() {
@@ -13,11 +13,12 @@ class Teste extends Component {
     if (dir == "/regUser") num = 2;
     switch (num) {
       case 2: {
+        console.log("Rendering User Registration Form");
         return (
           <React.Fragment>
             <NavBar />
             <main className="container">
-              <userRegForm />
+              <UserRegForm />
             </main>
           </React.Fragment>
         );
@@ -27,7 +28,7 @@ class Teste extends Component {
           <React.Fragment>
             <NavBar />
             <main className="container">
-              <userLatNavBar />
+              <UserLatNavBar />
             </main>
           </React.Fragment>
         );

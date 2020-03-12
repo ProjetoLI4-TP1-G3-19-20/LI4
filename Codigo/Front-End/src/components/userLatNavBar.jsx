@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const userLatNavBar = () => {
+const UserLatNavBar = () => {
   return (
     <span class="border m-4">
       <ul class="nav flex-column">
@@ -14,4 +14,4 @@ const userLatNavBar = () => {
   );
 };
 
-export default userLatNavBar;
+export default UserLatNavBar;
