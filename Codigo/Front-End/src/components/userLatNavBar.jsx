@@ -1,32 +1,17 @@
 import React, { Component } from "react";
 
-function userLatNavBar() {
+const userLatNavBar = () => {
   return (
-    <span class="border">
+    <span class="border m-4">
       <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">
-            Active
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Link
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Link
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">
-            Disabled
-          </a>
-        </li>
+        <span class="border m-4">
+          <li> Teste1 </li>
+          <li> Teste2 </li>
+          <li> Teste3 </li>
+        </span>
       </ul>
     </span>
   );
-}
+};
 
 export default userLatNavBar;

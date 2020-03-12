@@ -9,7 +9,7 @@ const LoginForm = () => {
           <label for="inputEmail">E-mail</label>
           <input
             type="email"
-            className="form-control"
+            class="form-control"
             id="inputEmail"
             placeholder="Insira aqui o seu e-mail"
           />
@@ -34,14 +34,14 @@ const LoginForm = () => {
             Manter-me logado
           </label>
         </div>
-        <a className="btn btn-dark btn-link" href="/main">
+        <a className="btn btn-dark btn-link m-4" href="/main">
           Login
         </a>
       </form>
       <small>
         <label className="form-check-label" for="defaultCheck1">
           Não tem conta? Pode registar-se
-          <a href="about:blank"> aqui</a>!
+          <a href="/regUser"> aqui</a>!
         </label>
       </small>
     </div>
