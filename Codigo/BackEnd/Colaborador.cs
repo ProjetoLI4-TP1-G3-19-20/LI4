@@ -11,6 +11,7 @@ namespace LI4
 
         public Colaborador()
         {
+            super();
             this.departamento = "";
         }
 
@@ -32,6 +33,31 @@ namespace LI4
         public void setDepartamento(String departamento)
         {
             this.departamento = departamento;
+        }
+
+        public override getNome()
+        {
+          return this.nome;
+        }
+
+        public override getEmail()
+        {
+          return this.email;
+        }
+
+        public override getPassword()
+        {
+          return this.password;
+        }
+
+        public override getTelefone()
+        {
+          return this.telefone;
+        }
+
+        public override getId_utilizador()
+        {
+          return this.id_utilizador;
         }
     }
 }

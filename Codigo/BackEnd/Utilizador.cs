@@ -7,13 +7,13 @@ namespace LI4
     public abstract class Utilizador
     {
 
-        private String nome;
-        private String email;
-        private String password;
-        private String telefone;
-        private int id_utilizador;
+        private abstract String nome;
+        private abstract String email;
+        private abstract String password;
+        private abstract String telefone;
+        private abstract int id_utilizador;
 
-        public Utilizador()
+        protected Utilizador()
         {
             this.nome = "";
             this.email = "";
@@ -22,7 +22,7 @@ namespace LI4
             this.id_utilizador = -1;
         }
 
-        public Utilizador(String nome, String email, String password, String telefone, int id_utilizador)
+        protected Utilizador(String nome, String email, String password, String telefone, int id_utilizador)
         {
             this.nome = nome;
             this.email = email;
@@ -31,7 +31,7 @@ namespace LI4
             this.id_utilizador = id_utilizador;
         }
 
-        public Utilizador(Utilizador u)
+        protected Utilizador(Utilizador u)
         {
             this.nome = u.getNome();
             this.email = u.getEmail();
@@ -40,54 +40,16 @@ namespace LI4
             this.id_utilizador = u.getId_utilizador();
         }
 
-        public String getNome()
-        {
-            return nome;
-        }
+        public abstract String getNome();
+        public abstract String getEmail();
+        public abstract String getPassword();
+        public abstract String getTelefone();
+        public abstract int getId_utilizador();
 
-        public void setNome(String nome)
-        {
-            this.nome = nome;
-        }
-
-        public String getEmail()
-        {
-            return email;
-        }
-
-        public void setEmail(String email)
-        {
-            this.email = email;
-        }
-
-        public String getPassword()
-        {
-            return password;
-        }
-
-        public void setPassword(String password)
-        {
-            this.password = password;
-        }
-
-        public String getTelefone()
-        {
-            return telefone;
-        }
-
-        public void setTelefone(String telefone)
-        {
-            this.telefone = telefone;
-        }
-
-        public int getId_utilizador()
-        {
-            return id_utilizador;
-        }
-
-        public void setId_utilizador(int id_utilizador)
-        {
-            this.id_utilizador = id_utilizador;
-        }
+        public abstract void setNome(String nome);
+        public abstract void setEmail(String email);
+        public abstract void setPassword(String password);
+        public abstract void setTelefone(String telefone);
+        public abstract void setId_utilizador(int id);
     }
 }
