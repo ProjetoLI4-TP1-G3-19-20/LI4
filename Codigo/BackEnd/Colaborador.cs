@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LI4
 {
-    public class Colaborador
+    public class Colaborador : Utilizador
     {
 
         private String departamento;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Visita;
+using PedidoVisita;
 
 namespace LI4
 {
@@ -9,23 +11,31 @@ namespace LI4
 
         private String morada;
         private String cod_postal;
+        private List<PedidoVisita> pedidosVisita;
+        private List<Visita> visitas;
 
         public Visitante()
         {
             this.morada = "";
             this.cod_postal = "";
+            this.visitas = new List<Visita>;
+            this.pedidosVisita = new List<PedidoVisita>;
         }
 
-        public Visitante(String morada, String cod_postal)
+        public Visitante(String morada, String cod_postal, List<Visita> visitas, List<PedidoVisita> pedidosVisita)
         {
             this.morada = morada;
             this.cod_postal = cod_postal;
+            this.visitas = visitas;
+            this.pedidosVisita = pedidosVisita
         }
 
         public Visitante(Visitante v)
         {
             this.morada = v.getMorada();
             this.cod_postal = v.getCod_postal();
+            this.visitas = v.getVisitas();
+            this.pedidosVisita = v.getPedidosVisita();
         }
 
         public String getMorada()
@@ -47,5 +57,26 @@ namespace LI4
         {
             this.cod_postal = cod_postal;
         }
+
+        public List<PedidoVisita> getPedidosVisita()
+        {
+          return pedidosVisita;
+        }
+
+        public void setPedidosVisita(List<PedidoVisita> pv)
+        {
+          this.pedidosVisita = pv;
+        }
+
+        public List<Visita> getVisitas()
+        {
+          return visitas;
+        }
+
+        public void setPedidosVisita(List<Visita> v)
+        {
+          this.visitas = v;
+        }
+
     }
 }

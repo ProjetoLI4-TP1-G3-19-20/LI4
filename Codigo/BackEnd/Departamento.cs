@@ -6,45 +6,29 @@ namespace LI4
 {
     public class Departamento
     {
-        private String nome;
-        private int id;
+        public String nome;
+        public int id;
+        private Dictionary<int, Vaga> horas_disponiveis;
 
         public Departamento()
         {
             this.nome = "";
             this.id = -1;
+            this.horas_disponiviveis;
         }
 
-        public Departamento(String nome, int id)
+        public Departamento(String nome, int id, Dictionary<int, Vaga> horas_disponiveis)
         {
             this.nome = nome;
             this.id = id;
+            this.horas_disponiveis = horas_disponiveis;
         }
 
         public Departamento(Departamento departamento)
         {
-            this.nome = departamento.getNome();
-            this.id = departamento.getId();
-        }
-
-        public String getNome()
-        {
-            return nome;
-        }
-
-        public void setNome(String nome)
-        {
-            this.nome = nome;
-        }
-
-        public int getId()
-        {
-            return id;
-        }
-
-        public void setId(int id)
-        {
-            this.id = id;
+            this.nome = departamento.nome();
+            this.id = departamento.id();
+            this.horas_disponiveis = departamento.horas_disponiveis;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LI4
 {
-    public class Utilizador
+    public abstract class Utilizador
     {
 
         private String nome;

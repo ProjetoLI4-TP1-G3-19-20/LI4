@@ -11,6 +11,7 @@ namespace LI4
         private String comentario;
         private String visitado;
         private int departamento;
+        private Visitante visitante;
 
         public PedidoVisita()
         {
@@ -18,14 +19,16 @@ namespace LI4
             this.comentario = "";
             this.visitado = "";
             this.departamento = -1;
+            this.visitante = new Visitante();
         }
 
-        public PedidoVisita(DateTime data, String comentario, String visitado, int departamento)
+        public PedidoVisita(DateTime data, String comentario, String visitado, int departamento, Visitante v)
         {
             this.data = data;
             this.comentario = comentario;
             this.visitado = visitado;
             this.departamento = departamento;
+            this.visitante = v;
         }
 
         public PedidoVisita(PedidoVisita pv)
@@ -34,6 +37,7 @@ namespace LI4
             this.comentario = pv.getComentario();
             this.visitado = pv.getVisitado();
             this.departamento = pv.getDepartamento();
+            this.visitante = pv.getVisitante();
         }
 
 
@@ -75,6 +79,16 @@ namespace LI4
         public void setDepartamento(int departamento)
         {
             this.departamento = departamento;
+        }
+
+        public Visitante getVisitante()
+        {
+          return visitante;
+        }
+
+        public void setVisitante(Visitante v)
+        {
+          this.visitante = visitante;
         }
     }
 }

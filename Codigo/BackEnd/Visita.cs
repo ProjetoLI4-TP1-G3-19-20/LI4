@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Visitante;
 
 namespace LI4
 {
@@ -13,7 +14,7 @@ namespace LI4
         private int estado;
         private DateTime data_inicio;
         private DateTime data_saida;
-        private String attribute;
+        private Visitante visitante;
 
 
         public Visita()
@@ -24,11 +25,12 @@ namespace LI4
             this.estado = -1;
             this.data_inicio = new DateTime();
             this.data_saida = new DateTime();
-            this.attribute = null;
+            this.visitante = new Visitante();
+            this.visitado = "";
         }
 
 
-        public Visita(DateTime data, String comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, String attribute)
+        public Visita(DateTime data, String comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, String attribute, Visitante v, String vis)
         {
             this.data = data;
             this.comentario = comentario;
@@ -36,7 +38,8 @@ namespace LI4
             this.estado = estado;
             this.data_inicio = data_inicio;
             this.data_saida = data_saida;
-            this.attribute = attribute;
+            this.visitante = v;
+            this.visitado = vis;
         }
 
         public Visita(Visita v)
@@ -47,7 +50,8 @@ namespace LI4
             this.estado = v.getEstado();
             this.data_inicio = v.getData_inicio();
             this.data_saida = v.getData_saida();
-            this.attribute = v.getAttribute();
+            this.visitante = v.getVisitante();
+            this.visitado = v.getVisitado();
         }
 
 
@@ -111,14 +115,24 @@ namespace LI4
             this.data_saida = data_saida;
         }
 
-        public String getAttribute()
+        public String getVisitado()
         {
-            return attribute;
+            return visitado;
         }
 
-        public void setAttribute(String attribute)
+        public void setVisitado(String visitado)
         {
-            this.attribute = attribute;
+            this.visitado = visitado;
+        }
+
+        public Visitante getVisitante()
+        {
+          return visitante;
+        }
+
+        public void setVisitante(Visitante v)
+        {
+          this.visitante = visitante;
         }
     }
 }

@@ -8,23 +8,27 @@ namespace LI4
     {
         private String nome;
         private String email;
+        private List<HoraOcupada> horasOcupadas;
 
         public PessoaDeInteresse()
         {
             this.nome = "";
             this.email = "";
+            this.horasOcupadas = new List<horasOcupadas>;
         }
 
-        public PessoaDeInteresse(String nome, String email)
+        public PessoaDeInteresse(String nome, String email, List<HoraOcupada> horasOcupadas)
         {
             this.nome = nome;
             this.email = email;
+            this.horasOcupadas = horasOcupadas;
         }
 
         public PessoaDeInteresse(PessoaDeInteresse pessoa)
         {
             this.nome = pessoa.getNome();
             this.email = pessoa.getEmail();
+            this.horasOcupadas = pessoa.getHorasOcupadas();
         }
 
         public String getNome()
@@ -45,6 +49,16 @@ namespace LI4
         public void setEmail(String email)
         {
             this.email = email;
+        }
+
+        public List<HoraOcupada> getHorasOcupadas()
+        {
+            return horasOcupadas;
+        }
+
+        public void setHorasOcupadas(List<HoraOcupada> horasOcupadas)
+        {
+            this.horasOcupadas = horasOcupadas;
         }
     }
 }

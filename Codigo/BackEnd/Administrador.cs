@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LI4
 {
-    public class Administrador
+    public class Administrador : Utilizador
     {
 
         private int departamento;

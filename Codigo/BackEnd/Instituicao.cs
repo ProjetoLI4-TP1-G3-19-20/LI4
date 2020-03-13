@@ -9,6 +9,11 @@ namespace LI4
         private string nome;
         private ArrayList contactos;
         private String localizacao;
+        private Dictionary<string, Colaborador> colaboradores;
+        private Dictionary<string, Administrador> administradores;
+        private Dictionary<int, Departamento> departamentos;
+        private Dictionary<string, PessoaDeInteresse> pessoasDeInteresse;
+
 
         public Instituicao()
         {
