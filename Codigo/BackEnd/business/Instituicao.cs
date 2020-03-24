@@ -6,6 +6,7 @@ namespace LI4
     public class Instituicao
     {
         private int cod_instituicao;
+        private string email;
         private string nome;
         private ArrayList contactos;
         private String localizacao;
@@ -19,6 +20,7 @@ namespace LI4
         {
             cod_instituicao = -1;
             nome = "";
+            email = "";
             contactos = new ArrayList();
             localizacao = "";
             colaboradores = new Dictionary<string, Colaborador>();
@@ -27,10 +29,11 @@ namespace LI4
             pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>();
         }
 
-        public Instituicao(int cod_instituicao, string nome, ArrayList contactos, string localizacao, Dictionary<int, Departamento> departamentos, Dictionary<string, PessoaDeInteresse> pessoasDeInteresse, Dictionary<string, Administrador> administradores, Dictionary<string, Colaborador> colaboradores)
+        public Instituicao(int cod_instituicao, string nome, string email, ArrayList contactos, string localizacao, Dictionary<int, Departamento> departamentos, Dictionary<string, PessoaDeInteresse> pessoasDeInteresse, Dictionary<string, Administrador> administradores, Dictionary<string, Colaborador> colaboradores)
         {
             this.cod_instituicao = cod_instituicao;
             this.nome = nome;
+            this.email = email;
             this.contactos = new ArrayList(contactos);
             this.localizacao = localizacao;
             this.colaboradores = new Dictionary<string, Colaborador>(colaboradores);
@@ -43,6 +46,7 @@ namespace LI4
         {
             this.cod_instituicao = i.getCod_instituicao();
             this.nome = i.getNome();
+            this.email = i.getEmail();
             this.contactos = new ArrayList(i.getContactos());
             this.localizacao = i.getLocalizacao();
             this.colaboradores = i.getColaboradores();
@@ -60,6 +64,14 @@ namespace LI4
         {
             ArrayList r = new ArrayList(this.contactos);
             return r;
+        }
+
+        private string getEmail(){
+          return this.email;
+        }
+
+        private void setEmail(string mail){
+          this.email = mail;
         }
 
         private string getNome()
