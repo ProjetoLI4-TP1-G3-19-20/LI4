@@ -41,27 +41,32 @@ namespace LI4
             this.pedidosVisita = v.getPedidosVisita();
         }
 
-        public override getNome()
+        public override string getNome()
         {
           return this.nome;
         }
 
-        public override getEmail()
+        public override string getEmail()
         {
           return this.email;
         }
 
-        public override getTelefone()
+        public override string getTelefone()
         {
           return this.telefone;
         }
 
-        public override getPassword()
+        public override string getPassword()
         {
           return this.password;
         }
 
-        public override getId_utilizador()
+        public override int getId_utilizador()
+        {
+          return this.id_utilizador;
+        }
+
+        public override void setId_utilizador(int i)
         {
           return this.id_utilizador;
         }

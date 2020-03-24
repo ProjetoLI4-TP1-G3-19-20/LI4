@@ -26,7 +26,7 @@ using namespace BackEnd.Data{
         mc.Parameters.AddWithValue("@local", inst.getLocalizacao());
         mc.ExecuteNonQuery();
         foreach (string contacto in inst.getContactos()){
-          query = "INSERT INTO Contactos (id_inst, telemovel) VALUES (@id, @tele)";
+          query = "INSERT INTO Contacto (id_inst, telemovel) VALUES (@id, @tele)";
           MySqlCommand mc1 = new MySqlCommand(query, msc);
           mc1.Parameters.AddWithValue("@id", inst.getCod_instituicao());
           mc1.Parameters.AddWithValue("@tele", contacto);
@@ -101,7 +101,7 @@ using namespace BackEnd.Data{
         mc.Parameters.AddWithValue("@local", inst.getLocalizacao());
         mc.ExecuteNonQuery();
         foreach (string contacto in inst.getContactos()){
-          query = "UPDATE Contactos SET telemovel=@tele WHERE id_inst=@id, @tele";
+          query = "UPDATE Contacto SET telemovel=@tele WHERE id_inst=@id, @tele";
           MySqlCommand mc1 = new MySqlCommand(query, msc);
           mc1.Parameters.AddWithValue("@id", inst.getCod_instituicao());
           mc1.Parameters.AddWithValue("@tele", contacto);
@@ -132,7 +132,7 @@ using namespace BackEnd.Data{
         while(mr.Read()){
           insts.Add(this.Get(mr.GetInt32("id_inst")));
         }
-        
+
       }
       catch(Exception e){
         MessageBox.Show(e.ToString());

@@ -7,14 +7,15 @@ namespace LI4
 {
     public class Visita
     {
-
         private DateTime data;
-        private String comentario;
+        private string comentario;
         private bool aceite;
         private int estado;
         private DateTime data_inicio;
         private DateTime data_saida;
         private Visitante visitante;
+        private string avaliacao;
+        private string comentarios;
 
 
         public Visita()
@@ -27,10 +28,12 @@ namespace LI4
             this.data_saida = new DateTime();
             this.visitante = new Visitante();
             this.visitado = "";
+            this.comentarios = "";
+            this.avaliacao = "";
         }
 
 
-        public Visita(DateTime data, String comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, String attribute, Visitante v, String vis)
+        public Visita(DateTime data, string comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, string attribute, Visitante v, string vis, string coment, string aval)
         {
             this.data = data;
             this.comentario = comentario;
@@ -40,6 +43,8 @@ namespace LI4
             this.data_saida = data_saida;
             this.visitante = v;
             this.visitado = vis;
+            this.comentarios = coment;
+            this.avaliacao = aval;
         }
 
         public Visita(Visita v)
@@ -52,6 +57,28 @@ namespace LI4
             this.data_saida = v.getData_saida();
             this.visitante = v.getVisitante();
             this.visitado = v.getVisitado();
+            this.avaliacao = v.getAvaliacao();
+            this.comentarios = v.getComentario();
+        }
+
+        public string getAvaliacao()
+        {
+          return this.avaliacao;
+        }
+
+        public string getComentarios()
+        {
+          return this.comentarios
+        }
+
+        public void setComentario(string c)
+        {
+          this.comentarios = c;
+        }
+
+        public void setAvaliacao(string c)
+        {
+          this.avaliacao = c;
         }
 
 
@@ -65,12 +92,12 @@ namespace LI4
             this.data = data;
         }
 
-        public String getComentario()
+        public string getComentario()
         {
             return comentario;
         }
 
-        public void setComentario(String comentario)
+        public void setComentario(string comentario)
         {
             this.comentario = comentario;
         }
@@ -115,12 +142,12 @@ namespace LI4
             this.data_saida = data_saida;
         }
 
-        public String getVisitado()
+        public string getVisitado()
         {
             return visitado;
         }
 
-        public void setVisitado(String visitado)
+        public void setVisitado(string visitado)
         {
             this.visitado = visitado;
         }
