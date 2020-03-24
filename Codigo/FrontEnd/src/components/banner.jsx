@@ -1,17 +1,20 @@
-import React, { Component } from "react";
+import React from "react";
 import "./helper.css";
+import { Component } from "react";
 
 //Stateless Functional Component
 
-const NavBar = () => {
-  return (
-    <div className="jumbotron jumbotron-fluid">
-      <div className="container">
-        <h1 className="display-7">VisitUM20</h1>
-        <p className="lead">A facilitar visitas desde 2020</p>
+class Banner extends Component {
+  render() {
+    return (
+      <div className="jumbotron jumbotron-fluid">
+        <div className="container">
+          <h1 className="display-7">VisitUM20</h1>
+          <p className="lead">A facilitar visitas desde 2020</p>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
-export default NavBar;
+export default Banner;

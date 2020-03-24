@@ -1,45 +1,45 @@
 import React, { Component } from "react";
 
-const UserRegForm = () => {
-  return (
-    <div class="position-relative m-4">
-      <border>
+class UserRegForm extends Component {
+  render() {
+    return (
+      <div className="position-relative m-4">
         <form>
-          <div class="form-group">
-            <label for="exampleInputUsername">Nome de Utilizador</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputUsername">Nome de Utilizador</label>
             <input
               type="username"
-              class="form-control"
+              className="form-control"
               id="exampleInputUsername"
             />
           </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">E-mail</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputEmail1">E-mail</label>
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               Nunca partilharemos o seu e-mail com ninguém.
             </small>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputPassword1">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="exampleInputPassword1"
             />
           </div>
-          <button type="Registar" class="btn btn-primary">
+          <button type="Registar" className="btn btn-primary">
             Submit
           </button>
         </form>
-      </border>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 export default UserRegForm;
