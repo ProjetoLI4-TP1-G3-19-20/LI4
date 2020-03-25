@@ -13,7 +13,7 @@ namespace LI4
         private int estado;
         private DateTime data_inicio;
         private DateTime data_saida;
-        private Visitante visitante;
+        private int visitante;
         private string avaliacao;
         private string comentarios;
 
@@ -26,14 +26,14 @@ namespace LI4
             this.estado = -1;
             this.data_inicio = new DateTime();
             this.data_saida = new DateTime();
-            this.visitante = new Visitante();
+            this.visitante = -1;
             this.visitado = "";
             this.comentarios = "";
             this.avaliacao = "";
         }
 
 
-        public Visita(DateTime data, string comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, string attribute, Visitante v, string vis, string coment, string aval)
+        public Visita(DateTime data, string comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, string attribute, int v, string vis, string coment, string aval)
         {
             this.data = data;
             this.comentario = comentario;
@@ -152,12 +152,12 @@ namespace LI4
             this.visitado = visitado;
         }
 
-        public Visitante getVisitante()
+        public int getVisitante()
         {
           return visitante;
         }
 
-        public void setVisitante(Visitante v)
+        public void setVisitante(int v)
         {
           this.visitante = visitante;
         }

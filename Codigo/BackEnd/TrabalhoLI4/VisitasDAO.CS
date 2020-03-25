@@ -12,7 +12,7 @@ public class VisitasDAO{
       Connection = con;
     }
 
-    public void Put(Visitas visit, int id_inst)
+    public void Put(Visita visit, int id_inst)
     {
       MySqlConnection msc = new MySqlConnection(Connection);
 
@@ -21,12 +21,12 @@ public class VisitasDAO{
         string query = "INSERT INTO Visitas (idInstituicao, idUser, dataInicio, dataSaida, estado, avaliacao, comentarios) VALUES (@idi, @idu, @di, @ds, @estado, @aval, @coment)";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@idi", id_inst);
-        mc.Parameters.AddWithValue("@idu", visit.getVisitante().getId_utilizador());
+        mc.Parameters.AddWithValue("@idu", visit.getVisitante());
         mc.Parameters.AddWithValue("@di", visit.getData_inicio());
         mc.Parameters.AddWithValue("@ds", visit.getData_saida());
         mc.Parameters.AddWithValue("@estado", visit.getEstado());
         mc.Parameters.AddWithValue("@aval", visit.getAva());
-        mc.Parameters.AddWithValue("@coment", visit.getCod_postal());
+        mc.Parameters.AddWithValue("@coment", visit.getComentario());
         mc.ExecuteNonQuery();
       }
       catch(Exception e){
@@ -44,22 +44,25 @@ public class VisitasDAO{
 
     public Visitas Get(int id_visit, int id_inst, DateTime data_inicio)
     {
-      Visitas visit = new Visitas();
+      Visita visit = new Visita();
       MySqlConnection msc = new MySqlConnection(Connection);
       try{
         msc.Open();
-        string query = "SELECT * FROM Visitas WHERE id=@id";
+        string query = "SELECT * FROM Visitas WHERE idInstituicao=@id_inst, idUser=@id_user, dataInicio=@di";
         MySqlCommand mc = new MySqlCommand(query, msc);
-        mc.Parameters.AddWithValue("@id", id);
+        mc.Parameters.AddWithValue("@id_inst", id_inst);
+        mc.Parameters.AddWithValue("@id_user", id_visit);
+        mc.Parameters.AddWithValue("@di", data_inicio);
         MySqlDataReader mr = mc.ExecuteReader();
 
         if(mr.Read()){
-          visit.setId_utilizador(id);
-          visit.SetTelemovel(mr.GetString("Telemóvel"));
-          visit.SetNome(mr.GetString("Nome"));
-          visit.SetEmail(mr.GetString("e-mail"));
-          visit.SetMorada(mr.GetString("morada"));
-          visit.setCod_postal(mr.GetString("cod_postal"));
+          visit.setVisitante(id_visit);
+          visit.setData_inicio(data_inicio);
+          visit.setData(data_inicio);
+          visit.setData_fim(mr.GetString("dataSaida"));
+          visit.setComentario(mr.GetString("comentarios"));
+          visit.setAvaliacao(mr.GetString("avaliacao"));
+          visit.setEstado(mr.GetInt32("estado"));
 
           mr.Close();
         }
@@ -78,7 +81,7 @@ public class VisitasDAO{
       return visit;
     }
 
-    public void Update(Visitas visit){
+    public void Update(Visita visit){
       MySqlConnection msc = new MySqlConnection(Connection);
 
       try{
@@ -86,12 +89,12 @@ public class VisitasDAO{
         string query = "UPDATE Visitas SET Nome=@nome, e-mail=@mail, morada=@morada, Telemóvel=@tele, cod_postal=@cp WHERE id=@id";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@idi", id_inst);
-        mc.Parameters.AddWithValue("@idu", visit.getVisitante().getId_utilizador());
+        mc.Parameters.AddWithValue("@idu", visit.getVisitante());
         mc.Parameters.AddWithValue("@di", visit.getData_inicio());
         mc.Parameters.AddWithValue("@ds", visit.getData_saida());
         mc.Parameters.AddWithValue("@estado", visit.getEstado());
         mc.Parameters.AddWithValue("@aval", visit.getAva());
-        mc.Parameters.AddWithValue("@coment", visit.getCod_postal());
+        mc.Parameters.AddWithValue("@coment", visit.getComentario());
         mc.ExecuteNonQuery();
       }
       catch(Exception e){
@@ -106,8 +109,39 @@ public class VisitasDAO{
         }
       }}
 
-    public ICollection<Visitas> GetAll(int id_inst){
-      ICollection<Visitas> visits = new HashSet<Visitas>();
+    public ICollection<Visita> GetAllByUser(int id_user){
+      ICollection<Visita> visits = new HashSet<Visita>();
+      MySqlConnection msc = new MySqlConnection(Connection);
+
+      try{
+        msc.Open();
+        string query = "SELECT * FROM Visitas WHERE idUser=@id";
+        MySqlCommand mc = new MySqlCommand(query, msc);
+        mc.Parameters.AddWithValue("@id", id_user);
+        MySqlDataReader mr = mc.ExecuteReader();
+        while(mr.Read()){
+          int id = mr.GetInt32("id");
+          visits.Add(this.Get(id));
+        }
+
+      }
+      catch(Exception e){
+        Console.WriteLine(e.ToString());
+      }
+      finally{
+        try{
+          msc.Close();
+        }
+        catch(Exception e){
+          Console.WriteLine(e.ToString());
+        }
+      }
+        return visits;
+    }
+    }
+
+    public ICollection<Visita> GetAll(int id_inst){
+      ICollection<Visita> visits = new HashSet<Visita>();
       MySqlConnection msc = new MySqlConnection(Connection);
 
       try{
