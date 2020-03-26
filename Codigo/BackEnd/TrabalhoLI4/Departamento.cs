@@ -8,16 +8,16 @@ namespace LI4
     {
         private String nome;
         private int id;
-        private Dictionary<int, Vaga> horas_disponiveis;
+        private List<Vaga> horas_disponiveis;
 
         public Departamento()
         {
             this.nome = "";
             this.id = -1;
-            this.horas_disponiveis = new Dictionary<int, Vaga>();
+            this.horas_disponiveis = new List<Vaga>();
         }
 
-        public Departamento(String nome, int id, Dictionary<int, Vaga> horas_disponiveis)
+        public Departamento(String nome, int id, List<Vaga> horas_disponiveis)
         {
             this.nome = nome;
             this.id = id;
@@ -54,14 +54,14 @@ namespace LI4
         }
 
 
-        public Dictionary<int, Vaga> GetHorasDisponiveis()
+        public List<Vaga> GetHorasDisponiveis()
         {
-            return new Dictionary<int, Vaga>(this.horas_disponiveis); ;
+            return new List<Vaga>(this.horas_disponiveis); ;
         }
 
-        public void SetHorasDisponiveis(Dictionary<int, Vaga> horas)
+        public void SetHorasDisponiveis(List<Vaga> horas)
         {
-            this.horas_disponiveis = new Dictionary<int, Vaga>(horas);
+            this.horas_disponiveis = new List<Vaga>(horas);
         }
 
     }

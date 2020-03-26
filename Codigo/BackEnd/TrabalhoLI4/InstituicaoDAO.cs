@@ -64,14 +64,48 @@ public class InstituicaoDAO{
 
           query = "SELECT telemovel FROM Contacto WHERE id_inst=@id";
           MySqlCommand mc1 = new MySqlCommand(query, msc);
-          mc.Parameters.AddWithValue("@id", id_inst);
+          mc1.Parameters.AddWithValue("@id", id_inst);
           MySqlDataReader mr1 = mc1.ExecuteReader();
 
           ArrayList conts = new ArrayList();
 
           while(mr1.Read()){
             conts.Add(mr1.GetString("telemovel"));
-                }
+          }
+          inst.SetContactos(conts);
+          mr1.Close();
+
+          query = "SELECT * FROM PessoaDeInteresse WHERE idInst=@id";
+          MySqlCommand mmc2 = new MySqlCommand(query, msc);
+          mc2.Parameters.AddWithValue("@id", id_inst);
+          MySqlDataReader mr2 = mmc2.ExecuteReader();
+
+          Dictionary<string, PessoaDeInteresse> pis = new Dictionary<string, PessoaDeInteresse>();
+
+          while(mr2.Read()){
+            PessoaDeInteresse pi = new PessoaDeInteresse();
+            string nome_pi = mr2.GetString("nome");
+            pi.setNome(nome_pi);
+            pi.setEmail(mr2.GetString("email"));
+            List<HoraOcupada> hos = new List<HoraOcupada>;
+
+            query = "SELECT * FROM HorariosOcupados WHERE nome=@n"
+            MySqlCommand mc3 = new MySqlCommand(query, msc);
+            mc3.Parameters.AddWithValue("@n", nome_pi);
+            MySqlDataReader mr3 = mc3.ExecuteReader();
+
+            while(mr3.Read()){
+              HoraOcupada ho = new HoraOcupada();
+              ho.setHora_inicio(mr3.GetDateTime("data_inicio"));
+              ho.setHora_fim(mr3.GetDateTime("data_fim"));
+              hos.Add(ho);
+            }
+            mr3.Close();
+            pi.setHorasOcupadas(hos);
+            pis.add(nome_pi, pi);
+          }
+          mr1.Close();
+          inst.SetPessoaDeInteresse(pis);
         }
       }
       catch(Exception e){
@@ -132,7 +166,7 @@ public class InstituicaoDAO{
         while(mr.Read()){
           insts.Add(this.Get(mr.GetInt32("id_inst")));
         }
-        
+
       }
       catch(Exception e){
         Console.WriteLine(e.ToString());
