@@ -25,7 +25,7 @@ public class AdministradorDAO
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@tele", ad.GetTelefone());
             mc.Parameters.AddWithValue("@nome", ad.GetNome());
-            mc.Parameters.AddWithValue("@email", ad.GetEmail());
+            mc.Parameters.AddWithValue("@mail", ad.GetEmail());
             mc.Parameters.AddWithValue("@id_inst", id_inst);
             mc.Parameters.AddWithValue("@admin", admin);
             mc.Parameters.AddWithValue("@id", ad.GetId_utilizador());
@@ -48,27 +48,38 @@ public class AdministradorDAO
         }
     }
 
-    public Administrador Get(int id_inst)
+    public Administrador Get(int id_inst, int id_col)
     {
         Administrador ad = new Administrador();
         MySqlConnection msc = new MySqlConnection(connection);
         try
         {
             msc.Open();
-            string query = "SELECT * FROM Departamento d, Trabalhadores t WHERE t.id_inst=@id and d.id_inst=@id";
+            string query = "SELECT * FROM trabalhadores WHERE id_inst=@id and id_col = @id2 ";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@id", id_inst);
+            mc.Parameters.AddWithValue("@id2", id_col);
             MySqlDataReader mr = mc.ExecuteReader();
 
             if (mr.Read())
             {
-                ad.SetTelefone(mr.GetString("t.Telemovel"));
-                ad.SetNome(mr.GetString("t.Nome"));
-                ad.SetEmail(mr.GetString("t.email"));
-                ad.SetId_utilizador(mr.GetInt32("t.id"));
-                ad.SetDepartamento(mr.GetInt32("d.id"));
-
+                ad.SetTelefone(mr.GetString("Telemovel"));
+                ad.SetNome(mr.GetString("Nome"));
+                ad.SetEmail(mr.GetString("email"));
+                ad.SetId_utilizador(mr.GetInt32("id_col"));
                 mr.Close();
+
+                string query2 = "SELECT * FROM departamentos WHERE id_inst=`id_inst` ";
+                MySqlCommand mc2 = new MySqlCommand(query2, msc);
+                MySqlDataReader mr2 = mc2.ExecuteReader();
+
+                if (mr2.Read())
+                {
+
+                    ad.SetDepartamento(mr2.GetInt32("id"));
+
+                    mr2.Close();
+                }
             }
         }
         catch (Exception e)

@@ -62,9 +62,8 @@ public class InstituicaoDAO{
 
           mr.Close();
 
-          query = "SELECT telemovel FROM Contacto WHERE id_inst=@id";
+          query = "SELECT telemovel FROM Contacto WHERE id_inst = + `id_inst`";
           MySqlCommand mc1 = new MySqlCommand(query, msc);
-          mc.Parameters.AddWithValue("@id", id_inst);
           MySqlDataReader mr1 = mc1.ExecuteReader();
 
           ArrayList conts = new ArrayList();

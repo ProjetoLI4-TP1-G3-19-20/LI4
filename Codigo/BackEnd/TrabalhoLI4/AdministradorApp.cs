@@ -12,16 +12,31 @@ namespace LI4
         public AdministradorApp()
         {
             this.departamento = -1;
+            this.nome = "";
+            this.email = "";
+            this.telefone = "";
+            this.password = "";
+            this.id_utilizador = -2;
         }
 
-        public AdministradorApp(int dep)
+        public AdministradorApp(int dep, int id, string nome, string email, string telefone, string pass)
         {
             this.departamento = dep;
+            this.nome = nome;
+            this.email = email;
+            this.telefone = telefone;
+            this.password = pass;
+            this.id_utilizador = id;
         }
 
         public AdministradorApp(Administrador a)
         {
             this.departamento = a.GetDepartamento();
+            this.nome = a.GetNome();
+            this.email = a.GetEmail();
+            this.telefone = a.GetTelefone();
+            this.password = a.GetPassword();
+            this.id_utilizador = a.GetId_utilizador();
         }
 
         public override String GetNome()

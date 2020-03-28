@@ -17,19 +17,34 @@ public class ColaboradorDAO
     public void Put(Colaborador col, int id_inst, int admin)
     {
         MySqlConnection msc = new MySqlConnection(connection);
-
         try
         {
             msc.Open();
-            string query = "INSERT INTO `trabalholi4`.`trabalhadores`(`Nome`,`Telemovel`,`email`,`id_inst`,`admin`,`id`) VALUES (@Nome, @tele, @mail, @id_inst, @admin, @id)";
+            string query = "SELECT * FROM trabalhadores WHERE id_inst=@id ";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@tele", col.GetTelefone());
-            mc.Parameters.AddWithValue("@nome", col.GetNome());
-            mc.Parameters.AddWithValue("@email", col.GetEmail());
-            mc.Parameters.AddWithValue("@id_inst", id_inst);
-            mc.Parameters.AddWithValue("@admin", admin);
-            mc.Parameters.AddWithValue("@id", col.GetId_utilizador());
-            mc.ExecuteNonQuery();
+            mc.Parameters.AddWithValue("@id", id_inst);
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read())
+            {
+                col.SetTelefone(mr.GetString("Telemovel"));
+                col.SetNome(mr.GetString("Nome"));
+                col.SetEmail(mr.GetString("email"));
+                col.SetId_utilizador(mr.GetInt32("id_col"));
+                mr.Close();
+
+                string query2 = "SELECT * FROM departamentos WHERE id_inst=`id_inst` ";
+                MySqlCommand mc2 = new MySqlCommand(query2, msc);
+                MySqlDataReader mr2 = mc2.ExecuteReader();
+
+                if (mr2.Read())
+                {
+
+                    col.SetDepartamento(mr2.GetInt32("id"));
+
+                    mr2.Close();
+                }
+            }
         }
         catch (Exception e)
         {
@@ -48,27 +63,38 @@ public class ColaboradorDAO
         }
     }
 
-    public Colaborador Get(int id_inst)
+    public Colaborador Get(int id_inst, int id_col)
     {
         Colaborador col = new Colaborador();
         MySqlConnection msc = new MySqlConnection(connection);
         try
         {
             msc.Open();
-            string query = "SELECT * FROM Departamento d, Trabalhadores t WHERE t.id_inst=@id and d.id_inst=@id";
+            string query = "SELECT * FROM trabalhadores WHERE id_inst=@id and id_col = @id2 ";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@id", id_inst);
+            mc.Parameters.AddWithValue("@id2", id_col);
             MySqlDataReader mr = mc.ExecuteReader();
 
             if (mr.Read())
             {
-                col.SetTelefone(mr.GetString("t.Telemovel"));
-                col.SetNome(mr.GetString("t.Nome"));
-                col.SetEmail(mr.GetString("t.email"));
-                col.SetId_utilizador(mr.GetInt32("t.id"));
-                col.SetDepartamento(mr.GetInt32("d.id"));
-
+                col.SetTelefone(mr.GetString("Telemovel"));
+                col.SetNome(mr.GetString("Nome"));
+                col.SetEmail(mr.GetString("email"));
+                col.SetId_utilizador(mr.GetInt32("id_col"));
                 mr.Close();
+
+                string query2 = "SELECT * FROM departamentos WHERE id_inst=`id_inst` ";
+                MySqlCommand mc2 = new MySqlCommand(query2, msc);
+                MySqlDataReader mr2 = mc2.ExecuteReader();
+
+                if (mr2.Read())
+                {
+
+                    col.SetDepartamento(mr2.GetInt32("id"));
+
+                    mr2.Close();
+                }
             }
         }
         catch (Exception e)

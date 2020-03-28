@@ -126,6 +126,7 @@ public class DepartamentoDAO
                     mc2.Parameters.AddWithValue("@hf", hf);
                     MySqlDataReader mr2 = mc2.ExecuteReader();
 
+
                     while (mr2.Read())
                     {
                         PessoaDeInteresse pi = new PessoaDeInteresse();

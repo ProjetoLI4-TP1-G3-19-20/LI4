@@ -12,16 +12,31 @@ namespace LI4
         public Colaborador()
         {
             this.departamento = -1;
+            this.nome = "";
+            this.email = "";
+            this.telefone = "";
+            this.password = "";
+            this.id_utilizador = -2;
         }
 
-        public Colaborador(int departamento)
+        public Colaborador(int departamento, int id, string nome, string email, string telefone, string pass)
         {
             this.departamento = departamento;
+            this.nome = nome;
+            this.email = email;
+            this.telefone = telefone;
+            this.password = pass;
+            this.id_utilizador = id;
         }
 
         public Colaborador(Colaborador c)
         {
             this.departamento = c.GetDepartamento();
+            this.nome = c.GetNome();
+            this.email = c.GetEmail();
+            this.telefone = c.GetTelefone();
+            this.password = c.GetPassword();
+            this.id_utilizador = c.GetId_utilizador();
         }
 
         public int GetDepartamento()
