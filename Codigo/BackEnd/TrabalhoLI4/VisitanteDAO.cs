@@ -47,7 +47,7 @@ public class VisitanteDAO{
       MySqlConnection msc = new MySqlConnection(Connection);
       try{
         msc.Open();
-        string query = "SELECT * FROM Visitante WHERE id=@id";
+        string query = "SELECT * FROM Visitante WHERE Visitante.id=@id";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@id", id);
         MySqlDataReader mr = mc.ExecuteReader();
@@ -82,7 +82,7 @@ public class VisitanteDAO{
 
       try{
         msc.Open();
-        string query = "UPDATE Visitante SET Nome=@nome, e-mail=@mail, morada=@morada, Telemóvel=@tele, cod_postal=@cp WHERE id=@id";
+        string query = "UPDATE Visitante SET Nome=@nome, e-mail=@mail, morada=@morada, Telemóvel=@tele, cod_postal=@cp WHERE Visitante.id=@id";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@id", visit.getId_utilizador());
         mc.Parameters.AddWithValue("@tele", visit.GetTelefone());
