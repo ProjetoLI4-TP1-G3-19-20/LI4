@@ -11,8 +11,8 @@ namespace LI4
         private string nome;
         private ArrayList contactos;
         private String localizacao;
-        private Dictionary<int, Colaborador> colaboradores;
-        private Dictionary<int, Administrador> administradores;
+        private Dictionary<string, Colaborador> colaboradores;
+        private Dictionary<string, Administrador> administradores;
         private Dictionary<int, Departamento> departamentos;
         private Dictionary<string, PessoaDeInteresse> pessoasDeInteresse;
 
@@ -24,21 +24,21 @@ namespace LI4
             email = "";
             contactos = new ArrayList();
             localizacao = "";
-            colaboradores = new Dictionary<int, Colaborador>();
-            administradores = new Dictionary<int, Administrador>();
+            colaboradores = new Dictionary<string, Colaborador>();
+            administradores = new Dictionary<string, Administrador>();
             departamentos = new Dictionary<int, Departamento>();
             pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>();
         }
 
-        public Instituicao(int cod_instituicao, string nome, string email, ArrayList contactos, string localizacao, Dictionary<int, Departamento> departamentos, Dictionary<string, PessoaDeInteresse> pessoasDeInteresse, Dictionary<int, Administrador> administradores, Dictionary<int, Colaborador> colaboradores)
+        public Instituicao(int cod_instituicao, string nome, string email, ArrayList contactos, string localizacao, Dictionary<int, Departamento> departamentos, Dictionary<string, PessoaDeInteresse> pessoasDeInteresse, Dictionary<string, Administrador> administradores, Dictionary<string, Colaborador> colaboradores)
         {
             this.cod_instituicao = cod_instituicao;
             this.nome = nome;
             this.email = email;
             this.contactos = new ArrayList(contactos);
             this.localizacao = localizacao;
-            this.colaboradores = new Dictionary<int, Colaborador>(colaboradores);
-            this.administradores = new Dictionary<int, Administrador>(administradores);
+            this.colaboradores = new Dictionary<string, Colaborador>(colaboradores);
+            this.administradores = new Dictionary<string, Administrador>(administradores);
             this.pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>(pessoasDeInteresse);
             this.departamentos = new Dictionary<int, Departamento>(departamentos);
         }
@@ -72,10 +72,6 @@ namespace LI4
             return r;
         }
 
-        public void SetContactos(ArrayList conts){
-          this.contactos = new ArrayList(conts);
-        }
-
         public string GetEmail(){
           return this.email;
         }
@@ -99,12 +95,12 @@ namespace LI4
             return cod_instituicao;
         }
 
-        public Dictionary<int, Colaborador> GetColaboradores(){
-          return new Dictionary<int, Colaborador>(this.colaboradores);
+        public Dictionary<string, Colaborador> GetColaboradores(){
+          return new Dictionary<string, Colaborador>(this.colaboradores);
         }
 
-        public Dictionary<int, Administrador> GetAdministradores(){
-          return new Dictionary<int, Administrador>(this.administradores);
+        public Dictionary<string, Administrador> GetAdministradores(){
+          return new Dictionary<string, Administrador>(this.administradores);
         }
 
         public Dictionary<string, PessoaDeInteresse> GetPessoasDeInteresse(){
@@ -115,14 +111,14 @@ namespace LI4
           return new Dictionary<int, Departamento>(this.departamentos); ;
         }
 
-        public void SetColaboradores(Dictionary<int,Colaborador> colaboradores)
+        public void SetColaboradores(Dictionary<string,Colaborador> colaboradores)
         {
-            this.colaboradores = new Dictionary<int, Colaborador>(colaboradores);
+            this.colaboradores = new Dictionary<string, Colaborador>(colaboradores);
         }
 
-        public void SetAdministrador(Dictionary<int, Administrador> admin)
+        public void SetAdministrador(Dictionary<string, Administrador> admin)
         {
-            this.administradores = new Dictionary<int, Administrador>(admin);
+            this.administradores = new Dictionary<string, Administrador>(admin);
         }
 
         public void SetPessoaDeInteresse(Dictionary<string, PessoaDeInteresse> pessoa)

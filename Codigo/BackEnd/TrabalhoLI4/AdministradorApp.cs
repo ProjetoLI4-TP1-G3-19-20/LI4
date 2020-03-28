@@ -14,9 +14,9 @@ namespace LI4
             this.departamento = -1;
         }
 
-        public AdministradorApp(int departamento)
+        public AdministradorApp(int dep)
         {
-            this.departamento = departamento;
+            this.departamento = dep;
         }
 
         public AdministradorApp(Administrador a)

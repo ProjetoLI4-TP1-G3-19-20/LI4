@@ -21,13 +21,14 @@ public class AdministradorDAO
         try
         {
             msc.Open();
-            string query = "INSERT INTO Visitante (Nome, Telemovel, e-mail, id_inst, admin) VALUES (@Nome, @tele, @mail, @id_inst, @admin)";
+            string query = "INSERT INTO `trabalholi4`.`trabalhadores`(`Nome`,`Telemovel`,`email`,`id_inst`,`admin`,`id`) VALUES (@Nome, @tele, @mail, @id_inst, @admin, @id)";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@tele", ad.GetTelefone());
             mc.Parameters.AddWithValue("@nome", ad.GetNome());
             mc.Parameters.AddWithValue("@email", ad.GetEmail());
             mc.Parameters.AddWithValue("@id_inst", id_inst);
             mc.Parameters.AddWithValue("@admin", admin);
+            mc.Parameters.AddWithValue("@id", ad.GetId_utilizador());
             mc.ExecuteNonQuery();
         }
         catch (Exception e)
@@ -54,14 +55,18 @@ public class AdministradorDAO
         try
         {
             msc.Open();
-            string query = "SELECT * FROM Departamento WHERE id_inst=@id";
+            string query = "SELECT * FROM Departamento d, Trabalhadores t WHERE t.id_inst=@id and d.id_inst=@id";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@id", id_inst);
             MySqlDataReader mr = mc.ExecuteReader();
 
             if (mr.Read())
             {
-                ad.SetDepartamento(mr.GetInt32("id"));
+                ad.SetTelefone(mr.GetString("t.Telemovel"));
+                ad.SetNome(mr.GetString("t.Nome"));
+                ad.SetEmail(mr.GetString("t.email"));
+                ad.SetId_utilizador(mr.GetInt32("t.id"));
+                ad.SetDepartamento(mr.GetInt32("d.id"));
 
                 mr.Close();
             }
@@ -91,13 +96,14 @@ public class AdministradorDAO
         try
         {
             msc.Open();
-            string query = "UPDATE Trabalhadores SET Telemóvel=@tele, e-mail=@mail, id_inst=@id_inst, admin=@admin WHERE nome=@nome";
+            string query = "UPDATE Trabalhadores SET nome=@nome, Telemóvel=@tele, e-mail=@mail, id_inst=@id_inst, admin=@admin WHERE id=@id";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@nome", ad.GetNome());
             mc.Parameters.AddWithValue("@tele", ad.GetTelefone());
             mc.Parameters.AddWithValue("@email", ad.GetEmail());
             mc.Parameters.AddWithValue("@id_inst", id_inst);
             mc.Parameters.AddWithValue("@admin", admin);
+            mc.Parameters.AddWithValue("@admin", ad.GetId_utilizador());
             mc.ExecuteNonQuery();
         }
         catch (Exception e)
@@ -125,12 +131,12 @@ public class AdministradorDAO
         try
         {
             msc.Open();
-            string query = "SELECT nome FROM Trabalhadores";
+            string query = "SELECT id FROM Trabalhadores";
             MySqlCommand mc = new MySqlCommand(query, msc);
             MySqlDataReader mr = mc.ExecuteReader();
             while (mr.Read())
             {
-                string nome = mr.GetString("nome");
+                int id = mr.GetInt32("id");
                 ad.Add(this.Get(id_inst));
             }
 

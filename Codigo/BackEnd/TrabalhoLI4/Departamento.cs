@@ -50,7 +50,7 @@ namespace LI4
 
         public void SetID(int id)
         {
-           this.id=id;
+            this.id = id;
         }
 
 
