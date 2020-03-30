@@ -6,10 +6,12 @@ using System.Collections;
 
 public class VisitasDAO{
 
+    private int id_visitante;
     private string Connection;
 
-    public VisitasDAO(String con){
+    public VisitasDAO(String con, int id){
       Connection = con;
+      id_visitante = id;
     }
 
     public void Put(Visita visit, int id_inst)
@@ -21,7 +23,10 @@ public class VisitasDAO{
         string query = "INSERT INTO Visitas (idInstituicao, idUser, dataInicio, dataSaida, estado, avaliacao, comentarios) VALUES (@idi, @idu, @di, @ds, @estado, @aval, @coment)";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@idi", id_inst);
-        mc.Parameters.AddWithValue("@idu", visit.getVisitante());
+
+        if(id_visitante != -1) mc.Parameters.AddWithValue("@idu", visit.getVisitante());
+        else mc.Parameters.AddWithValue("@idu", this.id_visitante);
+
         mc.Parameters.AddWithValue("@di", visit.getData_inicio());
         mc.Parameters.AddWithValue("@ds", visit.getData_saida());
         mc.Parameters.AddWithValue("@estado", visit.getEstado());
@@ -42,7 +47,7 @@ public class VisitasDAO{
       }
     }
 
-    public Visitas Get(int id_visit, int id_inst, DateTime data_inicio)
+    public Visitas Get(int id_inst, DateTime data_inicio)
     {
       Visita visit = new Visita();
       MySqlConnection msc = new MySqlConnection(Connection);
@@ -51,7 +56,7 @@ public class VisitasDAO{
         string query = "SELECT * FROM Visitas WHERE idInstituicao=@id_inst, idUser=@id_user, dataInicio=@di";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@id_inst", id_inst);
-        mc.Parameters.AddWithValue("@id_user", id_visit);
+        mc.Parameters.AddWithValue("@id_user",this.id_visitante);
         mc.Parameters.AddWithValue("@di", data_inicio);
         MySqlDataReader mr = mc.ExecuteReader();
 
@@ -86,7 +91,7 @@ public class VisitasDAO{
 
       try{
         msc.Open();
-        string query = "UPDATE Visitas SET Nome=@nome, e-mail=@mail, morada=@morada, Telemóvel=@tele, cod_postal=@cp WHERE id=@id";
+        string query = "UPDATE Visitas SET dataSaida=@ds, estado=@estado, avaliacao=@aval, comentarios=@coment WHERE idInstituicao=@idi, idUser=@idu, dataInicio=@di";
         MySqlCommand mc = new MySqlCommand(query, msc);
         mc.Parameters.AddWithValue("@idi", id_inst);
         mc.Parameters.AddWithValue("@idu", visit.getVisitante());

@@ -8,13 +8,15 @@ public class DepartamentoDAO
 {
 
     private string connection;
+    private int id_instituicao;
 
-    public DepartamentoDAO(String con)
+    public DepartamentoDAO(String con, int id)
     {
         connection = con;
+        id_instituicao = id;
     }
 
-    public void Put(Departamento dep, int id_inst)
+    public void Put(Departamento dep)
     {
         MySqlConnection msc = new MySqlConnection(connection);
 
@@ -24,7 +26,7 @@ public class DepartamentoDAO
             string query = "INSERT INTO `trabalholi4`.`departamentos`(`id`,`id_inst`,`nome`) VALUES (@id, @id_inst, @nome)";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@id", dep.GetID());
-            mc.Parameters.AddWithValue("@id_inst", id_inst);
+            mc.Parameters.AddWithValue("@id_inst", this.id_instituicao);
             mc.Parameters.AddWithValue("@nome", dep.GetNome());
             mc.ExecuteNonQuery();
 
@@ -42,7 +44,7 @@ public class DepartamentoDAO
                 {
                     query = "INSERT INTO PessoaDeInteresse (nome, idInst, email) VALUES (@n, @id, @e) WHERE NOT EXISTS (SELECT * FROM PessoaDeInteresse WHERE nome=@n)";
                     MySqlCommand mc2 = new MySqlCommand(query, msc);
-                    mc2.Parameters.AddWithValue("@id", id_inst);
+                    mc2.Parameters.AddWithValue("@id", this.id_instituicao);
                     mc2.Parameters.AddWithValue("@n", pi.getNome());
                     mc2.Parameters.AddWithValue("@e", pi.getEmail());
                     mc2.ExecuteNonQuery();
@@ -178,7 +180,7 @@ public class DepartamentoDAO
         return dep;
     }
 
-    public void Update(Departamento dep, int id_inst)
+    public void Update(Departamento dep)
     {
         MySqlConnection msc = new MySqlConnection(connection);
 
@@ -188,7 +190,7 @@ public class DepartamentoDAO
             string query = "UPDATE departamentos SET id_inst=@id_inst, nome=@nome WHERE id=@id";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@id", dep.GetID());
-            mc.Parameters.AddWithValue("@id_inst", id_inst);
+            mc.Parameters.AddWithValue("@id_inst", this.id_instituicao);
             mc.Parameters.AddWithValue("@nome", dep.GetNome());
             mc.ExecuteNonQuery();
 
@@ -206,7 +208,7 @@ public class DepartamentoDAO
                 {
                     query = "UPDATE PessoaDeInteresse set nome=@n, idInst=@id, email=@e";
                     MySqlCommand mc2 = new MySqlCommand(query, msc);
-                    mc2.Parameters.AddWithValue("@id", id_inst);
+                    mc2.Parameters.AddWithValue("@id", this.id_instituicao);
                     mc2.Parameters.AddWithValue("@n", pi.getNome());
                     mc2.Parameters.AddWithValue("@e", pi.getEmail());
                     mc2.ExecuteNonQuery();
@@ -255,8 +257,9 @@ public class DepartamentoDAO
         try
         {
             msc.Open();
-            string query = "SELECT id FROM departamentos";
+            string query = "SELECT id FROM departamentos WHERE idInstituicao=@idi";
             MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@idi", this.id_instituicao);
             MySqlDataReader mr = mc.ExecuteReader();
             while (mr.Read())
             {

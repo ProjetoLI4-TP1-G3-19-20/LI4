@@ -11,36 +11,39 @@ namespace LI4
         private string nome;
         private ArrayList contactos;
         private String localizacao;
-        private Dictionary<string, Colaborador> colaboradores;
-        private Dictionary<string, Administrador> administradores;
-        private Dictionary<int, Departamento> departamentos;
-        private Dictionary<string, PessoaDeInteresse> pessoasDeInteresse;
+        private ColaboradorDAO colaboradores;
+        private AdministradorDAO administradores;
+        private DepartamentoDAO departamentos;
+        private VisitasDAO visitas;
+        private PedidoVisitaDAO pedidosVisita;
 
 
-        public Instituicao()
+        public Instituicao(int i)
         {
-            cod_instituicao = -1;
+            cod_instituicao = i;
             nome = "";
             email = "";
             contactos = new ArrayList();
             localizacao = "";
-            colaboradores = new Dictionary<string, Colaborador>();
-            administradores = new Dictionary<string, Administrador>();
-            departamentos = new Dictionary<int, Departamento>();
-            pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>();
+            colaboradores = new ColaboradorDAO();
+            administradores = new AdministradorDAO();
+            departamentos = new DepartamentoDAO(i);
+            visitas = new VisitasDAO();
+            pedidosVisita = new PedidoVisitaDAO();
         }
 
-        public Instituicao(int cod_instituicao, string nome, string email, ArrayList contactos, string localizacao, Dictionary<int, Departamento> departamentos, Dictionary<string, PessoaDeInteresse> pessoasDeInteresse, Dictionary<string, Administrador> administradores, Dictionary<string, Colaborador> colaboradores)
+        public Instituicao(int cod_instituicao, string nome, string email, ArrayList contactos, string localizacao)
         {
             this.cod_instituicao = cod_instituicao;
             this.nome = nome;
             this.email = email;
             this.contactos = new ArrayList(contactos);
             this.localizacao = localizacao;
-            this.colaboradores = new Dictionary<string, Colaborador>(colaboradores);
-            this.administradores = new Dictionary<string, Administrador>(administradores);
-            this.pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>(pessoasDeInteresse);
-            this.departamentos = new Dictionary<int, Departamento>(departamentos);
+            this.colaboradores = new ColaboradorDAO();
+            this.administradores = new AdministradorDAO();
+            this.departamentos = new DepartamentoDAO(cod_instituicao);
+            this.visitas = new VisitasDAO();
+            this.pedidosVisita = new PedidoVisitaDAO();
         }
 
         public Instituicao(Instituicao i)
@@ -50,10 +53,11 @@ namespace LI4
             this.email = i.GetEmail();
             this.contactos = new ArrayList(i.GetContactos());
             this.localizacao = i.GetLocalizacao();
-            this.colaboradores = i.GetColaboradores();
-            this.administradores = i.GetAdministradores();
-            this.pessoasDeInteresse = i.GetPessoasDeInteresse();
-            this.departamentos = i.GetDepartamentos();
+            this.colaboradores = new ColaboradorDAO();
+            this.administradores = new AdministradorDAO();
+            this.departamentos = new DepartamentoDAO(i.GetCod_instituicao());
+            this.visitas = new VisitasDAO();
+            this.pedidosVisita = new PedidoVisitaDAO();
         }
 
         public string GetLocalizacao()
@@ -95,40 +99,31 @@ namespace LI4
             return cod_instituicao;
         }
 
-        public Dictionary<string, Colaborador> GetColaboradores(){
-          return new Dictionary<string, Colaborador>(this.colaboradores);
+        public ColaboradorDAO GetColaboradores(){
+          return this.colaboradores;
         }
 
-        public Dictionary<string, Administrador> GetAdministradores(){
-          return new Dictionary<string, Administrador>(this.administradores);
+        public AdministradorDAO GetAdministradores(){
+          return new AdministradorDAO(this.administradores);
         }
 
-        public Dictionary<string, PessoaDeInteresse> GetPessoasDeInteresse(){
-            return new Dictionary<string, PessoaDeInteresse>(this.pessoasDeInteresse);
+        public DepartamentoDAO GetDepartamentos(){
+          return new DepartamentoDAO(this.departamentos); ;
         }
 
-        public Dictionary<int, Departamento> GetDepartamentos(){
-          return new Dictionary<int, Departamento>(this.departamentos); ;
-        }
-
-        public void SetColaboradores(Dictionary<string,Colaborador> colaboradores)
+        public void SetColaboradores(ColaboradorDAO colaboradores)
         {
-            this.colaboradores = new Dictionary<string, Colaborador>(colaboradores);
+            this.colaboradores = colaboradores;
         }
 
-        public void SetAdministrador(Dictionary<string, Administrador> admin)
+        public void SetAdministrador(AdministradorDAO admin)
         {
-            this.administradores = new Dictionary<string, Administrador>(admin);
+            this.administradores = admin;
         }
 
-        public void SetPessoaDeInteresse(Dictionary<string, PessoaDeInteresse> pessoa)
+        public void SetDepartamento(DepartamentoDAO dep)
         {
-            this.pessoasDeInteresse = new Dictionary<string, PessoaDeInteresse>(pessoa);
-        }
-
-        public void SetDepartamento(Dictionary<int, Departamento> dep)
-        {
-            this.departamentos = new Dictionary<int, Departamento>(dep);
+            this.departamentos = dep;
         }
 
         public void SetCod_instituicao(int cod)
