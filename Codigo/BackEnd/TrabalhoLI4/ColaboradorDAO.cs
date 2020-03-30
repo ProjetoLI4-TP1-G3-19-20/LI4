@@ -149,7 +149,7 @@ public class ColaboradorDAO
         }
     }
 
-    public ICollection<Colaborador> GetAll(int id_inst)
+    public ICollection<Colaborador> GetAll(int id_inst, int id_col)
     {
         ICollection<Colaborador> col = new HashSet<Colaborador>();
         MySqlConnection msc = new MySqlConnection(connection);
@@ -163,7 +163,7 @@ public class ColaboradorDAO
             while (mr.Read())
             {
                 int id = mr.GetInt32("id");
-                col.Add(this.Get(id_inst));
+                col.Add(this.Get(id_inst, id_col));
             }
 
         }

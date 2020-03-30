@@ -134,7 +134,7 @@ public class AdministradorDAO
         }
     }
 
-    public ICollection<Administrador> GetAll(int id_inst)
+    public ICollection<Administrador> GetAll(int id_inst, int id_col)
     {
         ICollection<Administrador> ad = new HashSet<Administrador>();
         MySqlConnection msc = new MySqlConnection(connection);
@@ -148,7 +148,7 @@ public class AdministradorDAO
             while (mr.Read())
             {
                 int id = mr.GetInt32("id");
-                ad.Add(this.Get(id_inst));
+                ad.Add(this.Get(id_inst,id_col));
             }
 
         }
