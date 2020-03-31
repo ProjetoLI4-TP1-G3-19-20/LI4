@@ -11,6 +11,7 @@ class LoginForm extends Component {
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderErrorMessage = this.renderErrorMessage.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   handleEmail(event) {
@@ -19,6 +20,12 @@ class LoginForm extends Component {
 
   handlePassword(event) {
     this.setState({ password: event.target.value });
+  }
+
+  handleKeyDown(event) {
+    if (event.key === "Enter") {
+      this.handleSubmit();
+    }
   }
 
   handleSubmit() {
@@ -48,6 +55,7 @@ class LoginForm extends Component {
               type="email"
               value={this.state.email}
               onChange={this.handleEmail}
+              onKeyDown={this.handleKeyDown}
               className="form-control"
               placeholder="Insira aqui o seu e-mail"
             />
@@ -58,6 +66,7 @@ class LoginForm extends Component {
               type="password"
               value={this.state.password}
               onChange={this.handlePassword}
+              onKeyDown={this.handleKeyDown}
               className="form-control"
               placeholder="Insira aqui a sua password"
             />
