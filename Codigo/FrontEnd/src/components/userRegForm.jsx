@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { createUser } from "../HTTPRequests";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 class UserRegForm extends Component {
   constructor(props) {
@@ -9,6 +11,9 @@ class UserRegForm extends Component {
       password: "",
       secondPassword: "",
       username: "",
+      phone: "",
+      morada: "",
+      postCode: "",
       current: 0
     };
     this.handleEmail = this.handleEmail.bind(this);
@@ -17,6 +22,7 @@ class UserRegForm extends Component {
     this.handleUsername = this.handleUsername.bind(this);
     this.renderSecondPassword = this.renderSecondPassword.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleMorada = this.handleMorada.bind(this);
   }
 
   handleEmail(event) {
@@ -29,11 +35,18 @@ class UserRegForm extends Component {
 
   handleSecondPassword(event) {
     this.setState({ secondPassword: event.target.value });
-    console.log(this.state.secondPassword);
   }
 
   handleUsername(event) {
     this.setState({ username: event.target.value });
+  }
+
+  handlePhone(phone) {
+    this.setState({ phone: phone.phone });
+  }
+
+  handleMorada(event) {
+    this.setState({ morada: event.target.value });
   }
 
   renderSecondPassword() {
@@ -81,7 +94,7 @@ class UserRegForm extends Component {
       <div className="position-relative m-4">
         <form>
           <div className="form-group">
-            <label htmlFor="exampleInputUsername">Nome de Utilizador</label>
+            <label htmlFor="exampleInputUsername">Nome Completo</label>
             <input
               onKeyDown={this.handleKeyDown}
               onChange={this.handleUsername}
@@ -103,6 +116,35 @@ class UserRegForm extends Component {
             <small id="emailHelp" className="form-text text-muted">
               Nunca partilharemos o seu e-mail com ninguém.
             </small>
+          </div>
+          <div className="form-group">
+            <label>Telemovel</label>
+            <PhoneInput
+              country={"pt"}
+              value={this.state.phone}
+              onChange={phone => this.handlePhone({ phone })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Morada</label>
+            <input
+              onKeyDown={this.handleKeyDown}
+              onChange={this.handleMorada}
+              type="text"
+              className="form-control"
+              id="inputAdress"
+            />
+          </div>
+          <div className="form-group">
+            <label>Código-Postal</label>
+            <input
+              style={{ width: "200px" }}
+              onKeyDown={this.handleKeyDown}
+              onChange={this.handleCodigoPostal}
+              type="text"
+              className="form-control"
+              id="inputAdress"
+            />
           </div>
           <div className="form-group">
             <label htmlFor="InputPassword1">Password</label>
