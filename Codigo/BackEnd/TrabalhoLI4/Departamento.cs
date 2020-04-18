@@ -9,6 +9,7 @@ namespace LI4
         private String nome;
         private int id;
         private List<Vaga> horas_disponiveis;
+        
 
         public Departamento()
         {

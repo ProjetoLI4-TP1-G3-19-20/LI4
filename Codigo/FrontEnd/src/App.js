@@ -45,7 +45,6 @@ class App extends Component {
   }
 
   updatePath(path) {
-    console.log(path);
     window.location.href = path;
   }
 }

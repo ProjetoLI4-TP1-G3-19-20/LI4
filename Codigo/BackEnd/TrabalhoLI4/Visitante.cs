@@ -39,6 +39,7 @@ namespace LI4
             this.id_utilizador = id;
         }
 
+
         public Visitante(Visitante v)
         {
             this.morada = v.GetMorada();

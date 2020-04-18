@@ -20,3 +20,26 @@ C:\Users\peter\OneDrive\Ambiente de Trabalho\TrabalhoLI4\obj\Debug\TrabalhoLI4.e
 C:\Users\peter\OneDrive\Ambiente de Trabalho\TrabalhoLI4\obj\Debug\TrabalhoLI4.csproj.CopyComplete
 C:\Users\peter\OneDrive\Ambiente de Trabalho\TrabalhoLI4\obj\Debug\TrabalhoLI4.exe
 C:\Users\peter\OneDrive\Ambiente de Trabalho\TrabalhoLI4\obj\Debug\TrabalhoLI4.pdb
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\TrabalhoLI4.exe.config
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\TrabalhoLI4.exe
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\TrabalhoLI4.pdb
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Data.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Data.EntityFramework.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySQL.Data.EntityFrameworkCore.Design.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySQL.Data.EntityFrameworkCore.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Web.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Google.Protobuf.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\BouncyCastle.Crypto.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Ubiety.Dns.Core.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Renci.SshNet.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Data.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Data.EntityFramework.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySQL.Data.EntityFrameworkCore.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySQL.Data.EntityFrameworkCore.Design.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\MySql.Web.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.exe.config
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.csproj.CoreCompileInputs.cache
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.csproj.CopyComplete
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.exe
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.pdb
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\obj\Debug\TrabalhoLI4.csprojAssemblyReference.cache

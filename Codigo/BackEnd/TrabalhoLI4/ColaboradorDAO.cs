@@ -48,27 +48,23 @@ public class ColaboradorDAO
         }
     }
 
-    public Boolean emailExiste(string emailEntrada, int id_col)
+    public Boolean emailExiste(string emailEntrada)
     {
         MySqlConnection msc = new MySqlConnection(this.connection);
         bool teste = false;
         try
         {
             msc.Open();
-            string query = "SELECT email FROM trabalhadores WHERE trabalhadores.id_col=@id";
+            string query = "SELECT id FROM trabalhadores WHERE trabalhadores.email=@emailEntrada";
 
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Prepare();
-            mc.Parameters.AddWithValue("@id", id_col);
+            mc.Parameters.AddWithValue("@emailEntrada", emailEntrada);
             MySqlDataReader mr = mc.ExecuteReader();
 
-            while (mr.Read() && teste == false)
+            while (mr.Read())
             {
-                string testemail = mr.GetString("email");
-                if (testemail == emailEntrada)
-                {
                     teste = true;
-                }
             }
             mr.Close();
         }

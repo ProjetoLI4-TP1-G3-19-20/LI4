@@ -13,16 +13,18 @@ class UserRegForm extends Component {
       username: "",
       phone: "",
       morada: "",
-      postCode: "",
-      current: 0
+      postCode: ""
     };
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSecondPassword = this.handleSecondPassword.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
+    this.renderFirstPassword = this.renderFirstPassword.bind(this);
     this.renderSecondPassword = this.renderSecondPassword.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMorada = this.handleMorada.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePostCode = this.handlePostCode.bind(this);
   }
 
   handleEmail(event) {
@@ -47,6 +49,33 @@ class UserRegForm extends Component {
 
   handleMorada(event) {
     this.setState({ morada: event.target.value });
+  }
+
+  handlePostCode(event) {
+    this.setState({ postCode: event.target.value });
+  }
+
+  renderFirstPassword() {
+    var classN;
+
+    if (this.state.password.length === 0 || this.state.password.length >= 8) {
+      classN = "form-control";
+    } else {
+      classN = "form-control is-invalid";
+    }
+
+    return (
+      <div className="form-group">
+        <label htmlFor="InputPassword2">Introduza a Password</label>
+        <input
+          onKeyDown={this.handleKeyDown}
+          onChange={this.handlePassword}
+          type="password"
+          className={classN}
+          id="InputPassword"
+        />
+      </div>
+    );
   }
 
   renderSecondPassword() {
@@ -82,11 +111,13 @@ class UserRegForm extends Component {
   }
 
   handleSubmit() {
-    createUser(this.state.email, this.state.password, this.state.username).then(
-      function(r) {
-        console.log(r);
-      }
-    );
+    if (this.state.secondPassword === this.state.password) {
+      createUser(this.state).then(r => {
+        r.text().then(rr => {
+          console.log(rr);
+        });
+      });
+    }
   }
 
   render() {
@@ -100,7 +131,7 @@ class UserRegForm extends Component {
               onChange={this.handleUsername}
               type="username"
               className="form-control"
-              id="exampleInputUsername"
+              id="InputName"
             />
           </div>
           <div className="form-group">
@@ -110,7 +141,7 @@ class UserRegForm extends Component {
               onChange={this.handleEmail}
               type="email"
               className="form-control"
-              id="exampleInputEmail1"
+              id="InputEmail"
               aria-describedby="emailHelp"
             />
             <small id="emailHelp" className="form-text text-muted">
@@ -140,22 +171,13 @@ class UserRegForm extends Component {
             <input
               style={{ width: "200px" }}
               onKeyDown={this.handleKeyDown}
-              onChange={this.handleCodigoPostal}
+              onChange={this.handlePostCode}
               type="text"
               className="form-control"
-              id="inputAdress"
+              id="inputPostCode"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="InputPassword1">Password</label>
-            <input
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handlePassword}
-              type="password"
-              className="form-control"
-              id="InputPassword1"
-            />
-          </div>
+          {this.renderFirstPassword()}
           {this.renderSecondPassword()}
           <button
             type="button"
@@ -165,6 +187,7 @@ class UserRegForm extends Component {
             Submit
           </button>
         </form>
+        <br></br>
       </div>
     );
   }

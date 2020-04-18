@@ -29,12 +29,12 @@ class LoginForm extends Component {
   }
 
   handleSubmit() {
-    login(this.state.email, this.state.password).then(
-      function(r) {
-        if (r === true) this.props.updatePath("/main");
+    login(this.state.email, this.state.password).then(r => {
+      r.text().then(rr => {
+        if (String(rr) === "true") this.props.updatePath("/main");
         else this.setState({ current: 1 });
-      }.bind(this)
-    );
+      });
+    });
   }
 
   renderErrorMessage() {

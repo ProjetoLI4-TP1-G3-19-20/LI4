@@ -1,31 +1,31 @@
-import axios from "axios";
-
 export async function login(email, password) {
-  const url = "http://localhost:8080";
-
-  console.log("Sending request");
-  const response = await axios.get(url, {
-    params: {
-      t: "login",
-      email: email,
-      pass: password
-    }
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "login",
+    email: email,
+    password: password
   });
-  if (String(response.data) === "true") return true;
-  else return false;
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers()
+  });
 }
 
-export async function createUser(email, password, username) {
+export async function createUser(state) {
   const url = "http://localhost:8080";
 
-  console.log("Sending request");
-  const response = await axios.get(url, {
-    params: {
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
       t: "create",
-      email: email,
-      password: password,
-      username: username
-    }
+      email: state.email,
+      password: state.password,
+      username: state.username,
+      phone: state.phone,
+      morada: state.morada,
+      postCode: state.postCode
+    }),
+    headers: new Headers()
   });
-  return String(response.data);
 }
