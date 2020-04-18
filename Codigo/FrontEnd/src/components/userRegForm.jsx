@@ -13,7 +13,8 @@ class UserRegForm extends Component {
       username: "",
       phone: "",
       morada: "",
-      postCode: ""
+      postCode: "",
+      current: 0,
     };
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -112,12 +113,18 @@ class UserRegForm extends Component {
 
   handleSubmit() {
     if (this.state.secondPassword === this.state.password) {
-      createUser(this.state).then(r => {
-        r.text().then(rr => {
+      createUser(this.state).then((r) => {
+        r.text().then((rr) => {
           console.log(rr);
         });
       });
     }
+
+    createUser(this.state.email, this.state.password, this.state.username).then(
+      function (r) {
+        console.log(r);
+      }
+    );
   }
 
   render() {
@@ -153,7 +160,7 @@ class UserRegForm extends Component {
             <PhoneInput
               country={"pt"}
               value={this.state.phone}
-              onChange={phone => this.handlePhone({ phone })}
+              onChange={(phone) => this.handlePhone({ phone })}
             />
           </div>
           <div className="form-group">
