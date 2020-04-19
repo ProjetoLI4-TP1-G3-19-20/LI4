@@ -65,6 +65,7 @@ public class VisitasDAO
 
             if (mr.Read())
             {
+                visit.SetVisitado(mr.GetString("visitado"));
                 visit.SetVisitante(id_visit);
                 visit.SetData_inicio(data_inicio);
                 visit.SetData(data_inicio);
@@ -72,6 +73,8 @@ public class VisitasDAO
                 visit.SetComentario(mr.GetString("comentarios"));
                 visit.SetAvaliacao(mr.GetString("avaliacao"));
                 visit.SetEstado(mr.GetInt32("estado"));
+                visit.setId_inst(mr.GetInt32("idInstituicao"));
+                visit.SetDepartamentoID(mr.GetInt32("departamentosID"));
 
                 mr.Close();
             }
@@ -129,9 +132,9 @@ public class VisitasDAO
         }
     }
 
-    public ICollection<Visita> GetAllByUser(int id_user, int id_inst, DateTime data_inicio)
+    public List<Visita> GetAllByUser(int id_user)
     {
-        ICollection<Visita> visits = new HashSet<Visita>();
+        List<Visita> visits = new List<Visita>();
         MySqlConnection msc = new MySqlConnection(Connection);
 
         try
@@ -143,7 +146,9 @@ public class VisitasDAO
             MySqlDataReader mr = mc.ExecuteReader();
             while (mr.Read())
             {
-                int id = mr.GetInt32("id");
+                int id = mr.GetInt32("idUser");
+                int id_inst = mr.GetInt32("idInstituicao");
+                DateTime data_inicio = mr.GetDateTime("dataInicio");
                 visits.Add(this.Get(id, id_inst, data_inicio));
             }
 

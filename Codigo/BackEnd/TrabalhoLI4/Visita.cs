@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LI4;
+using Newtonsoft.Json;
 
 namespace LI4
 {
@@ -17,6 +18,8 @@ namespace LI4
         private string visitado;
         private string avaliacao;
         private string comentarios;
+        private int id_inst;
+        private int departamentoID;
 
 
         public Visita()
@@ -29,8 +32,8 @@ namespace LI4
             this.data_saida = new DateTime();
             this.visitante = -1;
             this.visitado = "";
-            this.comentarios = "";
             this.avaliacao = "";
+            this.id_inst = -1;
         }
 
 
@@ -62,9 +65,27 @@ namespace LI4
             this.comentarios = v.GetComentario();
         }
 
+
+        public int GetDepartamentoID() {
+            return departamentoID;
+        }
+
+        public void SetDepartamentoID(int id) {
+            this.departamentoID = id;
+        }
+
+
         public string GetAvaliacao()
         {
             return this.avaliacao;
+        }
+
+        public int GetId_inst() {
+            return id_inst;
+        }
+
+        public void setId_inst(int id_inst) {
+            this.id_inst = id_inst;
         }
 
         public string GetComentarios()
@@ -74,7 +95,7 @@ namespace LI4
 
         public void SetComentario(string c)
         {
-            this.comentarios = c;
+            this.comentario = c;
         }
 
         public void SetAvaliacao(string c)
@@ -157,5 +178,22 @@ namespace LI4
         {
             this.visitante = v;
         }
+
+        public string getJson(string nameInst, string nameDep) {
+            string r = "";
+
+            r += "{";
+            r += "\"data_inicio\" : \"" + this.GetData_inicio() + "\",";
+            r += "\"comentario\" : \"" + this.GetComentario() + "\",";
+            r += "\"data_saida\" : \"" + this.GetData_saida() + "\",";
+            r += "\"visitante\" : \"" + this.GetVisitante() + "\",";
+            r += "\"visitado\" : \"" + this.GetVisitado() + "\",";
+            r += "\"id_inst\" : \"" + nameInst + "\",";
+            r += "\"departamentosID\" : \"" + nameDep + "\",";
+            r += "\"avaliacao\" : \"" + this.GetAvaliacao() + "\"}";
+
+            return r;
+        }
+     
     }
 }

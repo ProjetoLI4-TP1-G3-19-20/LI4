@@ -8,14 +8,20 @@ import AdminRegForm from "./components/AdminRegForm";
 import ColabRegForm from "./components/ColabRegForm";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { currentUser: "hey" };
+    this.login = this.login.bind(this);
+  }
+
   render() {
-    switch (window.location.pathname) {
+    switch (window.location.pathname.split("?")[0]) {
       case "/": {
         return (
           <React.Fragment>
             <NavBar />
             <main className="container">
-              <LoginForm updatePath={this.updatePath} />
+              <LoginForm login={this.login} />
             </main>
             ;
           </React.Fragment>
@@ -26,7 +32,7 @@ class App extends Component {
           <React.Fragment>
             <NavBar />
             <main className="container">
-              <UserLatNavBar />
+              <UserLatNavBar name={this.state.currentUser} />
             </main>
           </React.Fragment>
         );
@@ -77,8 +83,8 @@ class App extends Component {
     }
   }
 
-  updatePath(path) {
-    window.location.href = path;
+  login(user) {
+    window.location.href = "/main?u=" + user;
   }
 }
 

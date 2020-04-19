@@ -119,12 +119,6 @@ class UserRegForm extends Component {
         });
       });
     }
-
-    createUser(this.state.email, this.state.password, this.state.username).then(
-      function (r) {
-        console.log(r);
-      }
-    );
   }
 
   render() {

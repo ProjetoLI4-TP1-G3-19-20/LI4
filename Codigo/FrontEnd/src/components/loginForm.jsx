@@ -29,10 +29,14 @@ class LoginForm extends Component {
   }
 
   handleSubmit() {
-    login(this.state.email, this.state.password).then(r => {
-      r.text().then(rr => {
-        if (String(rr) === "true") this.props.updatePath("/main");
-        else this.setState({ current: 1 });
+    login(this.state.email, this.state.password).then((r) => {
+      r.text().then((rr) => {
+        console.log(rr);
+        if (String(rr) === "false" || String(rr) === "naoExiste") {
+          this.setState({ current: 1 });
+        } else {
+          this.props.login(String(rr));
+        }
       });
     });
   }

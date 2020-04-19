@@ -14,26 +14,27 @@ public class AdministradorDAO
         connection = con;
     }
 
-    public void Put(Administrador ad, int id_inst, int admin)
+    public bool Put(Administrador ad, int id_inst, int admin)
     {
         MySqlConnection msc = new MySqlConnection(connection);
 
         try
         {
             msc.Open();
-            string query = "INSERT INTO `trabalholi4`.`trabalhadores`(`Nome`,`Telemovel`,`email`,`id_inst`,`admin`,`id`) VALUES (@Nome, @tele, @mail, @id_inst, @admin, @id)";
+            string query = "INSERT INTO `trabalholi4`.`trabalhadores`(`Nome`,`Telemovel`,`email`,`id_inst`,`admin`, `password`) VALUES (@Nome, @tele, @mail, @id_inst, @admin, @password)";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@tele", ad.GetTelefone());
             mc.Parameters.AddWithValue("@nome", ad.GetNome());
             mc.Parameters.AddWithValue("@mail", ad.GetEmail());
             mc.Parameters.AddWithValue("@id_inst", id_inst);
             mc.Parameters.AddWithValue("@admin", admin);
-            mc.Parameters.AddWithValue("@id", ad.GetId_utilizador());
+            mc.Parameters.AddWithValue("@password", ad.GetPassword());
             mc.ExecuteNonQuery();
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
+            return false;
         }
         finally
         {
@@ -46,6 +47,7 @@ public class AdministradorDAO
                 Console.WriteLine(e.ToString());
             }
         }
+        return true;
     }
 
 
@@ -64,28 +66,19 @@ public class AdministradorDAO
             mc.Parameters.AddWithValue("@emailEntrada", emailEntrada);
             MySqlDataReader mr = mc.ExecuteReader();
 
-            while (mr.Read() && teste == false)
-            {
-                string testemail = mr.GetString("email");
-                if (testemail == emailEntrada)
-                {
-                    teste = true;
-                }
+            while (mr.Read()) {
+                teste = true;
             }
             mr.Close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Console.WriteLine(e.ToString());
         }
-        finally
-        {
-            try
-            {
+        finally {
+            try {
                 msc.Close();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine(e.ToString());
             }
         }

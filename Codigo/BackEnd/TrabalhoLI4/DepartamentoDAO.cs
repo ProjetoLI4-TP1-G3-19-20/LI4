@@ -282,4 +282,32 @@ public class DepartamentoDAO
         }
         return dep;
     }
+
+    public string getNameById(int id_inst, int id_dep) {
+        string dep = "departamentoDefault";
+        MySqlConnection msc = new MySqlConnection(connection);
+        try {
+            msc.Open();
+            string query = "SELECT nome FROM departamentos WHERE id = @id_dep AND id_inst = @id_inst";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@id_inst", id_inst);
+            mc.Parameters.AddWithValue("@id_dep", id_dep);
+            MySqlDataReader mr = mc.ExecuteReader();
+            while (mr.Read()) {
+                dep = mr.GetString("nome");
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        return dep;
+    }
 }

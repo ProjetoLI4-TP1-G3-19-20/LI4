@@ -1,28 +1,44 @@
 import React, { Component } from "react";
-import { createAdmin } from "../HTTPRequests";
+import Select from "react-select";
+import { createAdmin, getAllInsts } from "../HTTPRequests";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 class AdminRegForm extends Component {
   constructor(props) {
     super(props);
+
+    var i;
+    var insts = [];
+    getAllInsts().then((r) => {
+      r.text().then((rr) => {
+        i = JSON.parse(rr);
+
+        i.forEach((element) => {
+          insts.push({ value: element, label: element });
+        });
+      });
+    });
+
     this.state = {
+      selectedIns: "",
+      instituicoes: insts,
       email: "",
       password: "",
       secondPassword: "",
       username: "",
       phone: "",
-      morada: "",
-      postCode: "",
       current: 0,
     };
+
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleSecondPassword = this.handleSecondPassword.bind(this);
     this.handleUsername = this.handleUsername.bind(this);
     this.renderSecondPassword = this.renderSecondPassword.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleMorada = this.handleMorada.bind(this);
+    this.handleInst = this.handleInst.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleEmail(event) {
@@ -43,10 +59,6 @@ class AdminRegForm extends Component {
 
   handlePhone(phone) {
     this.setState({ phone: phone.phone });
-  }
-
-  handleMorada(event) {
-    this.setState({ morada: event.target.value });
   }
 
   renderSecondPassword() {
@@ -75,6 +87,11 @@ class AdminRegForm extends Component {
     );
   }
 
+  handleInst = (selectedOption) => {
+    this.setState({ selectedIns: selectedOption });
+    console.log(this.state.selectedIns.label);
+  };
+
   handleKeyDown(event) {
     if (event.key === "Enter") {
       this.handleSubmit();
@@ -82,13 +99,13 @@ class AdminRegForm extends Component {
   }
 
   handleSubmit() {
-    createAdmin(
-      this.state.email,
-      this.state.password,
-      this.state.username
-    ).then(function (r) {
-      console.log(r);
-    });
+    if (this.state.secondPassword === this.state.password) {
+      createAdmin(this.state).then((r) => {
+        r.text().then((rr) => {
+          console.log(rr);
+        });
+      });
+    }
   }
 
   render() {
@@ -128,24 +145,11 @@ class AdminRegForm extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Morada</label>
-            <input
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handleMorada}
-              type="text"
-              className="form-control"
-              id="inputAdress"
-            />
-          </div>
-          <div className="form-group">
-            <label>Código-Postal</label>
-            <input
-              style={{ width: "200px" }}
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handleCodigoPostal}
-              type="text"
-              className="form-control"
-              id="inputAdress"
+            <label htmlFor="exampleInputUsername">Instituição</label>
+            <Select
+              onChange={this.handleInst}
+              className="basic-single"
+              options={this.state.instituicoes}
             />
           </div>
           <div className="form-group">
