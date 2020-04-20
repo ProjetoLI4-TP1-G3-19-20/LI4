@@ -11,3 +11,21 @@
   color: white;
   text-shadow: black;
 }
+
+.inputstl {
+  padding: 9px;
+  border: solid 1px #b3ffb3;
+  outline: 0;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left 25,
+    from(#ffffff),
+    color-stop(4%, #a4ffa4),
+    to(#ffffff)
+  );
+  background: -moz-linear-gradient(top, #ffffff, #a4ffa4 1px, #ffffff 25px);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+}

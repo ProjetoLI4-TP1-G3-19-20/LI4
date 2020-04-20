@@ -6,6 +6,7 @@ import UserRegForm from "./components/userRegForm";
 import VisitHistory from "./components/VisitHistory";
 import AdminRegForm from "./components/AdminRegForm";
 import ColabRegForm from "./components/ColabRegForm";
+import VisitReqForm from "./components/visitReqForm";
 
 class App extends Component {
   constructor(props) {
@@ -73,6 +74,16 @@ class App extends Component {
             <NavBar />
             <main className="container">
               <ColabRegForm />
+            </main>
+          </React.Fragment>
+        );
+      }
+      case "/visitReq": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <VisitReqForm />
             </main>
           </React.Fragment>
         );
