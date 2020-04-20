@@ -112,19 +112,6 @@ class VisitReqForm extends Component {
             />
           </div>
 
-          <div class="col-lg-9">
-            <label for="dtpickerdemo" class="col-sm-2 control-label">
-              Select date/time:
-            </label>
-
-            <div class="col-sm-4 input-group date" id="dtpickerdemo">
-              <input type="text" class="form-control" />
-
-              <span class="input-group-addon">
-                <span class="glyphicon glyphicon-calendar"></span>
-              </span>
-            </div>
-          </div>
           <div className="form-group">
             <label htmlFor="inputHora">Hora de Início</label>
             <input
