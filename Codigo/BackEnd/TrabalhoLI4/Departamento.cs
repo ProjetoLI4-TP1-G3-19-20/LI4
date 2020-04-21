@@ -8,28 +8,28 @@ namespace LI4
     {
         private String nome;
         private int id;
-        private List<Vaga> horas_disponiveis;
+        private List<PessoaDeInteresse> pess;
         
 
         public Departamento()
         {
             this.nome = "";
             this.id = -1;
-            this.horas_disponiveis = new List<Vaga>();
+            this.pess = new List<PessoaDeInteresse>();
         }
 
-        public Departamento(String nome, int id, List<Vaga> horas_disponiveis)
+        public Departamento(String nome, int id, List<PessoaDeInteresse> pess)
         {
             this.nome = nome;
             this.id = id;
-            this.horas_disponiveis = horas_disponiveis;
+            this.pess = pess;
         }
 
         public Departamento(Departamento departamento)
         {
             this.nome = departamento.GetNome();
             this.id = departamento.GetID();
-            this.horas_disponiveis = departamento.GetHorasDisponiveis();
+            this.pess = departamento.GetPessoaDeInteresses();
         }
 
         public String GetNome()
@@ -55,14 +55,14 @@ namespace LI4
         }
 
 
-        public List<Vaga> GetHorasDisponiveis()
+        public List<PessoaDeInteresse> GetPessoaDeInteresses()
         {
-            return new List<Vaga>(this.horas_disponiveis); ;
+            return new List<PessoaDeInteresse>(this.pess); ;
         }
 
-        public void SetHorasDisponiveis(List<Vaga> horas)
+        public void SetPessoasDeInteresse(List<PessoaDeInteresse> pess)
         {
-            this.horas_disponiveis = new List<Vaga>(horas);
+            this.pess = new List<PessoaDeInteresse>(pess);
         }
 
     }

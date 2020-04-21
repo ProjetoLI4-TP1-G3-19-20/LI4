@@ -11,7 +11,7 @@ namespace LI4
         private int nr_pessoas;
         private DateTime hora_fim;
         private DateTime hora_inicio;
-        private List<PessoaDeInteresse> pessoasVisitaveis;
+
 
 
         public Vaga()
@@ -19,7 +19,7 @@ namespace LI4
             this.nr_pessoas = -1;
             this.hora_fim = new DateTime();
             this.hora_inicio = new DateTime();
-            this.pessoasVisitaveis = new List<PessoaDeInteresse>();
+
         }
 
         public Vaga(int nr_pessoas, DateTime hora_fim, DateTime hora_inicio, List<PessoaDeInteresse> pessoasVisitaveis)
@@ -27,7 +27,7 @@ namespace LI4
             this.nr_pessoas = nr_pessoas;
             this.hora_fim = hora_fim;
             this.hora_inicio = hora_inicio;
-            this.pessoasVisitaveis = pessoasVisitaveis;
+
         }
 
         public Vaga(Vaga vaga)
@@ -35,7 +35,7 @@ namespace LI4
             this.nr_pessoas = vaga.GetNr_pessoas();
             this.hora_fim = vaga.GetHora_fim();
             this.hora_inicio = vaga.GetHora_inicio();
-            this.pessoasVisitaveis = vaga.GetPessoasVisitaveis();
+
         }
 
         public int GetNr_pessoas()
@@ -69,14 +69,15 @@ namespace LI4
             this.hora_inicio = hora_inicio;
         }
 
-        public List<PessoaDeInteresse> GetPessoasVisitaveis()
-        {
-            return new List<PessoaDeInteresse>(this.pessoasVisitaveis);
+        public string getJson() {
+            string json = "";
+
+            json += "{\"inicio\":\"" + this.GetHora_inicio().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\", ";
+            json += "\"fim\":\"" + this.GetHora_fim().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\"} ";
+
+            return json;
         }
 
-        public void SetPessoasVisitaveis(List<PessoaDeInteresse> pessoasVisitaveis)
-        {
-            this.pessoasVisitaveis = new List<PessoaDeInteresse>(pessoasVisitaveis);
-        }
+
     }
 }

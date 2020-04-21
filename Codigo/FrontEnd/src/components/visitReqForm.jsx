@@ -1,8 +1,17 @@
 import React, { Component } from "react";
 import Select from "react-select";
-import { createAdmin, getAllInsts } from "../HTTPRequests";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import {
+  createPedido,
+  getAllInsts,
+  getDepartamentosByInst,
+  getPessoasByDepartamento,
+  getVagas,
+} from "../HTTPRequests";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+const localizer = momentLocalizer(moment);
 
 class VisitReqForm extends Component {
   constructor(props) {
@@ -10,9 +19,6 @@ class VisitReqForm extends Component {
 
     var i;
     var insts = [];
-    var deps = []; //Departamentos da Instituição escolhida
-    var pdi = []; //Pessoas de Interesse disponíveis
-    var available_slots = []; //Horas disponíveis da pessoa de interesse escolhida
     getAllInsts().then((r) => {
       r.text().then((rr) => {
         i = JSON.parse(rr);
@@ -26,15 +32,16 @@ class VisitReqForm extends Component {
     this.state = {
       instituicoes: insts,
       selectedInst: "",
-      departamentos: deps,
+      depsDisabled: true,
+      departamentos: [],
       selectedDep: "",
-      pdis: pdi,
+      pdis: [],
+      isPdiDisabled: true,
       selectedPdi: "",
-      as: available_slots,
-      hora_inicio: "",
-      duracao: "",
       comentario: "",
       current: 0,
+      events: [],
+      selectedEvent: "",
     };
 
     this.handleDuracao = this.handleDuracao.bind(this);
@@ -44,27 +51,77 @@ class VisitReqForm extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleInst = this.handleInst.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSelectEvent = this.handleSelectEvent.bind(this);
   }
+
   handleComentario(event) {
     this.setState({ comentario: event.target.value });
   }
+
   handleHoraInicio(event) {
     this.setState({ hora_inicio: event.target.value });
   }
+
   handleDuracao(event) {
     this.setState({ duracao: Number(event.target.value) });
   }
+
   handleDep = (selectedOption) => {
-    this.setState({ selectedIns: selectedOption });
-    console.log(this.state.selectedIns.label);
+    this.setState({ selectedDep: selectedOption, isPdiDisabled: false });
+    var p = [];
+
+    getPessoasByDepartamento(
+      this.state.selectedInst.label,
+      selectedOption.label
+    ).then((r) => {
+      r.text().then((r) => {
+        var j = JSON.parse(r);
+        j.forEach((element) => {
+          p.push({ value: element, label: element });
+        });
+
+        this.setState({ pdis: p });
+      });
+    });
   };
+
   handlePdi = (selectedOption) => {
-    this.setState({ selectedIns: selectedOption });
-    console.log(this.state.selectedIns.label);
+    this.setState({ selectedPdi: selectedOption });
+    var pdi = [];
+    var id = 0;
+
+    getVagas(selectedOption.label).then((r) => {
+      r.text().then((r) => {
+        var p = JSON.parse(r);
+
+        p.forEach((element) => {
+          pdi.push({
+            id: id,
+            title: "Vaga",
+            start: new Date(parseInt(element.inicio)),
+            end: new Date(parseInt(element.fim)),
+          });
+          id++;
+        });
+        this.setState({ events: pdi });
+      });
+    });
   };
+
   handleInst = (selectedOption) => {
-    this.setState({ selectedIns: selectedOption });
-    console.log(this.state.selectedIns.label);
+    this.setState({ selectedInst: selectedOption, depsDisabled: false });
+    var deps = []; //Departamentos da Instituição escolhida
+
+    getDepartamentosByInst(selectedOption.label).then((r) => {
+      r.text().then((rr) => {
+        var d = JSON.parse(rr);
+        d.forEach((element) => {
+          deps.push({ value: element, label: element });
+        });
+
+        this.setState({ departamentos: deps, pdis: [] });
+      });
+    });
   };
 
   handleKeyDown(event) {
@@ -74,13 +131,25 @@ class VisitReqForm extends Component {
   }
 
   handleSubmit() {
-    if (this.state.secondPassword === this.state.password) {
-      createAdmin(this.state).then((r) => {
-        r.text().then((rr) => {
-          console.log(rr);
+    if (
+      this.state.selectedInst !== "" &&
+      this.state.selectedPdi !== "" &&
+      this.state.selectedDep !== "" &&
+      this.state.selectedEvent !== "" &&
+      this.state.comentario !== ""
+    ) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const u = urlParams.get("u");
+      createPedido(this.state, u).then((r) => {
+        r.text().then((r) => {
+          console.log(r);
         });
       });
     }
+  }
+
+  handleSelectEvent(event) {
+    this.setState({ selectedEvent: event });
   }
 
   render() {
@@ -98,6 +167,7 @@ class VisitReqForm extends Component {
           <div className="form-group">
             <label htmlFor="inputDep">Departamento</label>
             <Select
+              isDisabled={this.state.depsDisabled}
               onChange={this.handleDep}
               className="basic-single"
               options={this.state.departamentos}
@@ -106,29 +176,24 @@ class VisitReqForm extends Component {
           <div className="form-group">
             <label htmlFor="input">Pessoa de Interesse</label>
             <Select
+              isDisabled={this.state.isPdiDisabled}
               onChange={this.handlePdi}
               className="basic-single"
               options={this.state.pdis}
             />
           </div>
-
           <div className="form-group">
-            <label htmlFor="inputHora">Hora de Início</label>
-            <input
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handleHoraInicio}
-              className="form-control"
-              id="inputHora"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="inputDuracao">Duração</label>
-            <input
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handleDuracao}
-              className="form-control"
-              id="inputDuracao"
-            />
+            <label htmlFor="input">Data e Hora</label>
+            <div style={{ height: "500pt" }}>
+              <Calendar
+                events={this.state.events}
+                startAccessor="start"
+                endAccessor="end"
+                defaultDate={moment().toDate()}
+                localizer={localizer}
+                onSelectEvent={this.handleSelectEvent}
+              />
+            </div>
           </div>
           <div>
             <div id="bootstrap-datetimepicker-widget"></div>

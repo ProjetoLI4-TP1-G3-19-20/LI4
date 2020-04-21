@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading;
 using System.Web.Script.Serialization;
 using LI4;
-using Newtonsoft.Json;
 
 class HTTPServer {
 
@@ -18,6 +17,7 @@ class HTTPServer {
     private InstituicaoDAO instituicaoDAO;
     private VisitasDAO visitasDAO;
     private DepartamentoDAO departamentoDAO;
+    private PedidoVisitaDAO pedidoVisitaDAO;
 
 
 
@@ -79,9 +79,44 @@ class HTTPServer {
             case "createAdmin":
                 ProcessCreateAdmin(context, JSON);
                 break;
+            case "createPedido":
+                ProcessCreatePedido(context, JSON);
+                break;
 
         }
        
+
+    }
+
+    void ProcessCreatePedido(HttpListenerContext context, Dictionary<String, String> JSON) {
+        PedidoVisita pv = new PedidoVisita();
+
+        string reply = "sucesso";
+
+        pv.setHoraInicio(DateTime.Parse(JSON["hora_inicio"]));
+        pv.setHoraFim(DateTime.Parse(JSON["hora_fim"]));
+        pv.setComentario(JSON["comentario"]);
+        pv.setVisitado(JSON["visitado"]);
+        pv.setInstituicao(instituicaoDAO.getIdByName(JSON["isnt"]));
+        pv.setDepartamento(departamentoDAO.getIdByName(JSON["dep"], instituicaoDAO.getIdByName(JSON["isnt"])));
+        pv.setVisitante(int.Parse(JSON["visitante"]));
+
+        try {
+            pedidoVisitaDAO.Put(pv);
+        } catch(Exception e) {
+            Console.WriteLine(e.ToString());
+            reply = "erro";
+        }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
+
 
     }
 
@@ -96,6 +131,15 @@ class HTTPServer {
                 break;
             case "visitas":
                 processGetVisitas(context);
+                break;
+            case "depsByInst":
+                processGetDepsByInst(context);
+                break;
+            case "pesByDep":
+                processGetPesByDep(context);
+                break;
+            case "vagas":
+                processGetVagas(context);
                 break;
         }
     }
@@ -132,10 +176,12 @@ class HTTPServer {
             }
         }
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
         context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = reply.Length;
+        context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, reply.Length);
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
     }
 
@@ -167,11 +213,68 @@ class HTTPServer {
             }
         }
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
         context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = reply.Length;
+        context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, reply.Length);
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
+    }
+
+    void processGetVagas(HttpListenerContext context) {
+        string name = context.Request.QueryString["name"];
+
+        List<Vaga> lista = visitasDAO.getVagas(name);
+        string reply = "[";
+        
+        for(int i = 0; i < lista.Count; i++) {
+            reply += lista[i].getJson() + ",";
+        }
+
+        char[] chars = { ',' };
+        reply = reply.Trim(chars);
+
+        reply += "]";
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
+    void processGetPesByDep(HttpListenerContext context) {
+        string inst = context.Request.QueryString["inst"];
+        string dep = context.Request.QueryString["dep"];
+
+        List<String> lista = departamentoDAO.getPessoasByDepartamento(inst, dep);
+
+        String reply = new JavaScriptSerializer().Serialize(lista);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
+    void processGetDepsByInst(HttpListenerContext context) {
+        string inst = context.Request.QueryString["inst"];
+
+        List<String> lista = departamentoDAO.DepByInst(inst);
+
+        String reply = new JavaScriptSerializer().Serialize(lista);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
 
@@ -198,10 +301,12 @@ class HTTPServer {
 
         reply += "]";
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
         context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = reply.Length;
+        context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, reply.Length);
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
 
     }
 
@@ -224,10 +329,12 @@ class HTTPServer {
             reply = "false";
         }
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
         context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = reply.Length;
+        context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, reply.Length);
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
     private void processGetInsts(HttpListenerContext context) {
@@ -235,10 +342,12 @@ class HTTPServer {
 
         String reply = new JavaScriptSerializer().Serialize(lista);
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
         context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = reply.Length;
+        context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, reply.Length);
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
 
     }
 
@@ -257,6 +366,7 @@ class HTTPServer {
         instituicaoDAO = new InstituicaoDAO(con);
         visitasDAO = new VisitasDAO(con);
         departamentoDAO = new DepartamentoDAO(con);
+        pedidoVisitaDAO = new PedidoVisitaDAO(con);
 
     }
 

@@ -2,93 +2,93 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LI4
-{
-    public class PedidoVisita
-    {
+namespace LI4 {
+    public class PedidoVisita {
 
-        private DateTime data;
+        private DateTime hora_inicio;
+        private DateTime hora_fim;
         private String comentario;
         private String visitado;
         private int departamento;
-        private Visitante visitante;
+        private int instituicao;
+        private int visitante;
 
-        public PedidoVisita()
-        {
-            this.data = new DateTime();
+        public PedidoVisita() {
+            this.hora_inicio = new DateTime();
+            this.hora_fim = new DateTime();
             this.comentario = "";
             this.visitado = "";
             this.departamento = -1;
-            this.visitante = new Visitante();
+            this.instituicao = -1;
+            this.visitante = -1;
         }
 
-        public PedidoVisita(DateTime data, String comentario, String visitado, int departamento, Visitante v)
-        {
-            this.data = data;
+        public PedidoVisita(DateTime hora_inicio, DateTime hora_fim, String comentario, String visitado, int departamento, int instituicao, int visitante) {
+            this.hora_inicio = hora_inicio;
+            this.hora_fim = hora_fim;
             this.comentario = comentario;
             this.visitado = visitado;
             this.departamento = departamento;
-            this.visitante = v;
+            this.instituicao = instituicao;
+            this.visitante = visitante;
         }
 
-        public PedidoVisita(PedidoVisita pv)
-        {
-            this.data = pv.GetData();
-            this.comentario = pv.GetComentario();
-            this.visitado = pv.GetVisitado();
-            this.departamento = pv.GetDepartamento();
-            this.visitante = pv.GetVisitante();
+        public DateTime getHoraInicio() {
+            return this.hora_inicio;
         }
 
-
-        public DateTime GetData()
-        {
-            return data;
+        public DateTime getHoraFim() {
+            return this.hora_fim;
         }
 
-        public void SetData(DateTime data)
-        {
-            this.data = data;
+        public String getComentario() {
+            return this.comentario;
         }
 
-        public String GetComentario()
-        {
-            return comentario;
+        public String getVisitado() {
+            return this.visitado;
         }
 
-        public void SetComentario(String comentario)
-        {
+        public int getDepartamento() {
+            return this.departamento;
+        }
+
+        public int getInstituicao() {
+            return this.instituicao;
+        }
+
+        public int getVisitante() {
+            return this.visitante;
+        }
+
+        public void setHoraInicio(DateTime hora_inicio) {
+            this.hora_inicio = hora_inicio;
+        }
+
+        public void setHoraFim(DateTime hora_fim) {
+            this.hora_fim = hora_fim;
+        }
+
+        public void setComentario(String comentario) {
             this.comentario = comentario;
         }
 
-        public String GetVisitado()
-        {
-            return visitado;
-        }
-
-        public void SetVisitado(String visitado)
-        {
+        public void setVisitado(String visitado) {
             this.visitado = visitado;
         }
 
-        public int GetDepartamento()
-        {
-            return departamento;
-        }
-
-        public void SetDepartamento(int departamento)
-        {
+        public void setDepartamento(int departamento) {
             this.departamento = departamento;
         }
 
-        public Visitante GetVisitante()
-        {
-          return visitante;
+        public void setInstituicao(int instituicao) {
+            this.instituicao = instituicao;
         }
 
-        public void SetVisitante(Visitante v)
-        {
-          this.visitante = v;
+        public void setVisitante(int visitante) {
+            this.visitante = visitante;
         }
+
+
     }
 }

@@ -208,4 +208,37 @@ public class VisitasDAO
         }
         return visits;
     }
+
+    public List<Vaga> getVagas(string nome) {
+        List<Vaga> va = new List<Vaga>();
+
+        MySqlConnection msc = new MySqlConnection(Connection);
+        try {
+            msc.Open();
+            string query = "SELECT * FROM pessoadeinteresse_has_vagas piv " +
+                "           WHERE piv.nome = @n";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@n", nome);
+            MySqlDataReader mr = mc.ExecuteReader();
+            while (mr.Read()) {
+                Vaga v = new Vaga();
+                v.SetHora_fim(mr.GetDateTime("hora_fim"));
+                v.SetHora_inicio(mr.GetDateTime("hora_inicio"));
+                v.SetNr_pessoas(mr.GetInt32("NrDeVagas"));
+                va.Add(v);
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        return va;
+    }
 }

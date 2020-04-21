@@ -65,10 +65,69 @@ export async function createColab(state) {
   });
 }
 
+export async function createPedido(state, u) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      t: "createPedido",
+      hora_inicio: state.selectedEvent.start.toJSON(),
+      hora_fim: state.selectedEvent.end.toJSON(),
+      comentario: state.comentario,
+      visitado: state.selectedPdi.label,
+      dep: state.selectedDep.label,
+      isnt: state.selectedInst.label,
+      visitante: u,
+    }),
+    headers: new Headers(),
+  });
+}
+
 export async function getAllInsts() {
   let url = new URL("http://localhost:8080");
   url.search = new URLSearchParams({
     t: "insts",
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getDepartamentosByInst(inst) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "depsByInst",
+    inst: inst,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getPessoasByDepartamento(inst, dep) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "pesByDep",
+    inst: inst,
+    dep: dep,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getVagas(name) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "vagas",
+    name: name,
   });
 
   return fetch(url, {
