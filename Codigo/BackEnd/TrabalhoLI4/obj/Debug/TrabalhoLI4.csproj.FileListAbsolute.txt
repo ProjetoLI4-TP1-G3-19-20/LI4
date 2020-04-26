@@ -63,3 +63,11 @@ F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\System.Threading.Tasks.Exte
 F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\System.ValueTuple.xml
 F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Newtonsoft.Json.dll
 F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Newtonsoft.Json.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.Logging.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.Tokens.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\System.IdentityModel.Tokens.Jwt.dll
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.JsonWebTokens.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.Logging.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\Microsoft.IdentityModel.Tokens.xml
+F:\Main\Uni\LI4\Codigo\BackEnd\TrabalhoLI4\bin\Debug\System.IdentityModel.Tokens.Jwt.xml

@@ -35,7 +35,9 @@ class LoginForm extends Component {
         if (String(rr) === "false" || String(rr) === "naoExiste") {
           this.setState({ current: 1 });
         } else {
-          this.props.login(String(rr));
+          var json = JSON.parse(rr);
+          sessionStorage.setItem("token", json.token);
+          this.props.login(String(json.id));
         }
       });
     });
@@ -62,6 +64,7 @@ class LoginForm extends Component {
               onKeyDown={this.handleKeyDown}
               className="form-control"
               placeholder="Insira aqui o seu e-mail"
+              id="inputEmail"
             />
           </div>
           <div className="form-group-auto m-2">

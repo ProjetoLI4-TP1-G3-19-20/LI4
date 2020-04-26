@@ -148,3 +148,17 @@ export async function getVisitas(id) {
     headers: new Headers(),
   });
 }
+
+export async function validateMe(id) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "validate",
+    user: id,
+    token: sessionStorage.getItem("token"),
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}

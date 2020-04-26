@@ -30,6 +30,7 @@ class VisitReqForm extends Component {
     });
 
     this.state = {
+      auth: false,
       instituicoes: insts,
       selectedInst: "",
       depsDisabled: true,

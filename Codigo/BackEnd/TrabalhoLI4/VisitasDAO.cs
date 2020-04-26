@@ -74,7 +74,7 @@ public class VisitasDAO
                 visit.SetAvaliacao(mr.GetString("avaliacao"));
                 visit.SetEstado(mr.GetInt32("estado"));
                 visit.setId_inst(mr.GetInt32("idInstituicao"));
-                visit.SetDepartamentoID(mr.GetInt32("departamentosID"));
+                visit.SetDepartamentoID(mr.GetInt32("departamentos_id"));
 
                 mr.Close();
             }

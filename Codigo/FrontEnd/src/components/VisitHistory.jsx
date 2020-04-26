@@ -1,22 +1,26 @@
 import React, { Component } from "react";
 import VisitComponent from "./VisitComponent";
 import ReactList from "react-list";
-import { getVisitas } from "../HTTPRequests";
+import { getVisitas, validateMe } from "../HTTPRequests";
 
 class VisitHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      auth: false,
       visitas: [],
+      user: -1,
     };
 
     const urlParams = new URLSearchParams(window.location.search);
     const u = urlParams.get("u");
 
-    getVisitas(u).then((r) => {
+    validateMe(u).then((r) => {
       r.text().then((r) => {
-        var json = JSON.parse(r);
-        this.setState({ visitas: json });
+        console.log(r);
+        if (String(r) === "True") {
+          this.setState({ auth: true, user: u });
+        }
       });
     });
 
@@ -41,14 +45,28 @@ class VisitHistory extends Component {
     );
   }
 
+  updateVisitas() {
+    getVisitas(this.state.user).then((r) => {
+      r.text().then((r) => {
+        var json = JSON.parse(r);
+        this.setState({ visitas: json, auth: true });
+      });
+    });
+  }
+
   render() {
-    return (
-      <ReactList
-        itemRenderer={this.renderItem}
-        length={this.state.visitas.length}
-        type="uniform"
-      />
-    );
+    if (this.state.auth === true) {
+      this.updateVisitas();
+      return (
+        <ReactList
+          itemRenderer={this.renderItem}
+          length={this.state.visitas.length}
+          type="uniform"
+        />
+      );
+    } else {
+      return <div>Acesso Negado</div>;
+    }
   }
 }
 

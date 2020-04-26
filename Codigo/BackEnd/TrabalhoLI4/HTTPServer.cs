@@ -18,6 +18,7 @@ class HTTPServer {
     private VisitasDAO visitasDAO;
     private DepartamentoDAO departamentoDAO;
     private PedidoVisitaDAO pedidoVisitaDAO;
+    private JWT jwt;
 
 
 
@@ -123,6 +124,9 @@ class HTTPServer {
     void ProcessGetRequests(HttpListenerContext context) {
 
         switch (context.Request.QueryString["t"]) {
+            case "validate":
+                ProcessValidate(context);
+                break;
             case "login":
                 ProcessLogin(context);
                 break;
@@ -222,6 +226,20 @@ class HTTPServer {
         context.Response.OutputStream.Close();
     }
 
+
+    void ProcessValidate(HttpListenerContext context) {
+        string user = context.Request.QueryString["user"];
+        string token = context.Request.QueryString["token"];
+
+        bool reply = jwt.validateToken(token, int.Parse(user));
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply.ToString()).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
+    }
     void processGetVagas(HttpListenerContext context) {
         string name = context.Request.QueryString["name"];
 
@@ -323,9 +341,12 @@ class HTTPServer {
             reply = "naoExiste";
         }
         if (password.CompareTo(v.GetPassword()) == 0) {
-            reply = v.GetId_utilizador().ToString();
+            string token = jwt.generateToken(v.GetId_utilizador());
+            reply = "";
+            reply += "{\"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
         }
         else {
+  
             reply = "false";
         }
 
@@ -367,6 +388,7 @@ class HTTPServer {
         visitasDAO = new VisitasDAO(con);
         departamentoDAO = new DepartamentoDAO(con);
         pedidoVisitaDAO = new PedidoVisitaDAO(con);
+        jwt = new JWT();
 
     }
 
