@@ -94,8 +94,8 @@ class HTTPServer {
 
         string reply = "sucesso";
 
-        pv.setHoraInicio(DateTime.Parse(JSON["hora_inicio"]));
-        pv.setHoraFim(DateTime.Parse(JSON["hora_fim"]));
+        pv.setHoraInicio(DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
+        pv.setHoraFim(DateTime.Parse(JSON["hora_fim"]).ToUniversalTime());
         pv.setComentario(JSON["comentario"]);
         pv.setVisitado(JSON["visitado"]);
         pv.setInstituicao(instituicaoDAO.getIdByName(JSON["isnt"]));
@@ -104,6 +104,7 @@ class HTTPServer {
 
         try {
             pedidoVisitaDAO.Put(pv);
+            visitasDAO.deleteVaga(JSON["visitado"], DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
         } catch(Exception e) {
             Console.WriteLine(e.ToString());
             reply = "erro";

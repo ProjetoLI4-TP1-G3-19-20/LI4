@@ -6,16 +6,34 @@ class UserLatNavBar extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const u = urlParams.get("u");
     return (
-      <span className="border m-4">
-        <a href={"/userHistory?u=" + u}> Histórico</a>
-        <ul className="nav flex-column">
-          <span className="border m-4">
-            <li> {this.props.name} </li>
-            <li> Teste2 </li>
-            <li> Teste3 </li>
-          </span>
-        </ul>
-      </span>
+      <div className="position-relative m-4">
+        <form>
+          <div className="form-group-auto m-2">
+            <span style={{ fontSize: "30px" }}>Bem vindo!</span>
+          </div>
+
+          <div className="form-group-auto m-2">
+            <a
+              className="badge badge-primary"
+              style={{ fontSize: "20px" }}
+              href={"/userHistory?u=" + u}
+            >
+              {" "}
+              Histórico de Visitas
+            </a>
+          </div>
+          <div className="form-group-auto m-2">
+            <a
+              className="badge badge-primary"
+              style={{ fontSize: "20px" }}
+              href={"/visitReq?u=" + u}
+            >
+              {" "}
+              Pedir uma nova visita
+            </a>
+          </div>
+        </form>
+      </div>
     );
   }
 }

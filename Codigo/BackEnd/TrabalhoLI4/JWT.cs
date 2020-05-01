@@ -39,7 +39,6 @@ namespace LI4 {
             var handler = new JwtSecurityTokenHandler();
             SecurityToken st;
             try {
-                Console.WriteLine(token);
                 handler.ValidateToken(token, this.GetValidationParameters(), out st);
             } catch(Exception e) {
                 Console.WriteLine(e.ToString());

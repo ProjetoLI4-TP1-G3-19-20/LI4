@@ -6,6 +6,7 @@ import {
   getDepartamentosByInst,
   getPessoasByDepartamento,
   getVagas,
+  validateMe,
 } from "../HTTPRequests";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -43,7 +44,20 @@ class VisitReqForm extends Component {
       current: 0,
       events: [],
       selectedEvent: "",
+      user: -1,
     };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const u = urlParams.get("u");
+
+    validateMe(u).then((r) => {
+      r.text().then((r) => {
+        console.log(r);
+        if (String(r) === "True") {
+          this.setState({ auth: true, user: u });
+        }
+      });
+    });
 
     this.handleDuracao = this.handleDuracao.bind(this);
     this.handleComentario = this.handleComentario.bind(this);
@@ -98,7 +112,12 @@ class VisitReqForm extends Component {
         p.forEach((element) => {
           pdi.push({
             id: id,
-            title: "Vaga",
+            title:
+              "Vaga - " +
+              new Date(parseInt(element.inicio)).getHours() +
+              "h" +
+              new Date(parseInt(element.inicio)).getMinutes() +
+              "m",
             start: new Date(parseInt(element.inicio)),
             end: new Date(parseInt(element.fim)),
           });
@@ -154,70 +173,84 @@ class VisitReqForm extends Component {
   }
 
   render() {
-    return (
-      <div className="position-relative m-4">
-        <form>
-          <div className="form-group">
-            <label htmlFor="inputInst">Instituição</label>
-            <Select
-              onChange={this.handleInst}
-              className="basic-single"
-              options={this.state.instituicoes}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="inputDep">Departamento</label>
-            <Select
-              isDisabled={this.state.depsDisabled}
-              onChange={this.handleDep}
-              className="basic-single"
-              options={this.state.departamentos}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="input">Pessoa de Interesse</label>
-            <Select
-              isDisabled={this.state.isPdiDisabled}
-              onChange={this.handlePdi}
-              className="basic-single"
-              options={this.state.pdis}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="input">Data e Hora</label>
-            <div style={{ height: "500pt" }}>
-              <Calendar
-                events={this.state.events}
-                startAccessor="start"
-                endAccessor="end"
-                defaultDate={moment().toDate()}
-                localizer={localizer}
-                onSelectEvent={this.handleSelectEvent}
+    if (!this.state.auth) {
+      return <div>Acesso Negado</div>;
+    } else {
+      return (
+        <div className="position-relative m-4">
+          <form>
+            <div className="form-group-auto m-2">
+              <a
+                className="badge badge-primary"
+                style={{ fontSize: "20px" }}
+                href={"/main?u=" + this.state.user}
+              >
+                {" "}
+                Voltar atrás
+              </a>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputInst">Instituição</label>
+              <Select
+                onChange={this.handleInst}
+                className="basic-single"
+                options={this.state.instituicoes}
               />
             </div>
-          </div>
-          <div>
-            <div id="bootstrap-datetimepicker-widget"></div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="inputComentario">Comentários:</label>
-            <input
-              onKeyDown={this.handleKeyDown}
-              onChange={this.handleComentario}
-              className="form-control"
-              id="inputComentario"
-            />
-          </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={this.handleSubmit}
-          >
-            Submit
-          </button>
-        </form>
-      </div>
-    );
+            <div className="form-group">
+              <label htmlFor="inputDep">Departamento</label>
+              <Select
+                isDisabled={this.state.depsDisabled}
+                onChange={this.handleDep}
+                className="basic-single"
+                options={this.state.departamentos}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="input">Pessoa de Interesse</label>
+              <Select
+                isDisabled={this.state.isPdiDisabled}
+                onChange={this.handlePdi}
+                className="basic-single"
+                options={this.state.pdis}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="input">Data e Hora</label>
+              <div style={{ height: "500pt" }}>
+                <Calendar
+                  events={this.state.events}
+                  startAccessor="start"
+                  endAccessor="end"
+                  defaultDate={moment().toDate()}
+                  localizer={localizer}
+                  onSelectEvent={this.handleSelectEvent}
+                />
+              </div>
+            </div>
+            <div>
+              <div id="bootstrap-datetimepicker-widget"></div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputComentario">Comentários:</label>
+              <input
+                onKeyDown={this.handleKeyDown}
+                onChange={this.handleComentario}
+                className="form-control"
+                id="inputComentario"
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.handleSubmit}
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      );
+    }
   }
 }
 

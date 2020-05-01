@@ -162,3 +162,20 @@ export async function validateMe(id) {
     headers: new Headers(),
   });
 }
+
+export async function sendSMS(message, phone) {
+  let url = new URL("https://api.ez4uteam.com/ez4usms/API/sendSMS.php");
+  url.search = new URLSearchParams({
+    account: "a83870",
+    licensekey: "94440b861bc9af37853ce91c",
+    phoneNumber: phone,
+    messageText: message,
+    alfaSender: "UMVisitas",
+  });
+
+  return fetch(url, {
+    method: "GET",
+    mode: "no-cors",
+    headers: new Headers(),
+  });
+}

@@ -58,11 +58,27 @@ class VisitHistory extends Component {
     if (this.state.auth === true) {
       this.updateVisitas();
       return (
-        <ReactList
-          itemRenderer={this.renderItem}
-          length={this.state.visitas.length}
-          type="uniform"
-        />
+        <div className="position-relative m-4">
+          <form>
+            <div className="form-group-auto m-2">
+              <a
+                className="badge badge-primary"
+                style={{ fontSize: "20px" }}
+                href={"/main?u=" + this.state.user}
+              >
+                {" "}
+                Voltar atrás
+              </a>
+            </div>
+            <div className="form-group-auto m-2">
+              <ReactList
+                itemRenderer={this.renderItem}
+                length={this.state.visitas.length}
+                type="uniform"
+              />
+            </div>
+          </form>
+        </div>
       );
     } else {
       return <div>Acesso Negado</div>;

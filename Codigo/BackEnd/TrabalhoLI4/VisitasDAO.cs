@@ -224,7 +224,6 @@ public class VisitasDAO
                 Vaga v = new Vaga();
                 v.SetHora_fim(mr.GetDateTime("hora_fim"));
                 v.SetHora_inicio(mr.GetDateTime("hora_inicio"));
-                v.SetNr_pessoas(mr.GetInt32("NrDeVagas"));
                 va.Add(v);
             }
         }
@@ -240,5 +239,30 @@ public class VisitasDAO
             }
         }
         return va;
+    }
+
+    public void deleteVaga(string nome, DateTime inicio) {
+
+        MySqlConnection msc = new MySqlConnection(Connection);
+        try {
+            msc.Open();
+            string query = "DELETE FROM pessoadeinteresse_has_vagas piv " +
+                           "WHERE piv.nome = @n AND piv.hora_inicio = @d";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@n", nome);
+            mc.Parameters.AddWithValue("@d", inicio);
+            mc.ExecuteNonQuery();
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
     }
 }
