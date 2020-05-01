@@ -34,6 +34,30 @@ namespace LI4 {
             return tokenString;
         }
 
+        public string generateToken(String nome) {
+            var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.key));
+
+            var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials
+                             (securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var header = new JwtHeader(credentials);
+
+            //Some PayLoad that contain information about the  customer
+            var payload = new JwtPayload
+            {
+               { "nome", nome}
+           };
+
+            //
+            var secToken = new JwtSecurityToken(header, payload);
+            var handler = new JwtSecurityTokenHandler();
+
+            // Token to String so you can use it in your client
+            var tokenString = handler.WriteToken(secToken);
+
+            return tokenString;
+        }
+
         public bool validateToken(string token, int id) {
 
             var handler = new JwtSecurityTokenHandler();
@@ -53,6 +77,30 @@ namespace LI4 {
 
             enumerator.MoveNext();
             if (enumerator.Current.Value.ToString().CompareTo(id.ToString()) != 0) return false;
+
+            return true;
+        }
+
+        public bool validateToken(string token, String nome) {
+
+            var handler = new JwtSecurityTokenHandler();
+            SecurityToken st;
+            try {
+                handler.ValidateToken(token, this.GetValidationParameters(), out st);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+
+            JwtSecurityToken t = handler.ReadJwtToken(token);
+
+            JwtPayload payload = t.Payload;
+
+            var enumerator = payload.Claims.GetEnumerator();
+
+            enumerator.MoveNext();
+            if (enumerator.Current.Value.CompareTo(nome) != 0) return false;
 
             return true;
         }

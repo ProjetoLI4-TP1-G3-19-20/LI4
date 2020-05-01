@@ -136,6 +136,19 @@ export async function getVagas(name) {
   });
 }
 
+export async function getPedidos(name) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "pedidos",
+    name: name,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
 export async function getVisitas(id) {
   let url = new URL("http://localhost:8080");
   url.search = new URLSearchParams({
@@ -154,6 +167,20 @@ export async function validateMe(id) {
   url.search = new URLSearchParams({
     t: "validate",
     user: id,
+    token: sessionStorage.getItem("token"),
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function validateMePI(name) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "validateName",
+    user: name,
     token: sessionStorage.getItem("token"),
   });
 

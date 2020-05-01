@@ -60,7 +60,7 @@ namespace LI4
             try
             {
                 msc.Open();
-                string query = "SELECT * FROM pedidovisita WHERE id=@id";
+                string query = "SELECT * FROM pedidovisita WHERE idVisita=@id";
 
 
                 MySqlCommand mc = new MySqlCommand(query, msc);
@@ -135,5 +135,38 @@ namespace LI4
             }
             return visits;
         }
+
+
+        public List<PedidoVisita> getAllPedidos(String nome) {
+            List<PedidoVisita> va = new List<PedidoVisita>();
+
+            MySqlConnection msc = new MySqlConnection(Connection);
+            try {
+                msc.Open();
+                string query = "SELECT * FROM pedidovisita pv " +
+                               "WHERE pv.visitado = @n";
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Parameters.AddWithValue("@n", nome);
+                MySqlDataReader mr = mc.ExecuteReader();
+                while (mr.Read()) {
+                    PedidoVisita pv = new PedidoVisita();
+                    pv = this.Get(mr.GetInt32("idVisita"));
+                    va.Add(pv);
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+            return va;
+        }
+
     }
 }

@@ -89,6 +89,21 @@ namespace LI4 {
             this.visitante = visitante;
         }
 
+        public String getJson() {
+            string j = "{";
+
+            j += "\"inicio\": \"" + this.getHoraInicio().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
+            j += "\"fim\": \"" + this.getHoraFim().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
+            j += "\"comentario\": \"" + this.getComentario() + "\",";
+            j += "\"visitante\": \"" + this.getVisitante() + "\",";
+            j += "\"departamento\": \"" + this.getDepartamento() + "\",";
+            j += "\"instituicao\": \"" + this.getInstituicao() + "\"";
+
+            j += "}";
+
+            return j;
+        }
+
 
     }
 }

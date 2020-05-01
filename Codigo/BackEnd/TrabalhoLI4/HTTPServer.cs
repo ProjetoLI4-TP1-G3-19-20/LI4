@@ -89,44 +89,15 @@ class HTTPServer {
 
     }
 
-    void ProcessCreatePedido(HttpListenerContext context, Dictionary<String, String> JSON) {
-        PedidoVisita pv = new PedidoVisita();
-
-        string reply = "sucesso";
-
-        pv.setHoraInicio(DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
-        pv.setHoraFim(DateTime.Parse(JSON["hora_fim"]).ToUniversalTime());
-        pv.setComentario(JSON["comentario"]);
-        pv.setVisitado(JSON["visitado"]);
-        pv.setInstituicao(instituicaoDAO.getIdByName(JSON["isnt"]));
-        pv.setDepartamento(departamentoDAO.getIdByName(JSON["dep"], instituicaoDAO.getIdByName(JSON["isnt"])));
-        pv.setVisitante(int.Parse(JSON["visitante"]));
-
-        try {
-            pedidoVisitaDAO.Put(pv);
-            visitasDAO.deleteVaga(JSON["visitado"], DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
-        } catch(Exception e) {
-            Console.WriteLine(e.ToString());
-            reply = "erro";
-        }
-
-        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
-
-        context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = size;
-        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
-        context.Response.OutputStream.Close();
-
-
-
-    }
 
     void ProcessGetRequests(HttpListenerContext context) {
 
         switch (context.Request.QueryString["t"]) {
             case "validate":
                 ProcessValidate(context);
+                break;
+            case "validateName":
+                ProcessValidateName(context);
                 break;
             case "login":
                 ProcessLogin(context);
@@ -146,10 +117,47 @@ class HTTPServer {
             case "vagas":
                 processGetVagas(context);
                 break;
+            case "pedidos":
+                processGetPedidos(context);
+                break;
         }
     }
 
-   
+    void ProcessCreatePedido(HttpListenerContext context, Dictionary<String, String> JSON) {
+        PedidoVisita pv = new PedidoVisita();
+
+        string reply = "sucesso";
+
+        pv.setHoraInicio(DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
+        pv.setHoraFim(DateTime.Parse(JSON["hora_fim"]).ToUniversalTime());
+        pv.setComentario(JSON["comentario"]);
+        pv.setVisitado(JSON["visitado"]);
+        pv.setInstituicao(instituicaoDAO.getIdByName(JSON["isnt"]));
+        pv.setDepartamento(departamentoDAO.getIdByName(JSON["dep"], instituicaoDAO.getIdByName(JSON["isnt"])));
+        pv.setVisitante(int.Parse(JSON["visitante"]));
+
+        try {
+            pedidoVisitaDAO.Put(pv);
+            visitasDAO.deleteVaga(JSON["visitado"], DateTime.Parse(JSON["hora_inicio"]).ToUniversalTime());
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+            reply = "erro";
+        }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
+
+
+    }
+
+
 
     void ProcessCreateVisitante(HttpListenerContext context, Dictionary<String, String> JSON) {
         string reply;
@@ -241,6 +249,21 @@ class HTTPServer {
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
     }
+
+    void ProcessValidateName(HttpListenerContext context) {
+        string user = context.Request.QueryString["user"];
+        string token = context.Request.QueryString["token"];
+
+        bool reply = jwt.validateToken(token, int.Parse(user));
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply.ToString()).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
+    }
+
     void processGetVagas(HttpListenerContext context) {
         string name = context.Request.QueryString["name"];
 
@@ -248,6 +271,29 @@ class HTTPServer {
         string reply = "[";
         
         for(int i = 0; i < lista.Count; i++) {
+            reply += lista[i].getJson() + ",";
+        }
+
+        char[] chars = { ',' };
+        reply = reply.Trim(chars);
+
+        reply += "]";
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
+    void processGetPedidos(HttpListenerContext context) {
+        string name = context.Request.QueryString["name"];
+
+        List<PedidoVisita> lista = pedidoVisitaDAO.getAllPedidos(name);
+        string reply = "[";
+
+        for (int i = 0; i < lista.Count; i++) {
             reply += lista[i].getJson() + ",";
         }
 
