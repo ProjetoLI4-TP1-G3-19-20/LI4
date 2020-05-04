@@ -136,6 +136,48 @@ namespace LI4
             return visits;
         }
 
+        public List<Vaga> getHorasDisponiveis(string visitado)
+        {
+            List<Vaga> v = new List<Vaga>();
+            MySqlConnection msc = new MySqlConnection(Connection);
+
+
+            try
+            {
+                msc.Open();
+                string query = "SELECT * FROM pessoadeinteresse_has_vagas where nome=@n";
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Prepare();
+                mc.Parameters.AddWithValue("@n", visitado);
+                MySqlDataReader mr = mc.ExecuteReader();
+                Vaga vag = new Vaga();
+                while (mr.Read())
+                {
+                    vag.SetHora_inicio(mr.GetDateTime("hora_inicio"));
+                    vag.SetHora_fim(mr.GetDateTime("hora_fim"));
+                    v.Add(vag);
+                }
+                mr.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                try
+                {
+                    msc.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return v;
+        }
+
 
         public List<PedidoVisita> getAllPedidos(String nome) {
             List<PedidoVisita> va = new List<PedidoVisita>();
