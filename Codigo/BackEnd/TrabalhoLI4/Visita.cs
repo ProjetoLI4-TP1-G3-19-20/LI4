@@ -8,25 +8,20 @@ namespace LI4
 {
     public class Visita
     {
-        private DateTime data;
         private string comentario;
-        private bool aceite;
         private int estado;
         private DateTime data_inicio;
         private DateTime data_saida;
         private int visitante;
         private string visitado;
         private string avaliacao;
-        private string comentarios;
         private int id_inst;
         private int departamentoID;
 
 
         public Visita()
         {
-            this.data = new DateTime();
             this.comentario = "";
-            this.aceite = false;
             this.estado = -1;
             this.data_inicio = new DateTime();
             this.data_saida = new DateTime();
@@ -34,37 +29,23 @@ namespace LI4
             this.visitado = "";
             this.avaliacao = "";
             this.id_inst = -1;
+            this.departamentoID = -1;
         }
 
 
-        public Visita(DateTime data, string comentario, bool aceite, int estado, DateTime data_inicio, DateTime data_saida, int v, string vis, string coment, string aval)
+        public Visita(string comentario, int estado, DateTime data_inicio, DateTime data_saida, int v, string vis, string aval, int id_inst, int dep)
         {
-            this.data = data;
             this.comentario = comentario;
-            this.aceite = aceite;
             this.estado = estado;
             this.data_inicio = data_inicio;
             this.data_saida = data_saida;
             this.visitante = v;
             this.visitado = vis;
-            this.comentarios = coment;
             this.avaliacao = aval;
+            this.estado = estado;
+            this.id_inst = id_inst;
+            this.departamentoID = dep;
         }
-
-        public Visita(Visita v)
-        {
-            this.data = v.GetData();
-            this.comentario = v.GetComentario();
-            this.aceite = v.IsAceite();
-            this.estado = v.GetEstado();
-            this.data_inicio = v.GetData_inicio();
-            this.data_saida = v.GetData_saida();
-            this.visitante = v.GetVisitante();
-            this.visitado = v.GetVisitado();
-            this.avaliacao = v.GetAvaliacao();
-            this.comentarios = v.GetComentario();
-        }
-
 
         public int GetDepartamentoID() {
             return departamentoID;
@@ -88,11 +69,6 @@ namespace LI4
             this.id_inst = id_inst;
         }
 
-        public string GetComentarios()
-        {
-            return this.comentarios;
-        }
-
         public void SetComentario(string c)
         {
             this.comentario = c;
@@ -104,29 +80,9 @@ namespace LI4
         }
 
 
-        public DateTime GetData()
-        {
-            return data;
-        }
-
-        public void SetData(DateTime data)
-        {
-            this.data = data;
-        }
-
         public string GetComentario()
         {
             return comentario;
-        }
-
-        public bool IsAceite()
-        {
-            return aceite;
-        }
-
-        public void SetAceite(bool aceite)
-        {
-            this.aceite = aceite;
         }
 
         public int GetEstado()

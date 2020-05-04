@@ -120,6 +120,12 @@ class HTTPServer {
             case "pedidos":
                 processGetPedidos(context);
                 break;
+            case "userName":
+                processGetUserName(context);
+                break;
+            case "aceitePedido":
+                processAceitePedido(context);
+                break;
         }
     }
 
@@ -262,6 +268,43 @@ class HTTPServer {
         context.Response.ContentLength64 = size;
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
+    }
+
+
+    void processAceitePedido(HttpListenerContext context) {
+        string aceite = context.Request.QueryString["accepted"];
+        string id = context.Request.QueryString["id"];
+
+        PedidoVisita pv = pedidoVisitaDAO.Get(int.Parse(id));
+
+        if (aceite.CompareTo("true") == 0) {
+            Visita v = new Visita(pv.getComentario(), 0, pv.getHoraInicio(), pv.getHoraFim(), pv.getVisitante(), pv.getVisitado(), "", pv.getInstituicao(), pv.getDepartamento());
+            visitasDAO.Put(v);
+        }
+
+        pedidoVisitaDAO.deletePedido(pv.getIdVisita());
+
+        string reply = "ok";
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
+    void processGetUserName(HttpListenerContext context) {
+        string id = context.Request.QueryString["id"];
+
+        string reply = visitanteDAO.getName(int.Parse(id));
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
     void processGetVagas(HttpListenerContext context) {

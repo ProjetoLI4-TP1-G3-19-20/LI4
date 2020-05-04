@@ -78,6 +78,7 @@ namespace LI4
                     visit.setDepartamento(mr.GetInt32("idDepartamento"));
                     visit.setVisitado(mr.GetString("visitado"));
                     visit.setVisitante(mr.GetInt32("idUser"));
+                    visit.setIdVisita(mr.GetInt32("idVisita"));
                     mr.Close();
                 }
             }
@@ -99,86 +100,34 @@ namespace LI4
             return visit;
         }
 
-
-        public ICollection<PedidoVisita> GetAll()
-        {
-            ICollection<PedidoVisita> visits = new HashSet<PedidoVisita>();
+        public void deletePedido(int id) {
             MySqlConnection msc = new MySqlConnection(Connection);
 
-            try
-            {
+            try {
                 msc.Open();
-                string query = "SELECT id FROM pedidovisita";
-                MySqlCommand mc = new MySqlCommand(query, msc);
-                MySqlDataReader mr = mc.ExecuteReader();
-                while (mr.Read())
-                {
-                    int id = mr.GetInt32("id");
-                    visits.Add(this.Get(id));
-                }
+                string query = "DELETE FROM pedidovisita WHERE idVisita = @id";
 
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Parameters.AddWithValue("@id", id);
+
+                mc.ExecuteNonQuery();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                throw e;
             }
-            finally
-            {
-                try
-                {
+            finally {
+                try {
                     msc.Close();
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     Console.WriteLine(e.ToString());
                 }
             }
-            return visits;
         }
+    
 
-        public List<Vaga> getHorasDisponiveis(string visitado)
-        {
-            List<Vaga> v = new List<Vaga>();
-            MySqlConnection msc = new MySqlConnection(Connection);
-
-
-            try
-            {
-                msc.Open();
-                string query = "SELECT * FROM pessoadeinteresse_has_vagas where nome=@n";
-                MySqlCommand mc = new MySqlCommand(query, msc);
-                mc.Prepare();
-                mc.Parameters.AddWithValue("@n", visitado);
-                MySqlDataReader mr = mc.ExecuteReader();
-                Vaga vag = new Vaga();
-                while (mr.Read())
-                {
-                    vag.SetHora_inicio(mr.GetDateTime("hora_inicio"));
-                    vag.SetHora_fim(mr.GetDateTime("hora_fim"));
-                    v.Add(vag);
-                }
-                mr.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            finally
-            {
-                try
-                {
-                    msc.Close();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
-            }
-
-            return v;
-        }
-
-
+    
         public List<PedidoVisita> getAllPedidos(String nome) {
             List<PedidoVisita> va = new List<PedidoVisita>();
 

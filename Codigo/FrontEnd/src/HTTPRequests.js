@@ -206,3 +206,30 @@ export async function sendSMS(message, phone) {
     headers: new Headers(),
   });
 }
+
+export async function getUserName(id) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "userName",
+    id: id,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function aceitePedido(accepted, idVisita) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "aceitePedido",
+    accepted: accepted,
+    id: idVisita,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}

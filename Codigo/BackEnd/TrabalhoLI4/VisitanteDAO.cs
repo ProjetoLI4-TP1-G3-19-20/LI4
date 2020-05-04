@@ -240,4 +240,33 @@ public class VisitanteDAO
         }
         return visits;
     }
+
+    public string getName(int id) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+        string name = "";
+        try {
+            msc.Open();
+            string query = "SELECT Nome FROM visitante WHERE id = @id";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@id", id);
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read()) {
+                name = mr.GetString("Nome");
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        return name;
+    }
 }

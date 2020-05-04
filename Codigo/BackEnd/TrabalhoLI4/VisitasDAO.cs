@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using LI4;
-using System.Collections;
 
 public class VisitasDAO
 {
@@ -14,22 +13,24 @@ public class VisitasDAO
         Connection = con;
     }
 
-    public void Put(Visita visit, int id_inst)
+    public void Put(Visita visit)
     {
         MySqlConnection msc = new MySqlConnection(Connection);
 
         try
         {
             msc.Open();
-            string query = "INSERT INTO `trabalholi4`.`visitas`(`idInstituicao`,`idUser`,`dataInicio`,`dataSaida`,`estado`,`avaliacao`,`comentarios`) VALUES (@idi, @idu, @di, @ds, @estado, @aval, @coment)";
+            string query = "INSERT INTO `trabalholi4`.`visitas`(`idInstituicao`,`idUser`,`dataInicio`,`dataSaida`,`estado`,`avaliacao`,`comentarios`, `visitado`, `departamentos_id`) VALUES (@idi, @idu, @di, @ds, @estado, @aval, @coment, @visitado, @dep)";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@idi", id_inst);
+            mc.Parameters.AddWithValue("@idi", visit.GetId_inst());
             mc.Parameters.AddWithValue("@idu", visit.GetVisitante());
             mc.Parameters.AddWithValue("@di", visit.GetData_inicio());
             mc.Parameters.AddWithValue("@ds", visit.GetData_saida());
             mc.Parameters.AddWithValue("@estado", visit.GetEstado());
             mc.Parameters.AddWithValue("@aval", visit.GetAvaliacao());
             mc.Parameters.AddWithValue("@coment", visit.GetComentario());
+            mc.Parameters.AddWithValue("@dep", visit.GetDepartamentoID());
+            mc.Parameters.AddWithValue("@visitado", visit.GetVisitado());
             mc.ExecuteNonQuery();
         }
         catch (Exception e)
@@ -68,7 +69,6 @@ public class VisitasDAO
                 visit.SetVisitado(mr.GetString("visitado"));
                 visit.SetVisitante(id_visit);
                 visit.SetData_inicio(data_inicio);
-                visit.SetData(data_inicio);
                 visit.SetData_saida(mr.GetDateTime("dataSaida"));
                 visit.SetComentario(mr.GetString("comentarios"));
                 visit.SetAvaliacao(mr.GetString("avaliacao"));

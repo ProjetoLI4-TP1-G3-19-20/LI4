@@ -39,6 +39,7 @@ class VisitHistory extends Component {
             comentario={this.state.visitas[index].comentario}
             id_inst={this.state.visitas[index].id_inst}
             departamentosID={this.state.visitas[index].departamentosID}
+            concluded={1}
           />
         }
       </div>

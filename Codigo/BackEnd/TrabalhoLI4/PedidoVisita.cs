@@ -12,6 +12,7 @@ namespace LI4 {
         private int departamento;
         private int instituicao;
         private int visitante;
+        private int idVisita;
 
         public PedidoVisita() {
             this.hora_inicio = new DateTime();
@@ -21,16 +22,15 @@ namespace LI4 {
             this.departamento = -1;
             this.instituicao = -1;
             this.visitante = -1;
+            this.idVisita = -1;
         }
 
-        public PedidoVisita(DateTime hora_inicio, DateTime hora_fim, String comentario, String visitado, int departamento, int instituicao, int visitante) {
-            this.hora_inicio = hora_inicio;
-            this.hora_fim = hora_fim;
-            this.comentario = comentario;
-            this.visitado = visitado;
-            this.departamento = departamento;
-            this.instituicao = instituicao;
-            this.visitante = visitante;
+        public int getIdVisita() {
+            return this.idVisita;
+        }
+
+        public void setIdVisita(int idVisita) {
+            this.idVisita = idVisita;
         }
 
         public DateTime getHoraInicio() {
@@ -96,8 +96,11 @@ namespace LI4 {
             j += "\"fim\": \"" + this.getHoraFim().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
             j += "\"comentario\": \"" + this.getComentario() + "\",";
             j += "\"visitante\": \"" + this.getVisitante() + "\",";
+            j += "\"id\": \"" + this.getIdVisita() + "\",";
             j += "\"departamento\": \"" + this.getDepartamento() + "\",";
             j += "\"instituicao\": \"" + this.getInstituicao() + "\"";
+
+            
 
             j += "}";
 
