@@ -12,28 +12,32 @@ public class InstituicaoDAO {
         Connection = con;
     }
 
-    public void Put(Instituicao inst) {
+    public bool Put(Instituicao inst) {
         MySqlConnection msc = new MySqlConnection(Connection);
 
         try {
             msc.Open();
-            string query = "INSERT INTO `trabalholi4`.`instituicao`(`id_inst`,`Nome`,`email`,`localizacao`) VALUES (@id, @nome, @mail, @local)";
+            string query = "SELECT * FROM Instituicao WHERE Nome=@nome";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@id", inst.GetCod_instituicao());
+            mc.Parameters.AddWithValue("@nome", inst.GetNome());
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read()) {
+                mr.Close();
+                msc.Close();
+                return false;
+            }
+
+            query = "INSERT INTO `trabalholi4`.`instituicao`(`Nome`,`email`,`localizacao`) VALUES (@nome, @mail, @local)";
+            mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@nome", inst.GetNome());
             mc.Parameters.AddWithValue("@mail", inst.GetEmail());
             mc.Parameters.AddWithValue("@local", inst.GetLocalizacao());
             mc.ExecuteNonQuery();
-            foreach (string contacto in inst.GetContactos()) {
-                query = "INSERT INTO Contactos (id_inst, telemovel) VALUES (@id, @tele)";
-                MySqlCommand mc1 = new MySqlCommand(query, msc);
-                mc1.Parameters.AddWithValue("@id", inst.GetCod_instituicao());
-                mc1.Parameters.AddWithValue("@tele", contacto);
-                mc1.ExecuteNonQuery();
-            }
         }
         catch (Exception e) {
             Console.WriteLine(e.ToString());
+            return false;
         }
         finally {
             try {
@@ -43,6 +47,8 @@ public class InstituicaoDAO {
                 Console.WriteLine(e.ToString());
             }
         }
+
+        return true;
     }
 
     public Instituicao Get(int id_inst) {

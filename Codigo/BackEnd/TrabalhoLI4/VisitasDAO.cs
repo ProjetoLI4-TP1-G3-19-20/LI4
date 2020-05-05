@@ -265,4 +265,29 @@ public class VisitasDAO
             }
         }
     }
+
+    public void putVaga(DateTime inicio, DateTime fim, string nome) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+        try {
+            msc.Open();
+            string query = "INSERT INTO `trabalholi4`.`pessoadeinteresse_has_vagas`(`nome`,`hora_inicio`,`hora_fim`)VALUES(@nome, @inicio, @fim); ";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@nome", nome);
+            mc.Parameters.AddWithValue("@inicio", inicio);
+            mc.Parameters.AddWithValue("@fim", fim);
+            mc.ExecuteNonQuery();
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+    }
 }

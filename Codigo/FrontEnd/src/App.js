@@ -8,6 +8,8 @@ import AdminRegForm from "./components/AdminRegForm";
 import ColabRegForm from "./components/ColabRegForm";
 import VisitReqForm from "./components/visitReqForm";
 import AcceptVisitForm from "./components/AcceptVisitForm";
+import NewInstForm from "./components/newInstForm";
+import CreateVaga from "./components/CreateVaga";
 
 class App extends Component {
   constructor(props) {
@@ -99,9 +101,34 @@ class App extends Component {
           </React.Fragment>
         );
       }
-
-      default:
-        console.log("Algo foi mal cara");
+      case "/newInst": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <NewInstForm />
+            </main>
+          </React.Fragment>
+        );
+      }
+      case "/createVaga": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <CreateVaga />
+            </main>
+          </React.Fragment>
+        );
+      }
+      default: {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">Oops! Este página não existe!</main>
+          </React.Fragment>
+        );
+      }
     }
   }
 

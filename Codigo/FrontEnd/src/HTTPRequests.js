@@ -84,6 +84,36 @@ export async function createPedido(state, u) {
   });
 }
 
+export async function createInst(state) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      t: "createInst",
+      nome: state.nome,
+      email: state.email,
+      localizacao: state.localizacao,
+    }),
+    headers: new Headers(),
+  });
+}
+
+export async function createVaga(start, end, user) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      t: "createVaga",
+      start: start,
+      end: end,
+      user: user,
+    }),
+    headers: new Headers(),
+  });
+}
+
 export async function getAllInsts() {
   let url = new URL("http://localhost:8080");
   url.search = new URLSearchParams({

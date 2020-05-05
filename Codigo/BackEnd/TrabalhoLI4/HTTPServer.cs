@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Web.Script.Serialization;
 using LI4;
@@ -83,6 +85,12 @@ class HTTPServer {
             case "createPedido":
                 ProcessCreatePedido(context, JSON);
                 break;
+            case "createInst":
+                ProcessCreateInst(context, JSON);
+                break;
+            case "createVaga":
+                ProcessCreateVaga(context, JSON);
+                break;
 
         }
        
@@ -129,6 +137,29 @@ class HTTPServer {
         }
     }
 
+
+    void ProcessCreateVaga(HttpListenerContext context, Dictionary<String, String> JSON) {
+
+        string start = JSON["start"];
+        string end = JSON["end"];
+        string user = JSON["user"];
+
+        visitasDAO.putVaga(DateTime.Parse(start).ToUniversalTime(), DateTime.Parse(end).ToUniversalTime(), user);
+
+        string reply = "ok";
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
+
+
+    }
+
+
     void ProcessCreatePedido(HttpListenerContext context, Dictionary<String, String> JSON) {
         PedidoVisita pv = new PedidoVisita();
 
@@ -151,6 +182,27 @@ class HTTPServer {
             reply = "erro";
         }
 
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
+
+
+    }
+
+    void ProcessCreateInst(HttpListenerContext context, Dictionary<String, String> JSON) {
+
+        string reply = "sucesso";
+
+        bool x = instituicaoDAO.Put(new Instituicao(-1, JSON["nome"], JSON["email"], new ArrayList(), JSON["localizacao"]));
+
+        if (!x) {
+            reply = "erro";
+        }
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
 
         context.Response.ContentType = "text/simple";
