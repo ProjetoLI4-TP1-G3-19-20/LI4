@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { getPedidos, getUserName, aceitePedido } from "../HTTPRequests";
+import {
+  getPedidos,
+  getUserName,
+  aceitePedido,
+  getVisitasMarcadas,
+} from "../HTTPRequests";
 import PedidoVisitaComponent from "./PedidoVisitaComponent";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -17,9 +22,11 @@ class AcceptVisitForm extends Component {
     this.state = {
       auth: true,
       events: [],
+      confirmedEvents: [],
       pedidos: [],
       panel: 0,
       selectedEvent: [],
+      disabled: true,
       u: u,
     };
 
@@ -33,7 +40,7 @@ class AcceptVisitForm extends Component {
   }
 
   handleSelectEvent(event) {
-    this.setState({ selectedEvent: event });
+    this.setState({ selectedEvent: event, disabled: event.set });
   }
 
   handleSubmit() {
@@ -50,25 +57,26 @@ class AcceptVisitForm extends Component {
   }
 
   handleRefuse() {
-    aceitePedido(false, this.state.pedidos[this.selectedEvent.id].id).then(
-      (r) => {
-        this.updatePedidos();
-        this.setState({ panel: 0 });
-      }
-    );
+    aceitePedido(
+      false,
+      this.state.pedidos[this.state.selectedEvent.id].id
+    ).then((r) => {
+      this.updatePedidos();
+      this.setState({ panel: 0 });
+    });
   }
 
   updatePedidos() {
+    var e = [];
+    var id = 0;
     getPedidos(this.state.u).then((r) => {
-      r.json().then((r) => {
-        console.log(r);
-        var e = [];
-        var id = 0;
-        r.forEach((element) => {
+      r.json().then((rr) => {
+        rr.forEach((element) => {
           getUserName(element.visitante).then((r) => {
             r.text().then((r) => {
               element.visitante = r;
               e.push({
+                set: false,
                 id: id,
                 title:
                   new Date(parseInt(element.inicio)).getHours() +
@@ -80,10 +88,38 @@ class AcceptVisitForm extends Component {
                 end: new Date(parseInt(element.fim)),
               });
               id++;
+              this.setState({ pedidos: rr, events: e });
             });
           });
         });
-        this.setState({ pedidos: r, events: e });
+      });
+    });
+
+    getVisitasMarcadas(this.state.u).then((r) => {
+      var e = [];
+      var id = 10000;
+      r.json().then((r) => {
+        r.forEach((element) => {
+          getUserName(element.visitante).then((r) => {
+            r.text().then((r) => {
+              element.visitante = r;
+              e.push({
+                set: true,
+                id: id,
+                title:
+                  new Date(parseInt(element.data_inicio)).getHours() +
+                  "h" +
+                  new Date(parseInt(element.data_inicio)).getMinutes() +
+                  "m - " +
+                  r,
+                start: new Date(parseInt(element.data_inicio)),
+                end: new Date(parseInt(element.data_saida)),
+              });
+              this.setState({ confirmedEvents: e });
+              id++;
+            });
+          });
+        });
       });
     });
   }
@@ -93,6 +129,7 @@ class AcceptVisitForm extends Component {
       return <div>Acesso Negado</div>;
     } else {
       if (this.state.panel === 0) {
+        console.log(this.state.confirmedEvents.concat(this.state.events));
         return (
           <div className="position-relative m-4">
             <form>
@@ -108,9 +145,19 @@ class AcceptVisitForm extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="input">Data e Hora</label>
-                <div style={{ height: "500pt" }}>
+                <div>
                   <Calendar
-                    events={this.state.events}
+                    style={{ height: 600, width: "120%" }}
+                    eventPropGetter={(event, start, end, isSelected) => {
+                      var backgroundColor = "#3DD120";
+                      if (event.set === false) backgroundColor = "#1A37D7";
+                      if (event.set === false && isSelected === true)
+                        backgroundColor = "#404995";
+                      return { style: { backgroundColor } };
+                    }}
+                    events={this.state.confirmedEvents.concat(
+                      this.state.events
+                    )}
                     startAccessor="start"
                     endAccessor="end"
                     defaultDate={moment().toDate()}
@@ -126,6 +173,7 @@ class AcceptVisitForm extends Component {
                 type="button"
                 className="btn btn-primary"
                 onClick={this.handleSubmit}
+                disabled={this.state.disabled}
               >
                 Verificar
               </button>
@@ -133,15 +181,12 @@ class AcceptVisitForm extends Component {
           </div>
         );
       } else if (this.state.panel === 1) {
+        console.log(this.state.pedidos);
         return (
           <div>
             <PedidoVisitaComponent
-              data_inicio={new Date(
-                parseInt(this.state.pedidos[this.state.selectedEvent.id].fim)
-              ).toString()}
-              data_saida={new Date(
-                parseInt(this.state.pedidos[this.state.selectedEvent.id].inicio)
-              ).toString()}
+              data_inicio={this.state.selectedEvent.start.toString()}
+              data_saida={this.state.selectedEvent.end.toString()}
               visitante={
                 this.state.pedidos[this.state.selectedEvent.id].visitante
               }

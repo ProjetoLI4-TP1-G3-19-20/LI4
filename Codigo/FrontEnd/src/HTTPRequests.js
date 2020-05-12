@@ -263,3 +263,16 @@ export async function aceitePedido(accepted, idVisita) {
     headers: new Headers(),
   });
 }
+
+export async function getVisitasMarcadas(visitado) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "visitasMarcadas",
+    visitado: visitado,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}

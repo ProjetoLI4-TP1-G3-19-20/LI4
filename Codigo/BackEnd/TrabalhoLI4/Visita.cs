@@ -150,6 +150,22 @@ namespace LI4
 
             return r;
         }
-     
+
+        public string getJsonTimeStamp(string nameInst, string nameDep) {
+            string r = "";
+
+            r += "{";
+            r += "\"data_inicio\" : \"" + this.GetData_inicio().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
+            r += "\"comentario\" : \"" + this.GetComentario() + "\",";
+            r += "\"data_saida\" : \"" + this.GetData_saida().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
+            r += "\"visitante\" : \"" + this.GetVisitante() + "\",";
+            r += "\"visitado\" : \"" + this.GetVisitado() + "\",";
+            r += "\"id_inst\" : \"" + nameInst + "\",";
+            r += "\"departamentosID\" : \"" + nameDep + "\",";
+            r += "\"avaliacao\" : \"" + this.GetAvaliacao() + "\"}";
+
+            return r;
+        }
+
     }
 }

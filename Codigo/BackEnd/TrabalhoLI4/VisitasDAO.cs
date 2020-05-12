@@ -290,4 +290,37 @@ public class VisitasDAO
         }
 
     }
+
+    public List<Visita> getFutureVisits(String visitado) {
+        List<Visita> list = new List<Visita>();
+
+        MySqlConnection msc = new MySqlConnection(Connection);
+        try {
+            msc.Open();
+            string query = "SELECT * FROM Visitas v " +
+                "           WHERE v.estado = 0 AND v.visitado = @name";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@name", visitado);
+            MySqlDataReader mr = mc.ExecuteReader();
+            while (mr.Read()) {
+                Visita v = new Visita();
+                v = this.Get(mr.GetInt32("idUser"), mr.GetInt32("idInstituicao"), mr.GetDateTime("dataInicio"));
+                list.Add(v);
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+
+        return list;
+    }
 }

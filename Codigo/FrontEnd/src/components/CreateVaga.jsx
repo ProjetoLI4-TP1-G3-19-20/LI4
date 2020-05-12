@@ -29,6 +29,7 @@ class CreateVaga extends Component {
         p.forEach((element) => {
           pdi.push({
             id: id,
+            set: true,
             title:
               "Vaga - " +
               new Date(parseInt(element.inicio)).getHours() +
@@ -58,6 +59,7 @@ class CreateVaga extends Component {
             start,
             end,
             title,
+            set: false,
           },
         ],
       });
@@ -87,6 +89,7 @@ class CreateVaga extends Component {
             <Calendar
               selectable
               localizer={localizer}
+              style={{ height: 700, width: "120%" }}
               events={this.state.oldEvents.concat(this.state.events)}
               defaultView={Views.WEEK}
               scrollToTime={new Date(1970, 1, 1, 6)}

@@ -134,6 +134,9 @@ class HTTPServer {
             case "aceitePedido":
                 processAceitePedido(context);
                 break;
+            case "visitasMarcadas":
+                processGetVisitasMarcadas(context);
+                break;
         }
     }
 
@@ -453,6 +456,39 @@ class HTTPServer {
             nameInst = instituicaoDAO.getNamebyId(lista[i].GetId_inst());
             nameDep = departamentoDAO.getNameById(lista[i].GetId_inst(), lista[i].GetDepartamentoID());
             reply += lista[i].getJson(nameInst, nameDep);
+            reply += ",";
+        }
+
+        char[] chars = { ',' };
+        reply = reply.Trim(chars);
+
+        reply += "]";
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
+
+    void processGetVisitasMarcadas(HttpListenerContext context) {
+        string reply = "";
+
+        string visitado = context.Request.QueryString["visitado"];
+
+        List<Visita> lista = visitasDAO.getFutureVisits(visitado);
+
+        string nameInst, nameDep;
+
+        reply += "[";
+
+        for (int i = 0; i < lista.Count; i++) {
+            nameInst = instituicaoDAO.getNamebyId(lista[i].GetId_inst());
+            nameDep = departamentoDAO.getNameById(lista[i].GetId_inst(), lista[i].GetDepartamentoID());
+            reply += lista[i].getJsonTimeStamp(nameInst, nameDep);
             reply += ",";
         }
 
