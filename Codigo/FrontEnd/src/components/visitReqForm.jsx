@@ -161,7 +161,9 @@ class VisitReqForm extends Component {
       const u = urlParams.get("u");
       createPedido(this.state, u).then((r) => {
         r.text().then((r) => {
-          console.log(r);
+          if (String(r) === "sucesso") {
+            window.location.href = "/main?u=" + this.state.user;
+          }
         });
       });
     }
