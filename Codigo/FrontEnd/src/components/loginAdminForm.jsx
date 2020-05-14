@@ -1,9 +1,9 @@
 import React from "react";
 import "./helper.css";
 import { Component } from "react";
-import { login } from "../HTTPRequests";
+import { loginAdmin } from "../HTTPRequests";
 
-class LoginForm extends Component {
+class LoginAdminForm extends Component {
   constructor(props) {
     super(props);
     this.state = { email: "", password: "", current: 0 };
@@ -29,7 +29,7 @@ class LoginForm extends Component {
   }
 
   handleSubmit() {
-    login(this.state.email, this.state.password).then((r) => {
+    loginAdmin(this.state.email, this.state.password).then((r) => {
       r.text().then((rr) => {
         console.log(rr);
         if (String(rr) === "false" || String(rr) === "naoExiste") {
@@ -37,7 +37,7 @@ class LoginForm extends Component {
         } else {
           var json = JSON.parse(rr);
           sessionStorage.setItem("token", json.token);
-          window.location.href = "/main?u=" + json.id;
+          window.location.href = "/adminMain?u=" + json.id;
         }
       });
     });
@@ -54,6 +54,7 @@ class LoginForm extends Component {
   render() {
     return (
       <div className="position-relative m-4">
+        <div>Login do Administrador</div>
         <form>
           <div className="form-group-auto m-2">
             <label>E-mail</label>
@@ -100,23 +101,9 @@ class LoginForm extends Component {
             Login
           </button>
         </form>
-        <small>
-          <label className="form-check-label" htmlFor="defaultCheck1">
-            Não tem conta? Pode registar-se
-            <a href="/regUser"> aqui</a>!
-          </label>
-        </small>
-        <div>
-          <small>
-            <label className="form-check-label" htmlFor="defaultCheck1">
-              Espaço
-              <a href="/adminLogin"> admin</a>
-            </label>
-          </small>
-        </div>
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default LoginAdminForm;

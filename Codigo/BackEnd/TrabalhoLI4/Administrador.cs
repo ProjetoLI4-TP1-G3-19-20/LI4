@@ -7,11 +7,11 @@ namespace LI4
     public class Administrador : Utilizador
     {
 
-        private int departamento;
+        private int inst;
 
         public Administrador()
         {
-            this.departamento = -1;
+            this.inst = -1;
             this.nome = "";
             this.email = "";
             this.telefone = "";
@@ -19,9 +19,9 @@ namespace LI4
             this.id_utilizador = -2;
         }
 
-        public Administrador(int departamento, int id, string nome, string email, string telefone, string pass)
+        public Administrador(int inst, int id, string nome, string email, string telefone, string pass)
         {
-            this.departamento = departamento;
+            this.inst = inst;
             this.nome = nome;
             this.email = email;
             this.telefone = telefone;
@@ -31,7 +31,7 @@ namespace LI4
 
         public Administrador(Administrador a)
         {
-            this.departamento = a.GetDepartamento();
+            this.inst = a.Getinst();
             this.nome = a.GetNome();
             this.email = a.GetEmail();
             this.telefone = a.GetTelefone();
@@ -39,14 +39,14 @@ namespace LI4
             this.id_utilizador = a.GetId_utilizador();
         }
 
-        public int GetDepartamento()
+        public int Getinst()
         {
-            return departamento;
+            return inst;
         }
 
-        public void SetDepartamento(int departamento)
+        public void Setinst(int inst)
         {
-            this.departamento = departamento;
+            this.inst = inst;
         }
 
 

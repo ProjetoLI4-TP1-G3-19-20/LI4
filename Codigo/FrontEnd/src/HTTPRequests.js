@@ -12,6 +12,20 @@ export async function login(email, password) {
   });
 }
 
+export async function loginAdmin(email, password) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "loginAdmin",
+    email: email,
+    password: password,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
 export async function createUser(state) {
   const url = "http://localhost:8080";
 
@@ -196,6 +210,20 @@ export async function validateMe(id) {
   let url = new URL("http://localhost:8080");
   url.search = new URLSearchParams({
     t: "validate",
+    user: id,
+    token: sessionStorage.getItem("token"),
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function validateMeAdmin(id) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "validateAdmin",
     user: id,
     token: sessionStorage.getItem("token"),
   });

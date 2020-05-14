@@ -10,7 +10,7 @@ namespace LI4 {
         public JWT() {
         }
 
-        public string generateToken(int id) {
+        public string generateToken(int id, bool admin) {
             var securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.key));
 
             var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials
@@ -21,7 +21,8 @@ namespace LI4 {
             //Some PayLoad that contain information about the  customer
             var payload = new JwtPayload
             {
-               { "id", id}
+               { "id", id},
+               { "admin", admin}
            };
 
             //
@@ -58,7 +59,7 @@ namespace LI4 {
             return tokenString;
         }
 
-        public bool validateToken(string token, int id) {
+        public bool validateToken(string token, int id, bool admin) {
 
             var handler = new JwtSecurityTokenHandler();
             SecurityToken st;
@@ -77,6 +78,8 @@ namespace LI4 {
 
             enumerator.MoveNext();
             if (enumerator.Current.Value.ToString().CompareTo(id.ToString()) != 0) return false;
+            enumerator.MoveNext();
+            if(bool.Parse(enumerator.Current.Value) != admin) return false;
 
             return true;
         }

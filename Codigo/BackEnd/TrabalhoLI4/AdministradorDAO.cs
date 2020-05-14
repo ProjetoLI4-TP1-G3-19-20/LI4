@@ -86,16 +86,15 @@ public class AdministradorDAO
     }
 
 
-    public Administrador Get(int id_inst, int id_col)
+    public Administrador Get(int id_col)
     {
         Administrador ad = new Administrador();
         MySqlConnection msc = new MySqlConnection(connection);
         try
         {
             msc.Open();
-            string query = "SELECT * FROM trabalhadores WHERE id_inst=@id and id_col = @id2 ";
+            string query = "SELECT * FROM trabalhadores WHERE id_col = @id2 ";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@id", id_inst);
             mc.Parameters.AddWithValue("@id2", id_col);
             MySqlDataReader mr = mc.ExecuteReader();
 
@@ -105,19 +104,14 @@ public class AdministradorDAO
                 ad.SetNome(mr.GetString("Nome"));
                 ad.SetEmail(mr.GetString("email"));
                 ad.SetId_utilizador(mr.GetInt32("id_col"));
+                ad.Setinst(mr.GetInt32("id_inst"));
+
                 mr.Close();
 
                 string query2 = "SELECT * FROM departamentos WHERE id_inst=`id_inst` ";
                 MySqlCommand mc2 = new MySqlCommand(query2, msc);
                 MySqlDataReader mr2 = mc2.ExecuteReader();
 
-                if (mr2.Read())
-                {
-
-                    ad.SetDepartamento(mr2.GetInt32("id"));
-
-                    mr2.Close();
-                }
             }
         }
         catch (Exception e)
@@ -132,6 +126,40 @@ public class AdministradorDAO
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        return ad;
+    }
+
+    public Administrador Get(string email) {
+        Administrador ad = new Administrador();
+        MySqlConnection msc = new MySqlConnection(connection);
+        try {
+            msc.Open();
+            string query = "SELECT * FROM trabalhadores WHERE email = @email ";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@email", email);
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read()) {
+                ad.SetTelefone(mr.GetString("Telemovel"));
+                ad.SetNome(mr.GetString("Nome"));
+                ad.SetEmail(mr.GetString("email"));
+                ad.SetId_utilizador(mr.GetInt32("id_col"));
+                ad.Setinst(mr.GetInt32("id_inst"));
+                ad.SetPassword(mr.GetString("password"));
+                mr.Close();
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
                 Console.WriteLine(e.ToString());
             }
         }
@@ -187,7 +215,7 @@ public class AdministradorDAO
             while (mr.Read())
             {
                 int id = mr.GetInt32("id");
-                ad.Add(this.Get(id_inst,id_col));
+                ad.Add(this.Get(id_col));
             }
 
         }

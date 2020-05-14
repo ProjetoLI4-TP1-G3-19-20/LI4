@@ -104,11 +104,17 @@ class HTTPServer {
             case "validate":
                 ProcessValidate(context);
                 break;
+            case "validateAdmin":
+                ProcessValidateAdmin(context);
+                break;
             case "validateName":
                 ProcessValidateName(context);
                 break;
             case "login":
                 ProcessLogin(context);
+                break;
+            case "loginAdmin":
+                ProcessLoginAdmin(context);
                 break;
             case "insts":
                 processGetInsts(context);
@@ -157,8 +163,6 @@ class HTTPServer {
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
-
-
 
     }
 
@@ -213,8 +217,6 @@ class HTTPServer {
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
-
-
 
     }
 
@@ -301,7 +303,21 @@ class HTTPServer {
         string user = context.Request.QueryString["user"];
         string token = context.Request.QueryString["token"];
 
-        bool reply = jwt.validateToken(token, int.Parse(user));
+        bool reply = jwt.validateToken(token, int.Parse(user), false);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply.ToString()).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
+    }
+
+    void ProcessValidateAdmin(HttpListenerContext context) {
+        string user = context.Request.QueryString["user"];
+        string token = context.Request.QueryString["token"];
+
+        bool reply = jwt.validateToken(token, int.Parse(user), true);
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply.ToString()).Length;
 
@@ -315,7 +331,7 @@ class HTTPServer {
         string user = context.Request.QueryString["user"];
         string token = context.Request.QueryString["token"];
 
-        bool reply = jwt.validateToken(token, int.Parse(user));
+        bool reply = jwt.validateToken(token, user);
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply.ToString()).Length;
 
@@ -519,12 +535,42 @@ class HTTPServer {
             reply = "naoExiste";
         }
         if (password.CompareTo(v.GetPassword()) == 0) {
-            string token = jwt.generateToken(v.GetId_utilizador());
+            string token = jwt.generateToken(v.GetId_utilizador(), false);
             reply = "";
             reply += "{\"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
         }
         else {
   
+            reply = "false";
+        }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
+    void ProcessLoginAdmin(HttpListenerContext context) {
+
+        string reply;
+
+        string email = context.Request.QueryString["email"];
+        string password = context.Request.QueryString["password"];
+
+        Administrador a = administradorDAO.Get(email);
+        Console.WriteLine(a.GetId_utilizador());
+        if (a.GetId_utilizador() < 0) {
+            reply = "naoExiste";
+        }
+        if (password.CompareTo(a.GetPassword()) == 0) {
+            string token = jwt.generateToken(a.GetId_utilizador(), true);
+            reply = "";
+            reply += "{\"id\": \"" + a.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
+        }
+        else {
+
             reply = "false";
         }
 

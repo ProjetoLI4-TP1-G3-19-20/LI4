@@ -94,7 +94,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administrador.cs" />
-    <Compile Include="AdministradorApp.cs" />
     <Compile Include="AdministradorDAO.cs" />
     <Compile Include="HTTPServer.cs" />
     <Compile Include="JWT.cs" />

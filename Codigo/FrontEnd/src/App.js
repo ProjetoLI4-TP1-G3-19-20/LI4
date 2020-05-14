@@ -10,12 +10,12 @@ import VisitReqForm from "./components/visitReqForm";
 import AcceptVisitForm from "./components/AcceptVisitForm";
 import NewInstForm from "./components/newInstForm";
 import CreateVaga from "./components/CreateVaga";
+import LoginAdminForm from "./components/loginAdminForm";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = { currentUser: "hey" };
-    this.login = this.login.bind(this);
   }
 
   render() {
@@ -121,6 +121,16 @@ class App extends Component {
           </React.Fragment>
         );
       }
+      case "/adminLogin": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <LoginAdminForm />
+            </main>
+          </React.Fragment>
+        );
+      }
       default: {
         return (
           <React.Fragment>
@@ -130,10 +140,6 @@ class App extends Component {
         );
       }
     }
-  }
-
-  login(user) {
-    window.location.href = "/main?u=" + user;
   }
 }
 
