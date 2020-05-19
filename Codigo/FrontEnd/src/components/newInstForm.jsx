@@ -1,16 +1,27 @@
 import React, { Component } from "react";
-import { createInst } from "../HTTPRequests";
+import { createInst, validateMeAdmin } from "../HTTPRequests";
 
 class NewInstForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: "", nome: "", localizacao: "", current: 0 };
+    this.state = { email: "", nome: "", localizacao: "", current: 0, user: "" };
     this.handleEmail = this.handleEmail.bind(this);
     this.handleNome = this.handleNome.bind(this);
     this.handleLocalizacao = this.handleLocalizacao.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderErrorMessage = this.renderErrorMessage.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const u = urlParams.get("u");
+
+    validateMeAdmin(u).then((r) => {
+      r.text().then((r) => {
+        if (String(r) === "True") {
+          this.setState({ auth: true, user: u });
+        }
+      });
+    });
   }
 
   handleEmail(event) {
@@ -36,6 +47,8 @@ class NewInstForm extends Component {
       r.text().then((r) => {
         if (String(r) === "erro") {
           this.setState({ current: 1 });
+        } else {
+          window.location.href = "/adminMain?u=" + this.state.user;
         }
       });
     });
@@ -57,7 +70,7 @@ class NewInstForm extends Component {
             <a
               className="badge badge-primary"
               style={{ fontSize: "20px" }}
-              href={"/main?u=" + this.state.user}
+              href={"/adminMain?u=" + this.state.user}
             >
               {" "}
               Voltar atrás
@@ -98,14 +111,16 @@ class NewInstForm extends Component {
             />
             {this.renderErrorMessage()}
           </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={this.handleSubmit}
-          >
-            {" "}
-            Submit
-          </button>
+          <div className="form-group-auto m-2">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.handleSubmit}
+            >
+              {" "}
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     );

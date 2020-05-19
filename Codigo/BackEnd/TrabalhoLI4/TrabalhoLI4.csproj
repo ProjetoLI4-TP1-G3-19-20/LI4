@@ -98,6 +98,7 @@
     <Compile Include="HTTPServer.cs" />
     <Compile Include="JWT.cs" />
     <Compile Include="PedidoVisitaDAO.cs" />
+    <Compile Include="PessoaDeInteresseDAO.cs" />
     <Compile Include="VisitasDAO.cs" />
     <Compile Include="ColaboradorDAO.cs" />
     <Compile Include="DepartamentoDAO.cs" />

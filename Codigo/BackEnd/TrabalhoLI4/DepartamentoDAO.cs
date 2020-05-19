@@ -14,20 +14,20 @@ public class DepartamentoDAO
         connection = con;
     }
 
-    public void Put(Departamento dep, int id_inst) {
+    public bool Put(Departamento dep, int id_inst) {
         MySqlConnection msc = new MySqlConnection(connection);
 
         try {
             msc.Open();
-            string query = "INSERT INTO `trabalholi4`.`departamentos`(`id`,`id_inst`,`nome`) VALUES (@id, @id_inst, @nome)";
+            string query = "INSERT INTO `trabalholi4`.`departamentos`(`id_inst`,`nome`) VALUES (@id_inst, @nome)";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@id", dep.GetID());
             mc.Parameters.AddWithValue("@id_inst", id_inst);
             mc.Parameters.AddWithValue("@nome", dep.GetNome());
             mc.ExecuteNonQuery();
         }
         catch (Exception e) {
             Console.WriteLine(e.ToString());
+            return false;
         }
         finally {
             try {
@@ -37,6 +37,7 @@ public class DepartamentoDAO
                 Console.WriteLine(e.ToString());
             }
         }
+        return true;
     }
 
     public Departamento Get(int id) {
@@ -241,5 +242,35 @@ public class DepartamentoDAO
             }
         }
         return pessoas;
+    }
+
+    public bool existeNome(string nome, int inst) {
+        bool reply = false;
+
+        MySqlConnection msc = new MySqlConnection(connection);
+        try {
+            msc.Open();
+            string query = "SELECT id FROM departamentos WHERE nome = @name AND id_inst = @id_inst";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@id_inst", inst);
+            mc.Parameters.AddWithValue("@name", nome);
+            MySqlDataReader mr = mc.ExecuteReader();
+            if (mr.Read()) {
+                reply = true;
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        return reply;
     }
 }

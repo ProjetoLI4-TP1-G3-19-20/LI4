@@ -27,7 +27,7 @@ class AcceptVisitForm extends Component {
       panel: 0,
       selectedEvent: [],
       disabled: true,
-      u: u,
+      user: u,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -50,6 +50,10 @@ class AcceptVisitForm extends Component {
   handleAccept() {
     aceitePedido(true, this.state.pedidos[this.state.selectedEvent.id].id).then(
       (r) => {
+        // eslint-disable-next-line
+        this.state.pedidos = [];
+        // eslint-disable-next-line
+        this.state.events = [];
         this.updatePedidos();
         this.setState({ panel: 0 });
       }
@@ -69,7 +73,7 @@ class AcceptVisitForm extends Component {
   updatePedidos() {
     var e = [];
     var id = 0;
-    getPedidos(this.state.u).then((r) => {
+    getPedidos(this.state.user).then((r) => {
       r.json().then((rr) => {
         rr.forEach((element) => {
           getUserName(element.visitante).then((r) => {
@@ -95,7 +99,7 @@ class AcceptVisitForm extends Component {
       });
     });
 
-    getVisitasMarcadas(this.state.u).then((r) => {
+    getVisitasMarcadas(this.state.user).then((r) => {
       var e = [];
       var id = 10000;
       r.json().then((r) => {
@@ -137,7 +141,7 @@ class AcceptVisitForm extends Component {
                 <a
                   className="badge badge-primary"
                   style={{ fontSize: "20px" }}
-                  href={"/main?u=" + this.state.user}
+                  href={"/internoMain?u=" + this.state.user}
                 >
                   {" "}
                   Voltar atrás

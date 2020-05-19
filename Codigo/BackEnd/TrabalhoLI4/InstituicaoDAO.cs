@@ -23,11 +23,11 @@ public class InstituicaoDAO {
             MySqlDataReader mr = mc.ExecuteReader();
 
             if (mr.Read()) {
-                mr.Close();
                 msc.Close();
                 return false;
             }
 
+            mr.Close();
             query = "INSERT INTO `trabalholi4`.`instituicao`(`Nome`,`email`,`localizacao`) VALUES (@nome, @mail, @local)";
             mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@nome", inst.GetNome());

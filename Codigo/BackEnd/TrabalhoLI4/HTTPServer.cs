@@ -20,6 +20,7 @@ class HTTPServer {
     private VisitasDAO visitasDAO;
     private DepartamentoDAO departamentoDAO;
     private PedidoVisitaDAO pedidoVisitaDAO;
+    private PessoaDeInteresseDAO pessoaDeInteresseDAO;
     private JWT jwt;
 
 
@@ -73,6 +74,7 @@ class HTTPServer {
     void ProcessPostRequests(HttpListenerContext context) {
 
         var body = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding).ReadToEnd();
+        Console.WriteLine(body);
         var JSON = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(body);
 
         switch (JSON["t"]) {
@@ -90,6 +92,9 @@ class HTTPServer {
                 break;
             case "createVaga":
                 ProcessCreateVaga(context, JSON);
+                break;
+            case "createDep":
+                ProcessCreateDep(context, JSON);
                 break;
 
         }
@@ -115,6 +120,9 @@ class HTTPServer {
                 break;
             case "loginAdmin":
                 ProcessLoginAdmin(context);
+                break;
+            case "loginInterno":
+                ProcessLoginInterno(context);
                 break;
             case "insts":
                 processGetInsts(context);
@@ -206,6 +214,31 @@ class HTTPServer {
         string reply = "sucesso";
 
         bool x = instituicaoDAO.Put(new Instituicao(-1, JSON["nome"], JSON["email"], new ArrayList(), JSON["localizacao"]));
+
+        if (!x) {
+            reply = "erro";
+        }
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
+    }
+
+    void ProcessCreateDep(HttpListenerContext context, Dictionary<String, String> JSON) {
+
+        string reply = "sucesso";
+
+        int inst = instituicaoDAO.getIdByName(JSON["inst"]);
+        bool x = false;
+
+        if (!departamentoDAO.existeNome("", inst)) {
+            x = departamentoDAO.Put(new Departamento(JSON["dep"], -1), inst);
+        }
+        
 
         if (!x) {
             reply = "erro";
@@ -582,6 +615,36 @@ class HTTPServer {
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
+
+    void ProcessLoginInterno(HttpListenerContext context) {
+
+        string reply;
+
+        string email = context.Request.QueryString["email"];
+        string password = context.Request.QueryString["password"];
+
+        PessoaDeInteresse p = pessoaDeInteresseDAO.GetByEmail(email);
+        if (p.getEmail().CompareTo("") == 0) {
+            reply = "naoExiste";
+        }
+        if (password.CompareTo(p.getPassword()) == 0) {
+            string token = jwt.generateToken(p.getNome());
+            reply = "";
+            reply += "{\"nome\": \"" + p.getNome() + "\", \"token\":\"" + token + "\"}";
+        }
+        else {
+
+            reply = "false";
+        }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
     private void processGetInsts(HttpListenerContext context) {
         List<String> lista = instituicaoDAO.getAllNames();
 
@@ -612,6 +675,7 @@ class HTTPServer {
         visitasDAO = new VisitasDAO(con);
         departamentoDAO = new DepartamentoDAO(con);
         pedidoVisitaDAO = new PedidoVisitaDAO(con);
+        pessoaDeInteresseDAO = new PessoaDeInteresseDAO(con);
         jwt = new JWT();
 
     }

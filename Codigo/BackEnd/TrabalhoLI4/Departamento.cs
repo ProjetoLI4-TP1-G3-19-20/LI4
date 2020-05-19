@@ -16,7 +16,7 @@ namespace LI4
             this.id = -1;
         }
 
-        public Departamento(String nome, int id, List<PessoaDeInteresse> pess)
+        public Departamento(String nome, int id)
         {
             this.nome = nome;
             this.id = id;

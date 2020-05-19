@@ -26,6 +26,20 @@ export async function loginAdmin(email, password) {
   });
 }
 
+export async function loginInterno(email, password) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "loginInterno",
+    email: email,
+    password: password,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
 export async function createUser(state) {
   const url = "http://localhost:8080";
 
@@ -108,6 +122,20 @@ export async function createInst(state) {
       nome: state.nome,
       email: state.email,
       localizacao: state.localizacao,
+    }),
+    headers: new Headers(),
+  });
+}
+
+export async function createDep(state) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify({
+      t: "createDep",
+      inst: state.selectedInst.label,
+      dep: state.dep,
     }),
     headers: new Headers(),
   });

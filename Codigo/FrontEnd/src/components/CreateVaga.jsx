@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { createVaga, getVagas } from "../HTTPRequests";
+import { createVaga, getVagas, validateMePI } from "../HTTPRequests";
 
 const localizer = momentLocalizer(moment);
 
@@ -11,14 +11,24 @@ class CreateVaga extends Component {
   constructor(props) {
     super(props);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const u = urlParams.get("u");
-
     this.state = {
       events: [],
       oldEvents: [],
-      user: u,
+      user: "",
+      auth: false,
     };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const u = urlParams.get("u");
+
+    validateMePI(u).then((r) => {
+      r.text().then((r) => {
+        console.log(r);
+        if (String(r) === "True") {
+          this.setState({ auth: true, user: u });
+        }
+      });
+    });
 
     var id = 0;
     var pdi = [];
@@ -79,38 +89,43 @@ class CreateVaga extends Component {
     this.state.events.forEach((element) => {
       createVaga(element.start, element.end, this.state.user);
     });
+    window.location.href = "/internoMain?u=" + this.state.user;
   }
 
   render() {
-    return (
-      <div className="position-relative m-4">
-        <form>
-          <div className="form-group-auto m-2">
-            <Calendar
-              selectable
-              localizer={localizer}
-              style={{ height: 700, width: "120%" }}
-              events={this.state.oldEvents.concat(this.state.events)}
-              defaultView={Views.WEEK}
-              scrollToTime={new Date(1970, 1, 1, 6)}
-              onSelectEvent={(event) => this.remove(event)}
-              onSelectSlot={this.handleSelect}
-              dayLayoutAlgorithm={this.state.dayLayoutAlgorithm}
-            />
-          </div>
-          <div className="form-group-auto m-2">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleSubmit}
-            >
-              {" "}
-              Submit
-            </button>
-          </div>
-        </form>
-      </div>
-    );
+    if (this.state.auth === false) {
+      return <div>Acesso Negado</div>;
+    } else {
+      return (
+        <div className="position-relative m-4">
+          <form>
+            <div className="form-group-auto m-2">
+              <Calendar
+                selectable
+                localizer={localizer}
+                style={{ height: 700, width: "120%" }}
+                events={this.state.oldEvents.concat(this.state.events)}
+                defaultView={Views.WEEK}
+                scrollToTime={new Date(1970, 1, 1, 6)}
+                onSelectEvent={(event) => this.remove(event)}
+                onSelectSlot={this.handleSelect}
+                dayLayoutAlgorithm={this.state.dayLayoutAlgorithm}
+              />
+            </div>
+            <div className="form-group-auto m-2">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.handleSubmit}
+              >
+                {" "}
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      );
+    }
   }
 }
 
