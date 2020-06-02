@@ -128,7 +128,7 @@ class NewDepForm extends Component {
                 className="btn btn-primary"
                 onClick={this.handleSubmit}
               >
-                Submit
+                Submeter
               </button>
             </div>
           </form>

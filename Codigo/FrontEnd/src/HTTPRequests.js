@@ -58,6 +58,25 @@ export async function createUser(state) {
   });
 }
 
+export async function updateUser(state) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "PUT",
+    body: JSON.stringify({
+      t: "updateUser",
+      email: state.email,
+      password: state.password,
+      username: state.username,
+      phone: state.phone,
+      morada: state.morada,
+      postCode: state.postCode,
+      id: state.user,
+    }),
+    headers: new Headers(),
+  });
+}
+
 export async function createAdmin(state) {
   const url = "http://localhost:8080";
 
@@ -325,6 +344,19 @@ export async function getVisitasMarcadas(visitado) {
   url.search = new URLSearchParams({
     t: "visitasMarcadas",
     visitado: visitado,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getUserFullInfo(user) {
+  let url = new URL("http://localhost:8080");
+  url.search = new URLSearchParams({
+    t: "userInfo",
+    user: user,
   });
 
   return fetch(url, {

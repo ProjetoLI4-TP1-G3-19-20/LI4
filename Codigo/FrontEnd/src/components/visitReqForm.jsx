@@ -113,9 +113,11 @@ class VisitReqForm extends Component {
             id: id,
             title:
               "Vaga - " +
-              new Date(parseInt(element.inicio)).getHours() +
+              ("0" + new Date(parseInt(element.inicio)).getHours()).slice(-2) +
               "h" +
-              new Date(parseInt(element.inicio)).getMinutes() +
+              ("0" + new Date(parseInt(element.inicio)).getMinutes()).slice(
+                -2
+              ) +
               "m",
             start: new Date(parseInt(element.inicio)),
             end: new Date(parseInt(element.fim)),
@@ -246,7 +248,7 @@ class VisitReqForm extends Component {
               className="btn btn-primary"
               onClick={this.handleSubmit}
             >
-              Submit
+              Submeter pedido
             </button>
           </form>
         </div>

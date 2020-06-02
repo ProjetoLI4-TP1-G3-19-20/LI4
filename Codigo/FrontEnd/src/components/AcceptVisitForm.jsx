@@ -111,9 +111,13 @@ class AcceptVisitForm extends Component {
                 set: true,
                 id: id,
                 title:
-                  new Date(parseInt(element.data_inicio)).getHours() +
+                  (
+                    "0" + new Date(parseInt(element.data_inicio)).getHours()
+                  ).slice(-2) +
                   "h" +
-                  new Date(parseInt(element.data_inicio)).getMinutes() +
+                  (
+                    "0" + new Date(parseInt(element.data_inicio)).getMinutes()
+                  ).slice(-2) +
                   "m - " +
                   r,
                 start: new Date(parseInt(element.data_inicio)),

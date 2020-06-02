@@ -17,13 +17,25 @@ namespace LI4
         {
             this.morada = "";
             this.cod_postal = "";
-            this.visitas = new List<Visita>();
-            this.pedidosVisita = new List<PedidoVisita>();
             this.nome = "";
             this.email = "";
             this.telefone = "";
             this.password = "";
             this.id_utilizador = -2;
+        }
+
+        public string getJson() {
+            string r = "";
+
+            r += "{";
+            r += "\"morada\" : \"" + this.GetMorada() + "\",";
+            r += "\"cod_postal\" : \"" + this.GetCod_postal() + "\",";
+            r += "\"nome\" : \"" + this.GetNome() + "\",";
+            r += "\"email\" : \"" + this.GetEmail() + "\",";
+            r += "\"telefone\" : \"" + this.GetTelefone() + "\",";
+            r += "\"password\" : \"" + this.GetPassword() + "\"}";
+
+            return r;
         }
 
         public Visitante(String morada, String cod_postal, List<Visita> visitas, List<PedidoVisita> pedidosVisita, int id, string nome, string email, string telefone, string pass)
@@ -44,8 +56,6 @@ namespace LI4
         {
             this.morada = v.GetMorada();
             this.cod_postal = v.GetCod_postal();
-            this.visitas = v.GetVisitas();
-            this.pedidosVisita = v.GetPedidosVisita();
             this.nome = v.GetNome();
             this.email = v.GetEmail();
             this.password = v.GetPassword();
@@ -96,26 +106,6 @@ namespace LI4
         public void SetCod_postal(String cod_postal)
         {
             this.cod_postal = cod_postal;
-        }
-
-        public List<PedidoVisita> GetPedidosVisita()
-        {
-          return new List<PedidoVisita>(this.pedidosVisita);
-        }
-
-        public void SetPedidosVisita(List<PedidoVisita> pv)
-        {
-            this.pedidosVisita = new List<PedidoVisita>(pv);
-        }
-
-        public List<Visita> GetVisitas()
-        {
-          return visitas;
-        }
-
-        public void SetPedidosVisita(List<Visita> v)
-        {
-          this.visitas = v;
         }
 
         public override void SetNome(string nome)

@@ -46,6 +46,7 @@ class UserRegForm extends Component {
 
   handlePhone(phone) {
     this.setState({ phone: phone.phone });
+    console.log(this.state.phone);
   }
 
   handleMorada(event) {
@@ -115,7 +116,9 @@ class UserRegForm extends Component {
     if (this.state.secondPassword === this.state.password) {
       createUser(this.state).then((r) => {
         r.text().then((rr) => {
-          console.log(rr);
+          if (String(r) === "sucesso") {
+            window.location.href = "";
+          }
         });
       });
     }

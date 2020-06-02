@@ -10,11 +10,10 @@ import VisitReqForm from "./components/visitReqForm";
 import AcceptVisitForm from "./components/AcceptVisitForm";
 import NewInstForm from "./components/newInstForm";
 import CreateVaga from "./components/CreateVaga";
-import LoginAdminForm from "./components/loginAdminForm";
 import AdminMain from "./components/AdminMain";
 import NewDepForm from "./components/newDepForm";
-import InternoLoginForm from "./components/internoLoginForm";
 import InternoMain from "./components/internoMain";
+import UserDataUpdate from "./components/UserDataUpdate";
 
 class App extends Component {
   constructor(props) {
@@ -135,26 +134,6 @@ class App extends Component {
           </React.Fragment>
         );
       }
-      case "/adminLogin": {
-        return (
-          <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <LoginAdminForm />
-            </main>
-          </React.Fragment>
-        );
-      }
-      case "/internoLogin": {
-        return (
-          <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <InternoLoginForm />
-            </main>
-          </React.Fragment>
-        );
-      }
       case "/internoMain": {
         return (
           <React.Fragment>
@@ -171,6 +150,16 @@ class App extends Component {
             <NavBar />
             <main className="container">
               <AdminMain />
+            </main>
+          </React.Fragment>
+        );
+      }
+      case "/userDataUpdate": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <UserDataUpdate />
             </main>
           </React.Fragment>
         );

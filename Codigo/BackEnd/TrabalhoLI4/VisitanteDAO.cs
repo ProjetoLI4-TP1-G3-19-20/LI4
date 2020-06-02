@@ -171,26 +171,28 @@ public class VisitanteDAO
         return visit;
     }
 
-    public void Update(Visitante visit)
+    public bool Update(Visitante visit)
     {
         MySqlConnection msc = new MySqlConnection(Connection);
+        Console.WriteLine(visit.GetMorada());
 
         try
         {
             msc.Open();
-            string query = "UPDATE `trabalholi4`.`visitante` SET `id` = @id,`Telemóvel` = @tele,`Nome` = @nome,`email` = @email,`morada` = @morada,`cod_postal` = @cp WHERE `id` = @id";
+            string query = "UPDATE `trabalholi4`.`visitante` SET `Telemóvel` = @tele,`Nome` = @nome,`email` = @email,`morada` = @morada,`cod_postal` = @cp WHERE `id` = @id";
             MySqlCommand mc = new MySqlCommand(query, msc);
-            mc.Parameters.AddWithValue("@id", visit.GetId_utilizador());
             mc.Parameters.AddWithValue("@tele", visit.GetTelefone());
             mc.Parameters.AddWithValue("@nome", visit.GetNome());
             mc.Parameters.AddWithValue("@email", visit.GetEmail());
             mc.Parameters.AddWithValue("@morada", visit.GetMorada());
             mc.Parameters.AddWithValue("@cp", visit.GetCod_postal());
+            mc.Parameters.AddWithValue("@id", visit.GetId_utilizador());
             mc.ExecuteNonQuery();
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
+            return false;
         }
         finally
         {
@@ -203,6 +205,7 @@ public class VisitanteDAO
                 Console.WriteLine(e.ToString());
             }
         }
+        return true;
     }
 
     public ICollection<Visitante> GetAll()

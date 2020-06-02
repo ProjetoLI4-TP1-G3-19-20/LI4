@@ -31,13 +31,16 @@ class LoginForm extends Component {
   handleSubmit() {
     login(this.state.email, this.state.password).then((r) => {
       r.text().then((rr) => {
-        console.log(rr);
         if (String(rr) === "false" || String(rr) === "naoExiste") {
           this.setState({ current: 1 });
         } else {
           var json = JSON.parse(rr);
           sessionStorage.setItem("token", json.token);
-          window.location.href = "/main?u=" + json.id;
+          if (json.t === "v") window.location.href = "/main?u=" + json.id;
+          else if (json.t === "a")
+            window.location.href = "/adminMain?u=" + json.id;
+          else if (json.t === "i")
+            window.location.href = "/internoMain?u=" + json.nome;
         }
       });
     });
@@ -106,22 +109,6 @@ class LoginForm extends Component {
             <a href="/regUser"> aqui</a>!
           </label>
         </small>
-        <div>
-          <small>
-            <label className="form-check-label" htmlFor="defaultCheck1">
-              Espaço
-              <a href="/adminLogin"> admin</a>
-            </label>
-          </small>
-        </div>
-        <div>
-          <small>
-            <label className="form-check-label" htmlFor="defaultCheck1">
-              Espaço
-              <a href="/internoLogin"> interno</a>
-            </label>
-          </small>
-        </div>
       </div>
     );
   }

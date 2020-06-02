@@ -118,7 +118,7 @@ class NewInstForm extends Component {
               onClick={this.handleSubmit}
             >
               {" "}
-              Submit
+              Submeter
             </button>
           </div>
         </form>

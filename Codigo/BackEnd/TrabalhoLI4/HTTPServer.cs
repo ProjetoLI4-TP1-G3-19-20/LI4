@@ -62,10 +62,15 @@ class HTTPServer {
 
     private void Process(HttpListenerContext context) {
 
+
         if (context.Request.HttpMethod == "GET") {
             ProcessGetRequests(context);
         }else if(context.Request.HttpMethod == "POST") {
             ProcessPostRequests(context);
+        } else if(context.Request.HttpMethod == "PUT") {
+            ProcessPutRequests(context);
+        } else if(context.Request.HttpMethod == "OPTIONS") {
+            ProcessAllow(context);
         }
 
     }
@@ -74,7 +79,6 @@ class HTTPServer {
     void ProcessPostRequests(HttpListenerContext context) {
 
         var body = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding).ReadToEnd();
-        Console.WriteLine(body);
         var JSON = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(body);
 
         switch (JSON["t"]) {
@@ -102,6 +106,21 @@ class HTTPServer {
 
     }
 
+    void ProcessPutRequests(HttpListenerContext context) {
+
+        var body = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding).ReadToEnd();
+        var JSON = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(body);
+
+
+        switch (JSON["t"]) {
+            case "updateUser":
+                ProcessUpdateVisitante(context, JSON);
+                break;
+        }
+
+
+    }
+
 
     void ProcessGetRequests(HttpListenerContext context) {
 
@@ -117,12 +136,6 @@ class HTTPServer {
                 break;
             case "login":
                 ProcessLogin(context);
-                break;
-            case "loginAdmin":
-                ProcessLoginAdmin(context);
-                break;
-            case "loginInterno":
-                ProcessLoginInterno(context);
                 break;
             case "insts":
                 processGetInsts(context);
@@ -151,7 +164,23 @@ class HTTPServer {
             case "visitasMarcadas":
                 processGetVisitasMarcadas(context);
                 break;
+            case "userInfo":
+                processUserInfo(context);
+                break;
         }
+    }
+
+    void ProcessAllow(HttpListenerContext context) {
+
+        string reply = "ok";
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.AddHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT");
+        context.Response.AddHeader("Access-Control-Allow-Headers", "X-Requested-With, Accept, Access-Control-Allow-Origin, Content-Type");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply.ToString()), 0, size);
     }
 
 
@@ -284,6 +313,45 @@ class HTTPServer {
                 reply = "falha";
             }
         }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+    }
+
+
+    void ProcessUpdateVisitante(HttpListenerContext context, Dictionary<String, String> JSON) {
+        string reply;
+        string email = JSON["email"];
+
+        string password = JSON["password"];
+        string username = JSON["username"];
+        string phone = JSON["phone"];
+        string postcode = JSON["postCode"];
+        string morada = JSON["morada"];
+        int id = int.Parse(JSON["id"]);
+
+        Console.WriteLine(JSON["morada"]);
+        Visitante v = new Visitante();
+        v.SetEmail(email);
+        v.SetPassword(password);
+        v.SetNome(username);
+        v.SetTelefone(phone.Trim('+'));
+        v.SetCod_postal(postcode);
+        v.SetMorada(morada);
+        v.SetId_utilizador(id);
+
+        if (visitanteDAO.Update(v)) {
+            reply = "sucesso";
+        }
+        else {
+            reply = "falha";
+        }
+
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
 
@@ -489,6 +557,22 @@ class HTTPServer {
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
+    void processUserInfo(HttpListenerContext context) {
+        string user = context.Request.QueryString["user"];
+        int id = int.Parse(user);
+
+        Visitante v = visitanteDAO.Get(id);
+
+        string reply = v.getJson();
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
 
     void processGetVisitas(HttpListenerContext context) {
         string reply = "";
@@ -561,6 +645,7 @@ class HTTPServer {
 
         string email = context.Request.QueryString["email"];
         string password = context.Request.QueryString["password"];
+        bool found = false;
 
 
         Visitante v = visitanteDAO.Get(email);
@@ -568,14 +653,48 @@ class HTTPServer {
             reply = "naoExiste";
         }
         if (password.CompareTo(v.GetPassword()) == 0) {
+            found = true;
             string token = jwt.generateToken(v.GetId_utilizador(), false);
             reply = "";
-            reply += "{\"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
+            reply += "{\"t\": \"v\", \"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
         }
         else {
-  
             reply = "false";
         }
+
+        if (!found) {
+            Administrador a = administradorDAO.Get(email);
+            if (a.GetId_utilizador() < 0) {
+                reply = "naoExiste";
+            }
+            if (password.CompareTo(a.GetPassword()) == 0) {
+                found = true;
+                string token = jwt.generateToken(a.GetId_utilizador(), true);
+                reply = "";
+                reply += "{\"t\": \"a\", \"id\": \"" + a.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
+            }
+            else {
+
+                reply = "false";
+            }
+        }
+
+        if (!found) {
+            PessoaDeInteresse p = pessoaDeInteresseDAO.GetByEmail(email);
+            if (p.getEmail().CompareTo("") == 0) {
+                reply = "naoExiste";
+            }
+            if (password.CompareTo(p.getPassword()) == 0) {
+                string token = jwt.generateToken(p.getNome());
+                reply = "";
+                reply += "{\"t\": \"i\", \"nome\": \"" + p.getNome() + "\", \"token\":\"" + token + "\"}";
+            }
+            else {
+                reply = "false";
+            }
+        }
+        
+
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
 
@@ -585,65 +704,6 @@ class HTTPServer {
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
-    void ProcessLoginAdmin(HttpListenerContext context) {
-
-        string reply;
-
-        string email = context.Request.QueryString["email"];
-        string password = context.Request.QueryString["password"];
-
-        Administrador a = administradorDAO.Get(email);
-        Console.WriteLine(a.GetId_utilizador());
-        if (a.GetId_utilizador() < 0) {
-            reply = "naoExiste";
-        }
-        if (password.CompareTo(a.GetPassword()) == 0) {
-            string token = jwt.generateToken(a.GetId_utilizador(), true);
-            reply = "";
-            reply += "{\"id\": \"" + a.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
-        }
-        else {
-
-            reply = "false";
-        }
-
-        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
-
-        context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = size;
-        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
-    }
-
-
-    void ProcessLoginInterno(HttpListenerContext context) {
-
-        string reply;
-
-        string email = context.Request.QueryString["email"];
-        string password = context.Request.QueryString["password"];
-
-        PessoaDeInteresse p = pessoaDeInteresseDAO.GetByEmail(email);
-        if (p.getEmail().CompareTo("") == 0) {
-            reply = "naoExiste";
-        }
-        if (password.CompareTo(p.getPassword()) == 0) {
-            string token = jwt.generateToken(p.getNome());
-            reply = "";
-            reply += "{\"nome\": \"" + p.getNome() + "\", \"token\":\"" + token + "\"}";
-        }
-        else {
-
-            reply = "false";
-        }
-
-        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
-
-        context.Response.ContentType = "text/simple";
-        context.Response.ContentLength64 = size;
-        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
-        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
-    }
 
     private void processGetInsts(HttpListenerContext context) {
         List<String> lista = instituicaoDAO.getAllNames();

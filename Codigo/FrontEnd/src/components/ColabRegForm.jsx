@@ -99,7 +99,7 @@ class ColabRegForm extends Component {
             className="btn btn-primary"
             onClick={this.handleSubmit}
           >
-            Submit
+            Submeter
           </button>
         </form>
       </div>

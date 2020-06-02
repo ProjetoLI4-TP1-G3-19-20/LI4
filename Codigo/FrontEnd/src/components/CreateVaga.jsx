@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import question from "./questionMark.png";
 
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { createVaga, getVagas, validateMePI } from "../HTTPRequests";
+import { Popup } from "semantic-ui-react";
 
 const localizer = momentLocalizer(moment);
 
@@ -42,9 +44,11 @@ class CreateVaga extends Component {
             set: true,
             title:
               "Vaga - " +
-              new Date(parseInt(element.inicio)).getHours() +
+              ("0" + new Date(parseInt(element.inicio)).getHours()).slice(-2) +
               "h" +
-              new Date(parseInt(element.inicio)).getMinutes() +
+              ("0" + new Date(parseInt(element.inicio)).getMinutes()).slice(
+                -2
+              ) +
               "m",
             start: new Date(parseInt(element.inicio)),
             end: new Date(parseInt(element.fim)),
@@ -112,6 +116,11 @@ class CreateVaga extends Component {
                 dayLayoutAlgorithm={this.state.dayLayoutAlgorithm}
               />
             </div>
+            <Popup
+              content="Arraste na vertical, na data e hora correspondente, para criar uma nova vaga. Clique para apagar uma existente"
+              trigger={<img src={question} alt="Logo" width="50" height="50" />}
+              position="right center"
+            />
             <div className="form-group-auto m-2">
               <button
                 type="button"
@@ -119,7 +128,7 @@ class CreateVaga extends Component {
                 onClick={this.handleSubmit}
               >
                 {" "}
-                Submit
+                Submeter
               </button>
             </div>
           </form>
