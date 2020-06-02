@@ -1,18 +1,13 @@
 import React, { Component } from "react";
-import {
-  getPedidos,
-  getUserName,
-  aceitePedido,
-  getVisitasMarcadas,
-} from "../HTTPRequests";
-import PedidoVisitaComponent from "./PedidoVisitaComponent";
+import { getUserName, getVisitasMarcadas, finishVisita } from "../HTTPRequests";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import FeedbackForm from "./feedbackForm";
 
 const localizer = momentLocalizer(moment);
 
-class AcceptVisitForm extends Component {
+class IFvisits extends Component {
   constructor(props) {
     super(props);
 
@@ -28,13 +23,14 @@ class AcceptVisitForm extends Component {
       selectedEvent: [],
       disabled: true,
       user: u,
+      aval: "",
+      state: 0,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.updatePedidos = this.updatePedidos.bind(this);
-    this.handleAccept = this.handleAccept.bind(this);
-    this.handleRefuse = this.handleRefuse.bind(this);
+    this.handleAval = this.handleAval.bind(this);
 
     this.updatePedidos();
   }
@@ -43,37 +39,26 @@ class AcceptVisitForm extends Component {
     this.setState({ selectedEvent: event, disabled: event.set });
   }
 
+  handleAval(event) {
+    this.setState({ aval: event.target.value });
+  }
+
   handleSubmit() {
-    this.setState({ panel: 1 });
-  }
-
-  handleAccept() {
-    aceitePedido(true, this.state.pedidos[this.state.selectedEvent.id].id).then(
-      (r) => {
-        // eslint-disable-next-line
-        this.state.pedidos = [];
-        // eslint-disable-next-line
-        this.state.events = [];
-        this.updatePedidos();
-        this.setState({ panel: 0 });
-      }
-    );
-  }
-
-  handleRefuse() {
-    aceitePedido(
-      false,
-      this.state.pedidos[this.state.selectedEvent.id].id
-    ).then((r) => {
-      this.updatePedidos();
-      this.setState({ panel: 0 });
-    });
+    if (this.state.aval !== "") {
+      finishVisita(
+        this.state.pedidos[this.state.selectedEvent.id].visitado,
+        this.state.aval,
+        this.state.selectedEvent.start
+      );
+      this.setState({ state: 1 });
+    }
   }
 
   updatePedidos() {
     var e = [];
     var id = 0;
-    getPedidos(this.state.user).then((r) => {
+
+    getVisitasMarcadas(this.state.user).then((r) => {
       r.json().then((rr) => {
         rr.forEach((element) => {
           getUserName(element.visitante).then((r) => {
@@ -81,38 +66,6 @@ class AcceptVisitForm extends Component {
               element.visitante = r;
               e.push({
                 set: false,
-                id: id,
-                title:
-                  ("0" + new Date(parseInt(element.inicio)).getHours()).slice(
-                    -2
-                  ) +
-                  "h" +
-                  ("0" + new Date(parseInt(element.inicio)).getMinutes()).slice(
-                    -2
-                  ) +
-                  "m - " +
-                  r,
-                start: new Date(parseInt(element.inicio)),
-                end: new Date(parseInt(element.fim)),
-              });
-              id++;
-              this.setState({ pedidos: rr, events: e });
-            });
-          });
-        });
-      });
-    });
-
-    getVisitasMarcadas(this.state.user).then((r) => {
-      var e = [];
-      var id = 10000;
-      r.json().then((r) => {
-        r.forEach((element) => {
-          getUserName(element.visitante).then((r) => {
-            r.text().then((r) => {
-              element.visitante = r;
-              e.push({
-                set: true,
                 id: id,
                 title:
                   (
@@ -127,7 +80,7 @@ class AcceptVisitForm extends Component {
                 start: new Date(parseInt(element.data_inicio)),
                 end: new Date(parseInt(element.data_saida)),
               });
-              this.setState({ confirmedEvents: e });
+              this.setState({ pedidos: rr, confirmedEvents: e });
               id++;
             });
           });
@@ -140,7 +93,7 @@ class AcceptVisitForm extends Component {
     if (!this.state.auth) {
       return <div>Acesso Negado</div>;
     } else {
-      if (this.state.panel === 0) {
+      if (this.state.state === 0) {
         return (
           <div className="position-relative m-4">
             <form>
@@ -180,52 +133,42 @@ class AcceptVisitForm extends Component {
               <div>
                 <div id="bootstrap-datetimepicker-widget"></div>
               </div>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.handleSubmit}
-                disabled={this.state.disabled}
-              >
-                Verificar
-              </button>
+              <div className="form-group-auto m-2">
+                <label>Avaliação</label>
+                <input
+                  type="email"
+                  value={this.state.aval}
+                  onChange={this.handleAval}
+                  onKeyDown={this.handleKeyDown}
+                  className="form-control"
+                  placeholder="Insira aqui a sua avaliacao"
+                  id="inputAval"
+                  disabled={this.state.disabled}
+                />
+              </div>
+              <div className="form-group-auto m-2">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.handleSubmit}
+                  disabled={this.state.disabled}
+                >
+                  Terminar
+                </button>
+              </div>
             </form>
           </div>
         );
-      } else if (this.state.panel === 1) {
-        console.log(this.state.pedidos);
+      } else if (this.state.state === 1) {
         return (
-          <div>
-            <PedidoVisitaComponent
-              data_inicio={this.state.selectedEvent.start}
-              data_saida={this.state.selectedEvent.end}
-              visitante={
-                this.state.pedidos[this.state.selectedEvent.id].visitante
-              }
-              comentario={
-                this.state.pedidos[this.state.selectedEvent.id].comentario
-              }
-            ></PedidoVisitaComponent>
-            <span>
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={this.handleAccept}
-              >
-                Aceitar
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={this.handleRefuse}
-              >
-                Recusar
-              </button>
-            </span>
-          </div>
+          <FeedbackForm
+            href={"/internoMain?u=" + this.state.user}
+            text="A visita foi concluída"
+          />
         );
       }
     }
   }
 }
 
-export default AcceptVisitForm;
+export default IFvisits;

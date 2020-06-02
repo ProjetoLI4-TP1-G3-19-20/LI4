@@ -97,6 +97,33 @@ public class VisitasDAO
         return visit;
     }
 
+
+    public void finishVisita(string user, DateTime begin, string aval) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+
+        try {
+            msc.Open();
+            string query = "UPDATE `trabalholi4`.`visitas` SET `estado` = @estado ,`avaliacao` = @ava WHERE`dataInicio` = @datai AND `visitado` = @visitado";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@estado", 1);
+            mc.Parameters.AddWithValue("@ava", aval);
+            mc.Parameters.AddWithValue("@datai", begin);
+            mc.Parameters.AddWithValue("@visitado", user);
+            mc.ExecuteNonQuery();
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+    }
+
     public void Update(Visita visit, int id_inst,int iduser)
     {
         MySqlConnection msc = new MySqlConnection(Connection);

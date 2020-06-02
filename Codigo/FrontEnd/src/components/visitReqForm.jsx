@@ -11,6 +11,7 @@ import {
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import FeedbackForm from "./feedbackForm";
 
 const localizer = momentLocalizer(moment);
 
@@ -45,6 +46,7 @@ class VisitReqForm extends Component {
       events: [],
       selectedEvent: "",
       user: -1,
+      state: 0,
     };
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -164,7 +166,7 @@ class VisitReqForm extends Component {
       createPedido(this.state, u).then((r) => {
         r.text().then((r) => {
           if (String(r) === "sucesso") {
-            window.location.href = "/main?u=" + this.state.user;
+            this.setState({ state: 1 });
           }
         });
       });
@@ -179,80 +181,89 @@ class VisitReqForm extends Component {
     if (!this.state.auth) {
       return <div>Acesso Negado</div>;
     } else {
-      return (
-        <div className="position-relative m-4">
-          <form>
-            <div className="form-group-auto m-2">
-              <a
-                className="badge badge-primary"
-                style={{ fontSize: "20px" }}
-                href={"/main?u=" + this.state.user}
-              >
-                {" "}
-                Voltar atrás
-              </a>
-            </div>
-            <div className="form-group">
-              <label htmlFor="inputInst">Instituição</label>
-              <Select
-                onChange={this.handleInst}
-                className="basic-single"
-                options={this.state.instituicoes}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="inputDep">Departamento</label>
-              <Select
-                isDisabled={this.state.depsDisabled}
-                onChange={this.handleDep}
-                className="basic-single"
-                options={this.state.departamentos}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="input">Pessoa de Interesse</label>
-              <Select
-                isDisabled={this.state.isPdiDisabled}
-                onChange={this.handlePdi}
-                className="basic-single"
-                options={this.state.pdis}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="input">Data e Hora</label>
-              <div style={{ height: "500pt" }}>
-                <Calendar
-                  events={this.state.events}
-                  startAccessor="start"
-                  endAccessor="end"
-                  defaultDate={moment().toDate()}
-                  localizer={localizer}
-                  onSelectEvent={this.handleSelectEvent}
+      if (this.state.state === 0) {
+        return (
+          <div className="position-relative m-4">
+            <form>
+              <div className="form-group-auto m-2">
+                <a
+                  className="badge badge-primary"
+                  style={{ fontSize: "20px" }}
+                  href={"/main?u=" + this.state.user}
+                >
+                  {" "}
+                  Voltar atrás
+                </a>
+              </div>
+              <div className="form-group">
+                <label htmlFor="inputInst">Instituição</label>
+                <Select
+                  onChange={this.handleInst}
+                  className="basic-single"
+                  options={this.state.instituicoes}
                 />
               </div>
-            </div>
-            <div>
-              <div id="bootstrap-datetimepicker-widget"></div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="inputComentario">Comentários:</label>
-              <input
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handleComentario}
-                className="form-control"
-                id="inputComentario"
-              />
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleSubmit}
-            >
-              Submeter pedido
-            </button>
-          </form>
-        </div>
-      );
+              <div className="form-group">
+                <label htmlFor="inputDep">Departamento</label>
+                <Select
+                  isDisabled={this.state.depsDisabled}
+                  onChange={this.handleDep}
+                  className="basic-single"
+                  options={this.state.departamentos}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="input">Pessoa de Interesse</label>
+                <Select
+                  isDisabled={this.state.isPdiDisabled}
+                  onChange={this.handlePdi}
+                  className="basic-single"
+                  options={this.state.pdis}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="input">Data e Hora</label>
+                <div style={{ height: "500pt" }}>
+                  <Calendar
+                    events={this.state.events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    defaultDate={moment().toDate()}
+                    localizer={localizer}
+                    onSelectEvent={this.handleSelectEvent}
+                  />
+                </div>
+              </div>
+              <div>
+                <div id="bootstrap-datetimepicker-widget"></div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="inputComentario">Comentários:</label>
+                <input
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.handleComentario}
+                  className="form-control"
+                  id="inputComentario"
+                />
+              </div>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.handleSubmit}
+              >
+                Submeter pedido
+              </button>
+            </form>
+          </div>
+        );
+      } else if (this.state.state === 1) {
+        return (
+          <FeedbackForm
+            href={"/main?u=" + this.state.user}
+            text="O seu pedido foi realizado. Receberá um SMS se este for aceite."
+          />
+        );
+      }
     }
   }
 }

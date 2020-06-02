@@ -158,6 +158,7 @@ namespace LI4
             r += "\"data_inicio\" : \"" + this.GetData_inicio().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
             r += "\"comentario\" : \"" + this.GetComentario() + "\",";
             r += "\"data_saida\" : \"" + this.GetData_saida().Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\",";
+            r += "\"estado\" : \"" + this.GetEstado() + "\",";
             r += "\"visitante\" : \"" + this.GetVisitante() + "\",";
             r += "\"visitado\" : \"" + this.GetVisitado() + "\",";
             r += "\"id_inst\" : \"" + nameInst + "\",";

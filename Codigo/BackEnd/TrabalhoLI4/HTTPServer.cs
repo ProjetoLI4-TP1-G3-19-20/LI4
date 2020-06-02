@@ -116,6 +116,9 @@ class HTTPServer {
             case "updateUser":
                 ProcessUpdateVisitante(context, JSON);
                 break;
+            case "finishVisita":
+                ProcessFinishVisita(context, JSON);
+                break;
         }
 
 
@@ -123,6 +126,7 @@ class HTTPServer {
 
 
     void ProcessGetRequests(HttpListenerContext context) {
+
 
         switch (context.Request.QueryString["t"]) {
             case "validate":
@@ -201,6 +205,26 @@ class HTTPServer {
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
 
+    }
+
+
+    void ProcessFinishVisita(HttpListenerContext context, Dictionary<String, String> JSON) {
+
+
+        visitasDAO.finishVisita(JSON["user"], DateTime.Parse(JSON["date"]).ToUniversalTime(), JSON["aval"]);
+        Console.WriteLine(JSON["user"]);
+        Console.WriteLine(DateTime.Parse(JSON["date"]));
+        Console.WriteLine(JSON["aval"]);
+
+        string reply = "ok";
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+        
     }
 
 
@@ -400,6 +424,7 @@ class HTTPServer {
     }
 
 
+
     void ProcessValidate(HttpListenerContext context) {
         string user = context.Request.QueryString["user"];
         string token = context.Request.QueryString["token"];
@@ -580,6 +605,8 @@ class HTTPServer {
         string user = context.Request.QueryString["user"];
 
         List<Visita> lista = visitasDAO.GetAllByUser(int.Parse(user));
+
+        Console.WriteLine(int.Parse(user));
 
         string nameInst, nameDep;
 

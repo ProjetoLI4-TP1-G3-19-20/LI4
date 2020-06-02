@@ -37,7 +37,7 @@ class VisitComponent extends Component {
             <b>Hora Saída:</b> {this.state.end_date}
           </p>
           <p>
-            <b>Avaliacao:</b> {this.state.comments}
+            <b>Avaliacao:</b> {this.state.avalicao}
           </p>
           <p>
             <b>Comentários:</b> {this.state.comments}

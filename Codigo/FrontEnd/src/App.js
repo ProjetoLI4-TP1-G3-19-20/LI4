@@ -14,6 +14,7 @@ import AdminMain from "./components/AdminMain";
 import NewDepForm from "./components/newDepForm";
 import InternoMain from "./components/internoMain";
 import UserDataUpdate from "./components/UserDataUpdate";
+import IFvisits from "./components/IFvisits";
 
 class App extends Component {
   constructor(props) {
@@ -160,6 +161,16 @@ class App extends Component {
             <NavBar />
             <main className="container">
               <UserDataUpdate />
+            </main>
+          </React.Fragment>
+        );
+      }
+      case "/IFvisits": {
+        return (
+          <React.Fragment>
+            <NavBar />
+            <main className="container">
+              <IFvisits />
             </main>
           </React.Fragment>
         );

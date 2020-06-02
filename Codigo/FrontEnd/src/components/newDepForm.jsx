@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import { getAllInsts, validateMeAdmin, createDep } from "../HTTPRequests";
+import FeedbackForm from "./feedbackForm";
 
 class NewDepForm extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class NewDepForm extends Component {
       dep: "",
       current: 0,
       user: -1,
+      state: 0,
     };
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -65,7 +67,7 @@ class NewDepForm extends Component {
           if (String(r) === "erro") {
             this.setState({ current: 1 });
           } else {
-            window.location.href = "/adminMain?u=" + this.state.user;
+            this.setState({ state: 1 });
           }
         });
       });
@@ -88,52 +90,61 @@ class NewDepForm extends Component {
     if (!this.state.auth) {
       return <div>Acesso Negado</div>;
     } else {
-      return (
-        <div className="position-relative m-4">
-          <form>
-            <div className="form-group-auto m-2">
-              <a
-                className="badge badge-primary"
-                style={{ fontSize: "20px" }}
-                href={"/adminMain?u=" + this.state.user}
-              >
-                {" "}
-                Voltar atrás
-              </a>
-            </div>
-            <div className="form-group-auto m-2">
-              <label htmlFor="inputInst">Instituição</label>
-              <Select
-                onChange={this.handleInst}
-                className="basic-single"
-                options={this.state.instituicoes}
-              />
-            </div>
-            <div className="form-group-auto m-2">
-              <label>Nome do departamento</label>
-              <input
-                type="email"
-                value={this.state.dep}
-                onChange={this.handleDep}
-                onKeyDown={this.handleKeyDown}
-                className="form-control"
-                placeholder="Nome do departamento"
-                id="inputEmail"
-              />
-            </div>
-            {this.renderErrorMessage()}
-            <div className="form-group-auto m-2">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={this.handleSubmit}
-              >
-                Submeter
-              </button>
-            </div>
-          </form>
-        </div>
-      );
+      if (this.state.state === 0) {
+        return (
+          <div className="position-relative m-4">
+            <form>
+              <div className="form-group-auto m-2">
+                <a
+                  className="badge badge-primary"
+                  style={{ fontSize: "20px" }}
+                  href={"/adminMain?u=" + this.state.user}
+                >
+                  {" "}
+                  Voltar atrás
+                </a>
+              </div>
+              <div className="form-group-auto m-2">
+                <label htmlFor="inputInst">Instituição</label>
+                <Select
+                  onChange={this.handleInst}
+                  className="basic-single"
+                  options={this.state.instituicoes}
+                />
+              </div>
+              <div className="form-group-auto m-2">
+                <label>Nome do departamento</label>
+                <input
+                  type="email"
+                  value={this.state.dep}
+                  onChange={this.handleDep}
+                  onKeyDown={this.handleKeyDown}
+                  className="form-control"
+                  placeholder="Nome do departamento"
+                  id="inputEmail"
+                />
+              </div>
+              {this.renderErrorMessage()}
+              <div className="form-group-auto m-2">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.handleSubmit}
+                >
+                  Submeter
+                </button>
+              </div>
+            </form>
+          </div>
+        );
+      } else if (this.state.state === 1) {
+        return (
+          <FeedbackForm
+            href={"/adminMain?u=" + this.state.user}
+            text="O departamento foi criado com sucesso"
+          />
+        );
+      }
     }
   }
 }

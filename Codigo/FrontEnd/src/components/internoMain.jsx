@@ -67,6 +67,16 @@ class InternoMain extends Component {
               Gerir visitas
             </a>
           </div>
+          <div className="form-group-auto m-2">
+            <a
+              className="badge badge-primary"
+              style={{ fontSize: "20px" }}
+              href={"/IFvisits?u=" + this.state.user}
+            >
+              {" "}
+              Iniciar/Finalizar visitas
+            </a>
+          </div>
         </form>
       </div>
     );

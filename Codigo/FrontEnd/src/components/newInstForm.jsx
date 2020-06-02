@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { createInst, validateMeAdmin } from "../HTTPRequests";
+import FeedbackForm from "./feedbackForm";
 
 class NewInstForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { email: "", nome: "", localizacao: "", current: 0, user: "" };
+    this.state = {
+      email: "",
+      nome: "",
+      localizacao: "",
+      current: 0,
+      user: "",
+      state: 0,
+    };
     this.handleEmail = this.handleEmail.bind(this);
     this.handleNome = this.handleNome.bind(this);
     this.handleLocalizacao = this.handleLocalizacao.bind(this);
@@ -48,7 +56,7 @@ class NewInstForm extends Component {
         if (String(r) === "erro") {
           this.setState({ current: 1 });
         } else {
-          window.location.href = "/adminMain?u=" + this.state.user;
+          this.setState({ state: 1 });
         }
       });
     });
@@ -63,67 +71,80 @@ class NewInstForm extends Component {
   }
 
   render() {
-    return (
-      <div className="position-relative m-4">
-        <form>
-          <div className="form-group-auto m-2">
-            <a
-              className="badge badge-primary"
-              style={{ fontSize: "20px" }}
-              href={"/adminMain?u=" + this.state.user}
-            >
-              {" "}
-              Voltar atrás
-            </a>
+    if (this.state.auth === false) {
+      return <div>Acesso Negado</div>;
+    } else {
+      if (this.state.state === 0) {
+        return (
+          <div className="position-relative m-4">
+            <form>
+              <div className="form-group-auto m-2">
+                <a
+                  className="badge badge-primary"
+                  style={{ fontSize: "20px" }}
+                  href={"/adminMain?u=" + this.state.user}
+                >
+                  {" "}
+                  Voltar atrás
+                </a>
+              </div>
+              <div className="form-group-auto m-2">
+                <label>E-mail institucional</label>
+                <input
+                  type="email"
+                  value={this.state.email}
+                  onChange={this.handleEmail}
+                  onKeyDown={this.handleKeyDown}
+                  className="form-control"
+                  placeholder="Email institucional"
+                  id="inputEmail"
+                />
+              </div>
+              <div className="form-group-auto m-2">
+                <label htmlFor="inputPassword">Nome</label>
+                <input
+                  type="name"
+                  value={this.state.nome}
+                  onChange={this.handleNome}
+                  onKeyDown={this.handleKeyDown}
+                  className="form-control"
+                  placeholder="Insira aqui o nome da instituição"
+                />
+              </div>
+              <div className="form-group-auto m-2">
+                <label htmlFor="inputPassword">Localização</label>
+                <input
+                  type="name"
+                  value={this.state.localizacao}
+                  onChange={this.handleLocalizacao}
+                  onKeyDown={this.handleKeyDown}
+                  className="form-control"
+                  placeholder="Localização"
+                />
+                {this.renderErrorMessage()}
+              </div>
+              <div className="form-group-auto m-2">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={this.handleSubmit}
+                >
+                  {" "}
+                  Submeter
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="form-group-auto m-2">
-            <label>E-mail institucional</label>
-            <input
-              type="email"
-              value={this.state.email}
-              onChange={this.handleEmail}
-              onKeyDown={this.handleKeyDown}
-              className="form-control"
-              placeholder="Email institucional"
-              id="inputEmail"
-            />
-          </div>
-          <div className="form-group-auto m-2">
-            <label htmlFor="inputPassword">Nome</label>
-            <input
-              type="name"
-              value={this.state.nome}
-              onChange={this.handleNome}
-              onKeyDown={this.handleKeyDown}
-              className="form-control"
-              placeholder="Insira aqui o nome da instituição"
-            />
-          </div>
-          <div className="form-group-auto m-2">
-            <label htmlFor="inputPassword">Localização</label>
-            <input
-              type="name"
-              value={this.state.localizacao}
-              onChange={this.handleLocalizacao}
-              onKeyDown={this.handleKeyDown}
-              className="form-control"
-              placeholder="Localização"
-            />
-            {this.renderErrorMessage()}
-          </div>
-          <div className="form-group-auto m-2">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleSubmit}
-            >
-              {" "}
-              Submeter
-            </button>
-          </div>
-        </form>
-      </div>
-    );
+        );
+      } else if (this.state.state === 1) {
+        return (
+          <FeedbackForm
+            href={"/adminMain?u=" + this.state.user}
+            text="O departamento foi criado com sucesso"
+          />
+        );
+      }
+    }
   }
 }
 

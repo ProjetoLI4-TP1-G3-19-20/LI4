@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { updateUser, getUserFullInfo, validateMe } from "../HTTPRequests";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import FeedbackForm from "./feedbackForm";
 
 class UserDataUpdate extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class UserDataUpdate extends Component {
       postCode: "",
       current: 0,
       user: "",
+      state: 0,
     };
     this.handleEmail = this.handleEmail.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -145,7 +147,7 @@ class UserDataUpdate extends Component {
       updateUser(this.state).then((r) => {
         r.text().then((rr) => {
           if (String(rr) === "sucesso") {
-            window.location.href = "/main?u=" + this.state.user;
+            this.setState({ state: 1 });
           }
         });
       });
@@ -154,79 +156,89 @@ class UserDataUpdate extends Component {
 
   render() {
     if (this.state.auth) {
-      return (
-        <div className="position-relative m-4">
-          <form>
-            <div className="form-group">
-              <label htmlFor="exampleInputUsername">Nome Completo</label>
-              <input
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handleUsername}
-                value={this.state.username}
-                type="username"
-                className="form-control"
-                id="InputName"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="exampleInputEmail1">E-mail</label>
-              <input
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handleEmail}
-                value={this.state.email}
-                type="email"
-                className="form-control"
-                id="InputEmail"
-                aria-describedby="emailHelp"
-              />
-              <small id="emailHelp" className="form-text text-muted">
-                Nunca partilharemos o seu e-mail com ninguém.
-              </small>
-            </div>
-            <div className="form-group">
-              <label>Telemovel</label>
-              <PhoneInput
-                country={"pt"}
-                value={this.state.phone}
-                onChange={(phone) => this.handlePhone({ phone })}
-              />
-            </div>
-            <div className="form-group">
-              <label>Morada</label>
-              <input
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handleMorada}
-                value={this.state.morada}
-                type="text"
-                className="form-control"
-                id="inputAdress"
-              />
-            </div>
-            <div className="form-group">
-              <label>Código-Postal</label>
-              <input
-                style={{ width: "200px" }}
-                onKeyDown={this.handleKeyDown}
-                onChange={this.handlePostCode}
-                value={this.state.postCode}
-                type="text"
-                className="form-control"
-                id="inputPostCode"
-              />
-            </div>
-            {this.renderFirstPassword()}
-            {this.renderSecondPassword()}
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={this.handleSubmit}
-            >
-              Submeter
-            </button>
-          </form>
-          <br></br>
-        </div>
-      );
+      if (this.state.state === 0) {
+        return (
+          <div className="position-relative m-4">
+            <form>
+              <div className="form-group">
+                <label htmlFor="exampleInputUsername">Nome Completo</label>
+                <input
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.handleUsername}
+                  value={this.state.username}
+                  type="username"
+                  className="form-control"
+                  id="InputName"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleInputEmail1">E-mail</label>
+                <input
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.handleEmail}
+                  value={this.state.email}
+                  type="email"
+                  className="form-control"
+                  id="InputEmail"
+                  aria-describedby="emailHelp"
+                />
+                <small id="emailHelp" className="form-text text-muted">
+                  Nunca partilharemos o seu e-mail com ninguém.
+                </small>
+              </div>
+              <div className="form-group">
+                <label>Telemovel</label>
+                <PhoneInput
+                  country={"pt"}
+                  value={this.state.phone}
+                  onChange={(phone) => this.handlePhone({ phone })}
+                />
+              </div>
+              <div className="form-group">
+                <label>Morada</label>
+                <input
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.handleMorada}
+                  value={this.state.morada}
+                  type="text"
+                  className="form-control"
+                  id="inputAdress"
+                />
+              </div>
+              <div className="form-group">
+                <label>Código-Postal</label>
+                <input
+                  style={{ width: "200px" }}
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.handlePostCode}
+                  value={this.state.postCode}
+                  type="text"
+                  className="form-control"
+                  id="inputPostCode"
+                />
+              </div>
+              {this.renderFirstPassword()}
+              {this.renderSecondPassword()}
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={this.handleSubmit}
+              >
+                Submeter
+              </button>
+            </form>
+            <br></br>
+          </div>
+        );
+      } else if (this.state.state === 1) {
+        sessionStorage.removeItem("token");
+        return (
+          <FeedbackForm
+            href={"/"}
+            text="Os seus dados foram atualizados. Por favor volte a fazer login"
+          />
+        );
+      }
     } else {
       return <div>Acesso Negado</div>;
     }

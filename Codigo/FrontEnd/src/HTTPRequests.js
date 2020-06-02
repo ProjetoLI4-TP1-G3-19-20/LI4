@@ -77,6 +77,21 @@ export async function updateUser(state) {
   });
 }
 
+export async function finishVisita(user, aval, date) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "PUT",
+    body: JSON.stringify({
+      t: "finishVisita",
+      user: user,
+      date: date,
+      aval: aval,
+    }),
+    headers: new Headers(),
+  });
+}
+
 export async function createAdmin(state) {
   const url = "http://localhost:8080";
 

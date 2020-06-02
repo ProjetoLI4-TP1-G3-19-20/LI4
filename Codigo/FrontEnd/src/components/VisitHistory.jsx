@@ -20,6 +20,7 @@ class VisitHistory extends Component {
         console.log(r);
         if (String(r) === "True") {
           this.setState({ auth: true, user: u });
+          this.updateVisitas();
         }
       });
     });
@@ -39,7 +40,7 @@ class VisitHistory extends Component {
             comentario={this.state.visitas[index].comentario}
             id_inst={this.state.visitas[index].id_inst}
             departamentosID={this.state.visitas[index].departamentosID}
-            concluded={1}
+            concluded={this.state.visitas[index].estado}
           />
         }
       </div>
@@ -49,6 +50,7 @@ class VisitHistory extends Component {
   updateVisitas() {
     getVisitas(this.state.user).then((r) => {
       r.text().then((r) => {
+        console.log(r);
         var json = JSON.parse(r);
         this.setState({ visitas: json, auth: true });
       });
@@ -57,7 +59,6 @@ class VisitHistory extends Component {
 
   render() {
     if (this.state.auth === true) {
-      this.updateVisitas();
       return (
         <div className="position-relative m-4">
           <form>
