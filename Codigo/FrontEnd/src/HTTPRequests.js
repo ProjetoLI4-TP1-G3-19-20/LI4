@@ -92,6 +92,20 @@ export async function finishVisita(user, aval, date) {
   });
 }
 
+export async function initVisita(user, date) {
+  const url = "http://localhost:8080";
+
+  return fetch(url, {
+    method: "PUT",
+    body: JSON.stringify({
+      t: "initVisita",
+      user: user,
+      date: date,
+    }),
+    headers: new Headers(),
+  });
+}
+
 export async function createAdmin(state) {
   const url = "http://localhost:8080";
 
@@ -120,8 +134,8 @@ export async function createColab(state) {
       password: state.password,
       username: state.username,
       phone: state.phone,
-      morada: state.morada,
-      postCode: state.postCode,
+      inst: state.selectedInst.label,
+      dep: state.selectedDep.label,
     }),
     headers: new Headers(),
   });

@@ -124,6 +124,31 @@ public class VisitasDAO
         }
     }
 
+    public void initVisita(string user, DateTime begin) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+
+        try {
+            msc.Open();
+            string query = "UPDATE `trabalholi4`.`visitas` SET `estado` = @estado WHERE`dataInicio` = @datai AND `visitado` = @visitado";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@estado", 2);
+            mc.Parameters.AddWithValue("@datai", begin);
+            mc.Parameters.AddWithValue("@visitado", user);
+            mc.ExecuteNonQuery();
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+    }
+
     public void Update(Visita visit, int id_inst,int iduser)
     {
         MySqlConnection msc = new MySqlConnection(Connection);
@@ -325,7 +350,7 @@ public class VisitasDAO
         try {
             msc.Open();
             string query = "SELECT * FROM Visitas v " +
-                "           WHERE v.estado = 0 AND v.visitado = @name";
+                "           WHERE (v.estado = 0 OR v.estado = 2) AND v.visitado = @name";
             MySqlCommand mc = new MySqlCommand(query, msc);
             mc.Parameters.AddWithValue("@name", visitado);
             MySqlDataReader mr = mc.ExecuteReader();

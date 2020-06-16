@@ -144,16 +144,6 @@ class AcceptVisitForm extends Component {
         return (
           <div className="position-relative m-4">
             <form>
-              <div className="form-group-auto m-2">
-                <a
-                  className="badge badge-primary"
-                  style={{ fontSize: "20px" }}
-                  href={"/internoMain?u=" + this.state.user}
-                >
-                  {" "}
-                  Voltar atrás
-                </a>
-              </div>
               <div className="form-group">
                 <label htmlFor="input">Data e Hora</label>
                 <div>

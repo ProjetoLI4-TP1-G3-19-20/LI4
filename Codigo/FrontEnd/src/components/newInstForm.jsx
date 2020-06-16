@@ -79,16 +79,6 @@ class NewInstForm extends Component {
           <div className="position-relative m-4">
             <form>
               <div className="form-group-auto m-2">
-                <a
-                  className="badge badge-primary"
-                  style={{ fontSize: "20px" }}
-                  href={"/adminMain?u=" + this.state.user}
-                >
-                  {" "}
-                  Voltar atrás
-                </a>
-              </div>
-              <div className="form-group-auto m-2">
                 <label>E-mail institucional</label>
                 <input
                   type="email"

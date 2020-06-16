@@ -9,6 +9,9 @@ namespace LI4
         private String nome;
         private String email;
         private String password;
+        private String phone;
+        private int inst;
+        private int dep;
 
         public PessoaDeInteresse()
         {
@@ -17,10 +20,14 @@ namespace LI4
             this.password = "";
         }
 
-        public PessoaDeInteresse(String nome, String email, List<HoraOcupada> horasOcupadas, List<Vaga> horas_disponiveis)
+        public PessoaDeInteresse(String nome, String email, String password, String phone, int inst, int dep)
         {
             this.nome = nome;
             this.email = email;
+            this.password = password;
+            this.phone = phone;
+            this.inst = inst;
+            this.dep = dep; 
 
         }
 
@@ -28,6 +35,18 @@ namespace LI4
         {
             this.nome = pessoa.getNome();
             this.email = pessoa.getEmail();
+        }
+
+        public string getPhone() {
+            return this.phone;
+        }
+
+        public int getInst() {
+            return inst;
+        }
+
+        public int getDep() {
+            return this.dep;
         }
 
         public String getNome()

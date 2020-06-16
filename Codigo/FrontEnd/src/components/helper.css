@@ -6,7 +6,7 @@
   background-repeat: no-repeat;
   color: white;
   text-shadow: black 0.3em 0.3em 0.3em;
-  height: 150px;
+  height: 75px;
 }
 .inputEmail {
   color: white;
@@ -35,4 +35,28 @@
   float: right;
   width: 90%;
   padding: 5px;
+}
+
+/* unvisited link */
+a:link {
+  color: inherit;
+}
+
+/* visited link */
+a:visited {
+  color: inherit;
+}
+
+/* mouse over link */
+a:hover {
+  color: inherit;
+}
+
+/* selected link */
+a:active {
+  color: inherit;
+}
+
+a:focus {
+  color: inherit;
 }

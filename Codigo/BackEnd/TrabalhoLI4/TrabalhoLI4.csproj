@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Administrador.cs" />
     <Compile Include="AdministradorDAO.cs" />
+    <Compile Include="Hash.cs" />
     <Compile Include="HTTPServer.cs" />
     <Compile Include="JWT.cs" />
     <Compile Include="PedidoVisitaDAO.cs" />

@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { getUserName, getVisitasMarcadas, finishVisita } from "../HTTPRequests";
+import {
+  getUserName,
+  getVisitasMarcadas,
+  finishVisita,
+  initVisita,
+} from "../HTTPRequests";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -16,34 +21,38 @@ class IFvisits extends Component {
 
     this.state = {
       auth: true,
-      events: [],
       confirmedEvents: [],
       pedidos: [],
       panel: 0,
       selectedEvent: [],
-      disabled: true,
       user: u,
       aval: "",
       state: 0,
+      buttonState: -1,
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFinish = this.handleFinish.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.updatePedidos = this.updatePedidos.bind(this);
     this.handleAval = this.handleAval.bind(this);
+    this.renderButton = this.renderButton.bind(this);
+    this.handleInit = this.handleInit.bind(this);
 
     this.updatePedidos();
   }
 
   handleSelectEvent(event) {
-    this.setState({ selectedEvent: event, disabled: event.set });
+    this.setState({
+      selectedEvent: event,
+      buttonState: parseInt(event.estado),
+    });
   }
 
   handleAval(event) {
     this.setState({ aval: event.target.value });
   }
 
-  handleSubmit() {
+  handleFinish() {
     if (this.state.aval !== "") {
       finishVisita(
         this.state.pedidos[this.state.selectedEvent.id].visitado,
@@ -52,6 +61,14 @@ class IFvisits extends Component {
       );
       this.setState({ state: 1 });
     }
+  }
+
+  handleInit() {
+    initVisita(
+      this.state.pedidos[this.state.selectedEvent.id].visitado,
+      this.state.selectedEvent.start
+    );
+    this.setState({ state: 1 });
   }
 
   updatePedidos() {
@@ -65,7 +82,7 @@ class IFvisits extends Component {
             r.text().then((r) => {
               element.visitante = r;
               e.push({
-                set: false,
+                estado: element.estado,
                 id: id,
                 title:
                   (
@@ -89,6 +106,52 @@ class IFvisits extends Component {
     });
   }
 
+  renderButton() {
+    console.log(this.state.buttonState);
+    if (this.state.buttonState === -1) {
+      return;
+    } else if (this.state.buttonState === 2) {
+      return (
+        <div>
+          <div className="form-group-auto m-2">
+            <label>Avaliação</label>
+            <input
+              type="email"
+              value={this.state.aval}
+              onChange={this.handleAval}
+              onKeyDown={this.handleKeyDown}
+              className="form-control"
+              placeholder="Insira aqui a sua avaliacao"
+              id="inputAval"
+              disabled={this.state.disabled}
+            />
+          </div>
+          <div className="form-group-auto m-2">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={this.handleFinish}
+            >
+              Terminar
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="form-group-auto m-2">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={this.handleInit}
+          >
+            Iniciar
+          </button>
+        </div>
+      );
+    }
+  }
+
   render() {
     if (!this.state.auth) {
       return <div>Acesso Negado</div>;
@@ -97,31 +160,24 @@ class IFvisits extends Component {
         return (
           <div className="position-relative m-4">
             <form>
-              <div className="form-group-auto m-2">
-                <a
-                  className="badge badge-primary"
-                  style={{ fontSize: "20px" }}
-                  href={"/internoMain?u=" + this.state.user}
-                >
-                  {" "}
-                  Voltar atrás
-                </a>
-              </div>
               <div className="form-group">
                 <label htmlFor="input">Data e Hora</label>
                 <div>
                   <Calendar
                     style={{ height: 600, width: "120%" }}
                     eventPropGetter={(event, start, end, isSelected) => {
-                      var backgroundColor = "#3DD120";
-                      if (event.set === false) backgroundColor = "#1A37D7";
-                      if (event.set === false && isSelected === true)
-                        backgroundColor = "#404995";
+                      var backgroundColor = "#000000";
+                      if (event.estado === "0" && isSelected === false)
+                        backgroundColor = "#0000cc";
+                      else if (event.estado === "0" && isSelected === true)
+                        backgroundColor = "#4d4dff";
+                      else if (event.estado === "2" && isSelected === true)
+                        backgroundColor = "#ff8c1a";
+                      else if (event.estado === "2" && isSelected === false)
+                        backgroundColor = "#b35900";
                       return { style: { backgroundColor } };
                     }}
-                    events={this.state.confirmedEvents.concat(
-                      this.state.events
-                    )}
+                    events={this.state.confirmedEvents}
                     startAccessor="start"
                     endAccessor="end"
                     defaultDate={moment().toDate()}
@@ -130,32 +186,7 @@ class IFvisits extends Component {
                   />
                 </div>
               </div>
-              <div>
-                <div id="bootstrap-datetimepicker-widget"></div>
-              </div>
-              <div className="form-group-auto m-2">
-                <label>Avaliação</label>
-                <input
-                  type="email"
-                  value={this.state.aval}
-                  onChange={this.handleAval}
-                  onKeyDown={this.handleKeyDown}
-                  className="form-control"
-                  placeholder="Insira aqui a sua avaliacao"
-                  id="inputAval"
-                  disabled={this.state.disabled}
-                />
-              </div>
-              <div className="form-group-auto m-2">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={this.handleSubmit}
-                  disabled={this.state.disabled}
-                >
-                  Terminar
-                </button>
-              </div>
+              {this.renderButton()}
             </form>
           </div>
         );
@@ -163,7 +194,7 @@ class IFvisits extends Component {
         return (
           <FeedbackForm
             href={"/internoMain?u=" + this.state.user}
-            text="A visita foi concluída"
+            text="Atualização concluída"
           />
         );
       }

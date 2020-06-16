@@ -13,6 +13,41 @@ namespace LI4 {
             Connection = con;
         }
 
+        public bool Put(PessoaDeInteresse pdi) {
+            bool worked = false;
+
+            MySqlConnection msc = new MySqlConnection(Connection);
+
+            try {
+                msc.Open();
+                string query = "INSERT INTO `trabalholi4`.`pessoadeinteresse` (`nome`,`email`,`departamentos_id`,`departamentos_id_inst`,`password`,`phone`)" +
+                               "VALUES(@nome, @email, @dep, @inst, @pass, @phone)";
+
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Parameters.AddWithValue("@nome", pdi.getNome());
+                mc.Parameters.AddWithValue("@email", pdi.getEmail());
+                mc.Parameters.AddWithValue("@dep", pdi.getDep());
+                mc.Parameters.AddWithValue("@inst", pdi.getInst());
+                mc.Parameters.AddWithValue("@pass", pdi.getPassword());
+                mc.Parameters.AddWithValue("@phone", pdi.getPhone());
+                mc.ExecuteNonQuery();
+                worked = true;
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                throw e;
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return worked;
+        }
 
         public PessoaDeInteresse GetByEmail(string email) {
 
@@ -47,6 +82,37 @@ namespace LI4 {
             }
 
             return p;
+        }
+
+        public Boolean emailExiste(string emailEntrada) {
+            MySqlConnection msc = new MySqlConnection(Connection);
+            bool teste = false;
+            try {
+                msc.Open();
+                string query = "SELECT * FROM pessoadeinteresse pdi WHERE pdi.email=@emailEntrada";
+
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Prepare();
+                mc.Parameters.AddWithValue("@emailEntrada", emailEntrada);
+                MySqlDataReader mr = mc.ExecuteReader();
+
+                while (mr.Read()) {
+                    teste = true;
+                }
+                mr.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+            return teste;
         }
 
     }

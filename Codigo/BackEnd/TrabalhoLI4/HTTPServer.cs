@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Security.Policy;
 using System.Threading;
 using System.Web.Script.Serialization;
 using LI4;
@@ -22,7 +23,6 @@ class HTTPServer {
     private PedidoVisitaDAO pedidoVisitaDAO;
     private PessoaDeInteresseDAO pessoaDeInteresseDAO;
     private JWT jwt;
-
 
 
     public int Port {
@@ -65,11 +65,14 @@ class HTTPServer {
 
         if (context.Request.HttpMethod == "GET") {
             ProcessGetRequests(context);
-        }else if(context.Request.HttpMethod == "POST") {
+        }
+        else if (context.Request.HttpMethod == "POST") {
             ProcessPostRequests(context);
-        } else if(context.Request.HttpMethod == "PUT") {
+        }
+        else if (context.Request.HttpMethod == "PUT") {
             ProcessPutRequests(context);
-        } else if(context.Request.HttpMethod == "OPTIONS") {
+        }
+        else if (context.Request.HttpMethod == "OPTIONS") {
             ProcessAllow(context);
         }
 
@@ -88,6 +91,9 @@ class HTTPServer {
             case "createAdmin":
                 ProcessCreateAdmin(context, JSON);
                 break;
+            case "createColab":
+                ProcessCreateColab(context, JSON);
+                break;
             case "createPedido":
                 ProcessCreatePedido(context, JSON);
                 break;
@@ -102,7 +108,7 @@ class HTTPServer {
                 break;
 
         }
-       
+
 
     }
 
@@ -118,6 +124,9 @@ class HTTPServer {
                 break;
             case "finishVisita":
                 ProcessFinishVisita(context, JSON);
+                break;
+            case "initVisita":
+                ProcessInitVisita(context, JSON);
                 break;
         }
 
@@ -224,7 +233,24 @@ class HTTPServer {
         context.Response.AddHeader("Access-Control-Allow-Origin", "*");
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
         context.Response.OutputStream.Close();
-        
+
+    }
+
+    void ProcessInitVisita(HttpListenerContext context, Dictionary<String, String> JSON) {
+
+
+        visitasDAO.initVisita(JSON["user"], DateTime.Parse(JSON["date"]).ToUniversalTime());
+
+
+        string reply = "ok";
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+
     }
 
 
@@ -291,7 +317,7 @@ class HTTPServer {
         if (!departamentoDAO.existeNome("", inst)) {
             x = departamentoDAO.Put(new Departamento(JSON["dep"], -1), inst);
         }
-        
+
 
         if (!x) {
             reply = "erro";
@@ -311,13 +337,13 @@ class HTTPServer {
     void ProcessCreateVisitante(HttpListenerContext context, Dictionary<String, String> JSON) {
         string reply;
         string email = JSON["email"];
-        
+
 
         if (visitanteDAO.emailExiste(email)) {
             reply = "emailRepetido";
         }
         else {
-            string password = JSON["password"];
+            string password = SecurePasswordHasher.Hash(JSON["password"]);
             string username = JSON["username"];
             string phone = JSON["phone"];
             string postcode = JSON["postCode"];
@@ -347,12 +373,45 @@ class HTTPServer {
         context.Response.OutputStream.Close();
     }
 
+    void ProcessCreateColab(HttpListenerContext context, Dictionary<String, String> JSON) {
+        string reply = "";
+        string email = JSON["email"];
+        string password = SecurePasswordHasher.Hash(JSON["password"]);
+        string name = JSON["username"];
+        string phone = JSON["phone"];
+        string inst = JSON["inst"];
+        string dep = JSON["dep"];
+
+        if (pessoaDeInteresseDAO.emailExiste(email)) {
+            reply = "emailRepetido";
+        }
+        else {
+            PessoaDeInteresse pdi = new PessoaDeInteresse(name, email, password, phone, instituicaoDAO.getIdByName(inst), departamentoDAO.getIdByName(dep, instituicaoDAO.getIdByName(inst)));
+
+            if (pessoaDeInteresseDAO.Put(pdi)) {
+                reply = "ok";
+            }
+            else {
+                reply = "erro";
+            }
+
+        }
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+    }
+
 
     void ProcessUpdateVisitante(HttpListenerContext context, Dictionary<String, String> JSON) {
         string reply;
         string email = JSON["email"];
 
-        string password = JSON["password"];
+        string password = SecurePasswordHasher.Hash(JSON["password"]);
         string username = JSON["username"];
         string phone = JSON["phone"];
         string postcode = JSON["postCode"];
@@ -396,7 +455,7 @@ class HTTPServer {
             reply = "emailRepetido";
         }
         else {
-            string password = JSON["password"];
+            string password = SecurePasswordHasher.Hash(JSON["password"]);
             string username = JSON["username"];
             string phone = JSON["phone"];
             int ad = instituicaoDAO.getIdByName(JSON["instituicao"]);
@@ -509,8 +568,8 @@ class HTTPServer {
 
         List<Vaga> lista = visitasDAO.getVagas(name);
         string reply = "[";
-        
-        for(int i = 0; i < lista.Count; i++) {
+
+        for (int i = 0; i < lista.Count; i++) {
             reply += lista[i].getJson() + ",";
         }
 
@@ -612,7 +671,7 @@ class HTTPServer {
 
         reply += "[";
 
-        for(int i = 0; i < lista.Count; i++) {
+        for (int i = 0; i < lista.Count; i++) {
             nameInst = instituicaoDAO.getNamebyId(lista[i].GetId_inst());
             nameDep = departamentoDAO.getNameById(lista[i].GetId_inst(), lista[i].GetDepartamentoID());
             reply += lista[i].getJson(nameInst, nameDep);
@@ -676,17 +735,19 @@ class HTTPServer {
 
 
         Visitante v = visitanteDAO.Get(email);
-        if(v.GetId_utilizador() < 0) {
+        if (v.GetId_utilizador() < 0) {
             reply = "naoExiste";
         }
-        if (password.CompareTo(v.GetPassword()) == 0) {
-            found = true;
-            string token = jwt.generateToken(v.GetId_utilizador(), false);
-            reply = "";
-            reply += "{\"t\": \"v\", \"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
-        }
-        else {
-            reply = "false";
+        else{
+            if (SecurePasswordHasher.Verify(password, v.GetPassword())) {
+                found = true;
+                string token = jwt.generateToken(v.GetId_utilizador(), false);
+                reply = "";
+                reply += "{\"t\": \"v\", \"id\": \"" + v.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
+            }
+            else {
+                reply = "false";
+            }
         }
 
         if (!found) {
@@ -694,16 +755,18 @@ class HTTPServer {
             if (a.GetId_utilizador() < 0) {
                 reply = "naoExiste";
             }
-            if (password.CompareTo(a.GetPassword()) == 0) {
-                found = true;
-                string token = jwt.generateToken(a.GetId_utilizador(), true);
-                reply = "";
-                reply += "{\"t\": \"a\", \"id\": \"" + a.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
-            }
             else {
-
-                reply = "false";
+                if (SecurePasswordHasher.Verify(password, a.GetPassword())) {
+                    found = true;
+                    string token = jwt.generateToken(a.GetId_utilizador(), true);
+                    reply = "";
+                    reply += "{\"t\": \"a\", \"id\": \"" + a.GetId_utilizador() + "\", \"token\":\"" + token + "\"}";
+                }
+                else {
+                    reply = "false";
+                }
             }
+            
         }
 
         if (!found) {
@@ -711,16 +774,19 @@ class HTTPServer {
             if (p.getEmail().CompareTo("") == 0) {
                 reply = "naoExiste";
             }
-            if (password.CompareTo(p.getPassword()) == 0) {
-                string token = jwt.generateToken(p.getNome());
-                reply = "";
-                reply += "{\"t\": \"i\", \"nome\": \"" + p.getNome() + "\", \"token\":\"" + token + "\"}";
-            }
             else {
-                reply = "false";
+                if (SecurePasswordHasher.Verify(password, p.getPassword())) {
+                    string token = jwt.generateToken(p.getNome());
+                    reply = "";
+                    reply += "{\"t\": \"i\", \"nome\": \"" + p.getNome() + "\", \"token\":\"" + token + "\"}";
+                }
+                else {
+                    reply = "false";
+                }
             }
+            
         }
-        
+
 
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
@@ -764,6 +830,7 @@ class HTTPServer {
         pedidoVisitaDAO = new PedidoVisitaDAO(con);
         pessoaDeInteresseDAO = new PessoaDeInteresseDAO(con);
         jwt = new JWT();
+
 
     }
 

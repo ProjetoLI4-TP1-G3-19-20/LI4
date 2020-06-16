@@ -34,49 +34,6 @@ class UserLatNavBar extends Component {
           <div className="form-group-auto m-2">
             <span style={{ fontSize: "30px" }}>Bem vindo!</span>
           </div>
-          <div
-            className="form-group-auto m-2"
-            onClick={() => sessionStorage.removeItem("token")}
-          >
-            <a
-              className="badge badge-primary"
-              style={{ fontSize: "20px" }}
-              href={"/"}
-            >
-              {" "}
-              Log out
-            </a>
-          </div>
-          <div className="form-group-auto m-2">
-            <a
-              className="badge badge-primary"
-              style={{ fontSize: "20px" }}
-              href={"/userHistory?u=" + this.state.user}
-            >
-              {" "}
-              Histórico de Visitas
-            </a>
-          </div>
-          <div className="form-group-auto m-2">
-            <a
-              className="badge badge-primary"
-              style={{ fontSize: "20px" }}
-              href={"/visitReq?u=" + this.state.user}
-            >
-              {" "}
-              Pedir uma nova visita
-            </a>
-          </div>
-          <div className="form-group-auto m-2">
-            <a
-              className="badge badge-primary"
-              style={{ fontSize: "20px" }}
-              href={"/userDataUpdate?u=" + this.state.user}
-            >
-              {" "}
-              Alterar dados pessoais
-            </a>
-          </div>
         </form>
       </div>
     );

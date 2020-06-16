@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import NavBar from "./components/banner";
 import LoginForm from "./components/loginForm";
 import UserLatNavBar from "./components/userLatNavBar";
 import UserRegForm from "./components/userRegForm";
@@ -15,6 +14,10 @@ import NewDepForm from "./components/newDepForm";
 import InternoMain from "./components/internoMain";
 import UserDataUpdate from "./components/UserDataUpdate";
 import IFvisits from "./components/IFvisits";
+import NavBar from "./components/NavBar";
+import LoginNavBar from "./components/LoginNavBar";
+import AdminNavBar from "./components/AdminNavBar";
+import InternoNavBar from "./components/InternoNavBar";
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +30,7 @@ class App extends Component {
       case "/": {
         return (
           <React.Fragment>
-            <NavBar />
+            <LoginNavBar />
             <main className="container">
               <LoginForm login={this.login} />
             </main>
@@ -48,7 +51,7 @@ class App extends Component {
       case "/regUser": {
         return (
           <React.Fragment>
-            <NavBar />
+            <LoginNavBar />
             <main className="container">
               <UserRegForm />
             </main>
@@ -68,7 +71,7 @@ class App extends Component {
       case "/regAdmin": {
         return (
           <React.Fragment>
-            <NavBar />
+            <AdminNavBar />
             <main className="container">
               <AdminRegForm />
             </main>
@@ -78,7 +81,7 @@ class App extends Component {
       case "/colabRegForm": {
         return (
           <React.Fragment>
-            <NavBar />
+            <AdminNavBar />
             <main className="container">
               <ColabRegForm />
             </main>
@@ -98,7 +101,7 @@ class App extends Component {
       case "/AcceptVisit": {
         return (
           <React.Fragment>
-            <NavBar />
+            <InternoNavBar />
             <main className="container">
               <AcceptVisitForm />
             </main>
@@ -108,7 +111,7 @@ class App extends Component {
       case "/newInst": {
         return (
           <React.Fragment>
-            <NavBar />
+            <AdminNavBar />
             <main className="container">
               <NewInstForm />
             </main>
@@ -118,7 +121,7 @@ class App extends Component {
       case "/newDep": {
         return (
           <React.Fragment>
-            <NavBar />
+            <AdminNavBar />
             <main className="container">
               <NewDepForm />
             </main>
@@ -128,7 +131,7 @@ class App extends Component {
       case "/createVaga": {
         return (
           <React.Fragment>
-            <NavBar />
+            <InternoNavBar />
             <main className="container">
               <CreateVaga />
             </main>
@@ -138,7 +141,7 @@ class App extends Component {
       case "/internoMain": {
         return (
           <React.Fragment>
-            <NavBar />
+            <InternoNavBar />
             <main className="container">
               <InternoMain />
             </main>
@@ -148,7 +151,7 @@ class App extends Component {
       case "/adminMain": {
         return (
           <React.Fragment>
-            <NavBar />
+            <AdminNavBar />
             <main className="container">
               <AdminMain />
             </main>
@@ -168,7 +171,7 @@ class App extends Component {
       case "/IFvisits": {
         return (
           <React.Fragment>
-            <NavBar />
+            <InternoNavBar />
             <main className="container">
               <IFvisits />
             </main>
@@ -178,7 +181,6 @@ class App extends Component {
       default: {
         return (
           <React.Fragment>
-            <NavBar />
             <main className="container">Oops! Este página não existe!</main>
           </React.Fragment>
         );
