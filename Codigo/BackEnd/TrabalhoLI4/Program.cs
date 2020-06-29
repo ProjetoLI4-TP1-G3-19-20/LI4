@@ -9,12 +9,12 @@ namespace Version
         static void Main()
         {
             
-            string cs = @"server=localhost;user id=root;database=trabalholi4; password=PmMf1999.,,.";
+            string cs = @"server=ezvisits.mysql.database.azure.com;user id=uminho_admin@ezvisits;database=trabalholi4; password=PmMf1999.,,.";
             var bd = new MySqlConnection(cs);
             bd.Open();
 
             Console.WriteLine("A iniciar servidor");
-            HTTPServer server = new HTTPServer("C:", 8080, cs);
+            HTTPServer server = new HTTPServer("C:", 80, cs);
 
            
             bd.Close();

@@ -52,7 +52,7 @@ class InternoNavBar extends Component {
             <li className="nav-item active">
               <a
                 className="nav-link"
-                href={"/internoMain?u=" + this.state.user}
+                href={"/internoDataUpdate?u=" + this.state.user}
               >
                 Os meus dados pessoais{" "}
                 <span className="sr-only">(current)</span>
@@ -62,10 +62,10 @@ class InternoNavBar extends Component {
           <form className="form-inline my-2 my-lg-0">
             <button
               className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
+              type="reset"
               onClick={this.logout}
             >
-              <a href="/">Log Out</a>
+              Log Out
             </button>
           </form>
         </div>

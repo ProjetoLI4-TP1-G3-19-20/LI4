@@ -37,8 +37,21 @@ namespace LI4
             this.email = pessoa.getEmail();
         }
 
+
+        public void setInst(int inst) {
+            this.inst = inst;
+        }
+
+        public void setDep(int dep) {
+            this.dep = dep;
+        }
+
         public string getPhone() {
             return this.phone;
+        }
+
+        public void setPhone(string phone) {
+            this.phone = phone;
         }
 
         public int getInst() {
@@ -75,6 +88,20 @@ namespace LI4
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public string getJson(string inst, string dep) {
+            string r = "";
+
+            r += "{";
+            r += "\"nome\" : \"" + this.getNome() + "\",";
+            r += "\"email\" : \"" + this.getEmail() + "\",";
+            r += "\"telefone\" : \"" + this.getPhone() + "\",";
+            r += "\"inst\" : \"" + inst + "\",";
+            r += "\"dep\" : \"" + dep + "\",";
+            r += "\"password\" : \"" + this.getPassword() + "\"}";
+
+            return r;
         }
 
     }

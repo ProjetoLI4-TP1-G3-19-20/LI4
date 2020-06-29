@@ -46,8 +46,6 @@ class UserDataUpdate extends Component {
       r.json().then((r) => {
         this.setState({
           email: r.email,
-          password: r.password,
-          secondPassword: r.password,
           username: r.nome,
           postCode: r.cod_postal,
           phone: r.telefone,

@@ -108,13 +108,6 @@ public class InstituicaoDAO {
             mc.Parameters.AddWithValue("@email", inst.GetEmail());
             mc.Parameters.AddWithValue("@local", inst.GetLocalizacao());
             mc.ExecuteNonQuery();
-            foreach (string contacto in inst.GetContactos()) {
-                query = "UPDATE Contactos SET telemovel=@tele WHERE id_inst=@id, @tele";
-                MySqlCommand mc1 = new MySqlCommand(query, msc);
-                mc1.Parameters.AddWithValue("@id", inst.GetCod_instituicao());
-                mc1.Parameters.AddWithValue("@tele", contacto);
-                mc1.ExecuteNonQuery();
-            }
         }
         catch (Exception e) {
             Console.WriteLine(e.ToString());

@@ -49,6 +49,112 @@ namespace LI4 {
             return worked;
         }
 
+        public bool Update(PessoaDeInteresse pdi, string nomeOriginal) {
+            bool worked = false;
+
+            MySqlConnection msc = new MySqlConnection(Connection);
+
+            if(pdi.getPassword().CompareTo("") != 0) {
+                try {
+                    msc.Open();
+                    string query = "UPDATE `trabalholi4`.`pessoadeinteresse` SET `nome` = @nome, `email` = @email,`departamentos_id` = @dep, `departamentos_id_inst` = @inst, `password` = @pass, `phone` = @phone WHERE `nome` = @nome2";
+
+                    MySqlCommand mc = new MySqlCommand(query, msc);
+                    mc.Parameters.AddWithValue("@nome2", nomeOriginal);
+                    mc.Parameters.AddWithValue("@nome", pdi.getNome());
+                    mc.Parameters.AddWithValue("@email", pdi.getEmail());
+                    mc.Parameters.AddWithValue("@dep", pdi.getDep());
+                    mc.Parameters.AddWithValue("@inst", pdi.getInst());
+                    mc.Parameters.AddWithValue("@pass", pdi.getPassword());
+                    mc.Parameters.AddWithValue("@phone", pdi.getPhone());
+                    mc.ExecuteNonQuery();
+                    worked = true;
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                    throw e;
+                }
+                finally {
+                    try {
+                        msc.Close();
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.ToString());
+                    }
+                }
+
+                return worked;
+            }
+            else {
+                try {
+                    msc.Open();
+                    string query = "UPDATE `trabalholi4`.`pessoadeinteresse` SET `nome` = @nome, `email` = @email,`departamentos_id` = @dep, `departamentos_id_inst` = @inst, `phone` = @phone WHERE `nome` = @nome2";
+                    MySqlCommand mc = new MySqlCommand(query, msc);
+                    mc.Parameters.AddWithValue("@nome2", nomeOriginal);
+                    mc.Parameters.AddWithValue("@nome", pdi.getNome());
+                    mc.Parameters.AddWithValue("@email", pdi.getEmail());
+                    mc.Parameters.AddWithValue("@dep", pdi.getDep());
+                    mc.Parameters.AddWithValue("@inst", pdi.getInst());
+                    mc.Parameters.AddWithValue("@phone", pdi.getPhone());
+                    mc.ExecuteNonQuery();
+                    worked = true;
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                    throw e;
+                }
+                finally {
+                    try {
+                        msc.Close();
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e.ToString());
+                    }
+                }
+
+                return worked;
+            }
+
+            
+        }
+
+        public PessoaDeInteresse Get(string nome) {
+
+            PessoaDeInteresse p = new PessoaDeInteresse();
+            MySqlConnection msc = new MySqlConnection(Connection);
+            try {
+                msc.Open();
+                string query = "SELECT * FROM pessoadeinteresse WHERE nome = @nome";
+
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Prepare();
+                mc.Parameters.AddWithValue("@nome", nome);
+                MySqlDataReader mr = mc.ExecuteReader();
+
+                if (mr.Read()) {
+                    p.setNome(mr.GetString("nome"));
+                    p.setEmail(mr.GetString("email"));
+                    p.setPassword(mr.GetString("password"));
+                    p.setInst(mr.GetInt32("departamentos_id_inst"));
+                    p.setDep(mr.GetInt32("departamentos_id"));
+                }
+                mr.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return p;
+        }
+
         public PessoaDeInteresse GetByEmail(string email) {
 
             PessoaDeInteresse p = new PessoaDeInteresse();
@@ -83,6 +189,8 @@ namespace LI4 {
 
             return p;
         }
+
+
 
         public Boolean emailExiste(string emailEntrada) {
             MySqlConnection msc = new MySqlConnection(Connection);

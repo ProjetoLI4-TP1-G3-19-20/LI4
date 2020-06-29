@@ -1,5 +1,5 @@
 export async function login(email, password) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080/");
   url.search = new URLSearchParams({
     t: "login",
     email: email,
@@ -9,11 +9,12 @@ export async function login(email, password) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function loginAdmin(email, password) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "loginAdmin",
     email: email,
@@ -23,11 +24,12 @@ export async function loginAdmin(email, password) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function loginInterno(email, password) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "loginInterno",
     email: email,
@@ -37,11 +39,12 @@ export async function loginInterno(email, password) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createUser(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -55,11 +58,12 @@ export async function createUser(state) {
       postCode: state.postCode,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function updateUser(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "PUT",
@@ -74,11 +78,32 @@ export async function updateUser(state) {
       id: state.user,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
+  });
+}
+
+export async function updateInterno(state) {
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
+
+  return fetch(url, {
+    method: "PUT",
+    body: JSON.stringify({
+      t: "updateInterno",
+      inst: state.inst,
+      dep: state.dep,
+      email: state.email,
+      password: state.password,
+      username: state.username,
+      ogname: state.ogname,
+      phone: state.phone,
+    }),
+    headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function finishVisita(user, aval, date) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "PUT",
@@ -89,11 +114,12 @@ export async function finishVisita(user, aval, date) {
       aval: aval,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function initVisita(user, date) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "PUT",
@@ -103,11 +129,12 @@ export async function initVisita(user, date) {
       date: date,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createAdmin(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -120,11 +147,12 @@ export async function createAdmin(state) {
       instituicao: state.selectedIns.label,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createColab(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -138,11 +166,12 @@ export async function createColab(state) {
       dep: state.selectedDep.label,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createPedido(state, u) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -157,11 +186,12 @@ export async function createPedido(state, u) {
       visitante: u,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createInst(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -172,11 +202,12 @@ export async function createInst(state) {
       localizacao: state.localizacao,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createDep(state) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -186,11 +217,12 @@ export async function createDep(state) {
       dep: state.dep,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function createVaga(start, end, user) {
-  const url = "http://localhost:8080";
+  const url = "https://trabalholi4.azurewebsites.net/:8080";
 
   return fetch(url, {
     method: "POST",
@@ -201,11 +233,12 @@ export async function createVaga(start, end, user) {
       user: user,
     }),
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getAllInsts() {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "insts",
   });
@@ -213,11 +246,12 @@ export async function getAllInsts() {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getDepartamentosByInst(inst) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "depsByInst",
     inst: inst,
@@ -226,11 +260,12 @@ export async function getDepartamentosByInst(inst) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getPessoasByDepartamento(inst, dep) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "pesByDep",
     inst: inst,
@@ -240,11 +275,12 @@ export async function getPessoasByDepartamento(inst, dep) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getVagas(name) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "vagas",
     name: name,
@@ -253,11 +289,12 @@ export async function getVagas(name) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getPedidos(name) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "pedidos",
     name: name,
@@ -266,11 +303,12 @@ export async function getPedidos(name) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getVisitas(id) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "visitas",
     user: id,
@@ -279,11 +317,12 @@ export async function getVisitas(id) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function validateMe(id) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "validate",
     user: id,
@@ -293,11 +332,12 @@ export async function validateMe(id) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function validateMeAdmin(id) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "validateAdmin",
     user: id,
@@ -307,11 +347,12 @@ export async function validateMeAdmin(id) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function validateMePI(name) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "validateName",
     user: name,
@@ -321,6 +362,7 @@ export async function validateMePI(name) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
@@ -342,7 +384,7 @@ export async function sendSMS(message, phone) {
 }
 
 export async function getUserName(id) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "userName",
     id: id,
@@ -351,11 +393,12 @@ export async function getUserName(id) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function aceitePedido(accepted, idVisita) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "aceitePedido",
     accepted: accepted,
@@ -365,11 +408,12 @@ export async function aceitePedido(accepted, idVisita) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getVisitasMarcadas(visitado) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "visitasMarcadas",
     visitado: visitado,
@@ -378,11 +422,12 @@ export async function getVisitasMarcadas(visitado) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
   });
 }
 
 export async function getUserFullInfo(user) {
-  let url = new URL("http://localhost:8080");
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
   url.search = new URLSearchParams({
     t: "userInfo",
     user: user,
@@ -391,5 +436,20 @@ export async function getUserFullInfo(user) {
   return fetch(url, {
     method: "GET",
     headers: new Headers(),
+    mode: 'no-cors'
+  });
+}
+
+export async function getInternoFullInfo(user) {
+  let url = new URL("https://trabalholi4.azurewebsites.net/:8080");
+  url.search = new URLSearchParams({
+    t: "internoInfo",
+    user: user,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+    mode: 'no-cors'
   });
 }

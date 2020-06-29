@@ -9,7 +9,6 @@ namespace LI4
         private int cod_instituicao;
         private string email;
         private string nome;
-        private ArrayList contactos;
         private String localizacao;
 
 
@@ -18,7 +17,6 @@ namespace LI4
             cod_instituicao = -1;
             nome = "";
             email = "";
-            contactos = new ArrayList();
             localizacao = "";
         }
 
@@ -27,7 +25,6 @@ namespace LI4
             this.cod_instituicao = cod_instituicao;
             this.nome = nome;
             this.email = email;
-            this.contactos = new ArrayList(contactos);
             this.localizacao = localizacao;
         }
 
@@ -36,7 +33,6 @@ namespace LI4
             this.cod_instituicao = i.GetCod_instituicao();
             this.nome = i.GetNome();
             this.email = i.GetEmail();
-            this.contactos = new ArrayList(i.GetContactos());
             this.localizacao = i.GetLocalizacao();
         }
 
@@ -50,11 +46,6 @@ namespace LI4
             this.localizacao = loc;
         }
 
-        public ICollection GetContactos()
-        {
-            ArrayList r = new ArrayList(this.contactos);
-            return r;
-        }
 
         public string GetEmail(){
           return this.email;
