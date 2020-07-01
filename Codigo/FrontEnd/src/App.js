@@ -18,6 +18,7 @@ import NavBar from "./components/NavBar";
 import LoginNavBar from "./components/LoginNavBar";
 import AdminNavBar from "./components/AdminNavBar";
 import InternoNavBar from "./components/InternoNavBar";
+import InternoDataUpdate from "./components/InternoDataUpdate";
 
 class App extends Component {
   constructor(props) {
@@ -144,6 +145,16 @@ class App extends Component {
             <InternoNavBar />
             <main className="container">
               <InternoMain />
+            </main>
+          </React.Fragment>
+        );
+      }
+      case "/internoDataUpdate": {
+        return (
+          <React.Fragment>
+            <InternoNavBar />
+            <main className="container">
+              <InternoDataUpdate />
             </main>
           </React.Fragment>
         );

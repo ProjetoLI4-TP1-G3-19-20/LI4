@@ -17,7 +17,6 @@ class VisitHistory extends Component {
 
     validateMe(u).then((r) => {
       r.text().then((r) => {
-        console.log(r);
         if (String(r) === "True") {
           this.setState({ auth: true, user: u });
           this.updateVisitas();
@@ -50,7 +49,6 @@ class VisitHistory extends Component {
   updateVisitas() {
     getVisitas(this.state.user).then((r) => {
       r.text().then((r) => {
-        console.log(r);
         var json = JSON.parse(r);
         this.setState({ visitas: json, auth: true });
       });

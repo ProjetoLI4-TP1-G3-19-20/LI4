@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Security.Policy;
 using System.Threading;
 using System.Web.Script.Serialization;
 using LI4;
@@ -46,7 +44,8 @@ class HTTPServer {
 
     private void Listen() {
         listener = new HttpListener();
-        listener.Prefixes.Add("http://localhost:" + port.ToString() + "/");
+        listener.Prefixes.Add("http://+:" + port.ToString() + "/");
+
         listener.Start();
 
         while (true) {
@@ -122,6 +121,9 @@ class HTTPServer {
             case "updateUser":
                 ProcessUpdateVisitante(context, JSON);
                 break;
+            case "updateInterno":
+                ProcessUpdateInterno(context, JSON);
+                break;
             case "finishVisita":
                 ProcessFinishVisita(context, JSON);
                 break;
@@ -179,6 +181,9 @@ class HTTPServer {
                 break;
             case "userInfo":
                 processUserInfo(context);
+                break;
+            case "internoInfo":
+                processInternoInfo(context);
                 break;
         }
     }
@@ -411,14 +416,20 @@ class HTTPServer {
         string reply;
         string email = JSON["email"];
 
-        string password = SecurePasswordHasher.Hash(JSON["password"]);
+        string password;
+        if(JSON["password"].CompareTo("") != 0) {
+            password = SecurePasswordHasher.Hash(JSON["password"]);
+        }
+        else {
+            password = "";
+        }
+        
         string username = JSON["username"];
         string phone = JSON["phone"];
         string postcode = JSON["postCode"];
         string morada = JSON["morada"];
         int id = int.Parse(JSON["id"]);
 
-        Console.WriteLine(JSON["morada"]);
         Visitante v = new Visitante();
         v.SetEmail(email);
         v.SetPassword(password);
@@ -429,6 +440,52 @@ class HTTPServer {
         v.SetId_utilizador(id);
 
         if (visitanteDAO.Update(v)) {
+            reply = "sucesso";
+        }
+        else {
+            reply = "falha";
+        }
+
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+        context.Response.OutputStream.Close();
+    }
+
+    void ProcessUpdateInterno(HttpListenerContext context, Dictionary<String, String> JSON) {
+        string reply;
+        string email = JSON["email"];
+
+        string password;
+        if (JSON["password"].CompareTo("") != 0) {
+            password = SecurePasswordHasher.Hash(JSON["password"]);
+        }
+        else {
+            password = "";
+        }
+
+        string ogname = JSON["ogname"];
+        string username = JSON["username"];
+        string phone = JSON["phone"];
+        int inst = instituicaoDAO.getIdByName(JSON["inst"]);
+        int dep = departamentoDAO.getIdByName(JSON["dep"], inst);
+        Console.WriteLine("inst:" + inst + "\ndep:" + dep);
+
+
+        PessoaDeInteresse pdi = new PessoaDeInteresse();
+        pdi.setEmail(email);
+        pdi.setPassword(password);
+        pdi.setNome(username);
+        pdi.setPhone(phone.Trim('+'));
+        pdi.setDep(dep);
+        pdi.setInst(inst);
+
+
+        if (pessoaDeInteresseDAO.Update(pdi, ogname)) {
             reply = "sucesso";
         }
         else {
@@ -657,6 +714,21 @@ class HTTPServer {
         context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
     }
 
+    void processInternoInfo(HttpListenerContext context) {
+        string user = context.Request.QueryString["user"];
+
+        PessoaDeInteresse pdi = pessoaDeInteresseDAO.Get(user);
+
+        string reply = pdi.getJson(instituicaoDAO.getNamebyId(pdi.getInst()), departamentoDAO.getNameById(pdi.getInst(), pdi.getDep()));
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+    }
+
 
     void processGetVisitas(HttpListenerContext context) {
         string reply = "";
@@ -830,7 +902,6 @@ class HTTPServer {
         pedidoVisitaDAO = new PedidoVisitaDAO(con);
         pessoaDeInteresseDAO = new PessoaDeInteresseDAO(con);
         jwt = new JWT();
-
 
     }
 

@@ -31,6 +31,7 @@ class LoginForm extends Component {
   handleSubmit() {
     login(this.state.email, this.state.password).then((r) => {
       r.text().then((rr) => {
+        console.log("ola:" + rr);
         if (String(rr) === "false" || String(rr) === "naoExiste") {
           this.setState({ current: 1 });
         } else {
