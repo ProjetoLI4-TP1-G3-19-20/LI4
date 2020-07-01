@@ -25,7 +25,7 @@ class InternoNavBar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-        <a className="navbar-brand" href={"/main?u=" + this.state.user}>
+        <a className="navbar-brand" href={"/internoMain?u=" + this.state.user}>
           VisitasUminho
         </a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">

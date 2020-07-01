@@ -66,6 +66,7 @@ class AcceptVisitForm extends Component {
       this.state.pedidos[this.state.selectedEvent.id].id
     ).then((r) => {
       this.updatePedidos();
+      console.log(this.state.selectedEvent)
       this.setState({ panel: 0 });
     });
   }
