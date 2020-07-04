@@ -31,21 +31,6 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `trabalholi4`.`contacto`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `trabalholi4`.`contacto` (
-  `telemovel` VARCHAR(10) NOT NULL,
-  `id_inst` INT NOT NULL,
-  PRIMARY KEY (`telemovel`),
-  INDEX `fk_Contacto_Instituicao1_idx` (`id_inst` ASC) VISIBLE,
-  CONSTRAINT `fk_Contacto_Instituicao1`
-    FOREIGN KEY (`id_inst`)
-    REFERENCES `trabalholi4`.`instituicao` (`id_inst`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `trabalholi4`.`departamentos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `trabalholi4`.`departamentos` (
@@ -152,7 +137,6 @@ CREATE TABLE IF NOT EXISTS `trabalholi4`.`trabalhadores` (
   `admin` TINYINT NULL DEFAULT NULL,
   `id_col` INT NOT NULL AUTO_INCREMENT,
   `password` VARCHAR(200) NULL,
-  `trabalhadorescol` VARCHAR(45) NULL,
   PRIMARY KEY (`id_col`),
   INDEX `fk_Colaboradores_instituições1_idx` (`id_inst` ASC) VISIBLE,
   CONSTRAINT `fk_Colaboradores_instituições1`
@@ -173,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `trabalholi4`.`visitas` (
   `estado` INT NULL DEFAULT NULL,
   `avaliacao` VARCHAR(100) NULL DEFAULT NULL,
   `comentarios` VARCHAR(500) NULL DEFAULT NULL,
-  `visitado` VARCHAR(45) NULL,
+  `visitado` VARCHAR(100) NULL,
   `departamentos_id` INT NOT NULL,
   PRIMARY KEY (`idInstituicao`, `idUser`, `dataInicio`, `departamentos_id`),
   INDEX `fk_Instituicoes_has_Visita_Instituicoes1_idx` (`idInstituicao` ASC) VISIBLE,
