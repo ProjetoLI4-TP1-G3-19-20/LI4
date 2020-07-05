@@ -44,7 +44,7 @@ class HTTPServer {
 
     private void Listen() {
         listener = new HttpListener();
-        listener.Prefixes.Add("http://+:" + port.ToString() + "/");
+        listener.Prefixes.Add("https://+:" + port.ToString() + "/");
 
         listener.Start();
 
@@ -61,8 +61,6 @@ class HTTPServer {
 
     private void Process(HttpListenerContext context) {
 
-        Console.WriteLine("Request");
-
         if (context.Request.HttpMethod == "GET") {
             ProcessGetRequests(context);
         }
@@ -77,6 +75,7 @@ class HTTPServer {
         }
 
     }
+    
 
 
     void ProcessPostRequests(HttpListenerContext context) {
@@ -140,8 +139,6 @@ class HTTPServer {
 
     void ProcessGetRequests(HttpListenerContext context) {
 
-        Console.WriteLine(context.Request.QueryString["t"]);
-
         switch (context.Request.QueryString["t"]) {
             case "validate":
                 ProcessValidate(context);
@@ -190,6 +187,12 @@ class HTTPServer {
                 break;
             case "deleteAllVagas":
                 ProcessDeleteAllVagas(context);
+                break;
+            case "getPhoneNumber":
+                ProcessGetPhoneNumber(context);
+                break;
+            case "getNextVisit":
+                ProcessGetNextVisit(context);
                 break;
             default:
                 processDefault(context);
@@ -801,6 +804,22 @@ class HTTPServer {
 
     }
 
+    void ProcessGetNextVisit(HttpListenerContext context) {
+        string reply = "";
+
+        int id = int.Parse(context.Request.QueryString["id"]);
+
+        reply = visitanteDAO.getNextVisit(id);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
 
     void processGetVisitasMarcadas(HttpListenerContext context) {
         string reply = "";
@@ -824,6 +843,26 @@ class HTTPServer {
         reply = reply.Trim(chars);
 
         reply += "]";
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
+
+    void ProcessGetPhoneNumber(HttpListenerContext context) {
+        string reply = "";
+        
+
+        int id = int.Parse(context.Request.QueryString["id"]);
+
+        string phone = visitanteDAO.getPhoneNumber(id);
+
+        reply += "{\"phone\": \"" + phone + "\"}";
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
 
@@ -938,6 +977,7 @@ class HTTPServer {
         pedidoVisitaDAO = new PedidoVisitaDAO(con);
         pessoaDeInteresseDAO = new PessoaDeInteresseDAO(con);
         jwt = new JWT();
+
 
     }
 
