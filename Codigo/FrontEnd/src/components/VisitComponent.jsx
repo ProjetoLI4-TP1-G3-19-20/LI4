@@ -11,6 +11,7 @@ class VisitComponent extends Component {
       dep: this.props.departamentosID,
       visited: this.props.visitado,
       comments: this.props.comentario,
+      avaliacao: this.props.avaliacao
     };
   }
   render() {
@@ -19,7 +20,7 @@ class VisitComponent extends Component {
         <div>
           <p>
             <b>Concluída:</b>{" "}
-            {this.state.concluded === 1 ? "Concluído" : "Por realizar"}
+            {this.state.concluded === '1' ? "Concluído" : "Por realizar"}
           </p>
           <p>
             <b>Instituição:</b> {this.state.inst}
@@ -37,7 +38,7 @@ class VisitComponent extends Component {
             <b>Hora Saída:</b> {this.state.end_date}
           </p>
           <p>
-            <b>Avaliacao:</b> {this.state.avalicao}
+            <b>Avaliacao:</b> {this.state.avaliacao}
           </p>
           <p>
             <b>Comentários:</b> {this.state.comments}

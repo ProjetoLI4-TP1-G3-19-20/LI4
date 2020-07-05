@@ -4,7 +4,7 @@ import question from "./questionMark.png";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { createVaga, getVagas, validateMePI } from "../HTTPRequests";
+import { createVaga, getVagas, validateMePI, deleteAllVagas } from "../HTTPRequests";
 import { Popup } from "semantic-ui-react";
 import FeedbackForm from "./feedbackForm";
 
@@ -16,7 +16,6 @@ class CreateVaga extends Component {
 
     this.state = {
       events: [],
-      oldEvents: [],
       user: "",
       auth: false,
       state: 0,
@@ -43,7 +42,6 @@ class CreateVaga extends Component {
         p.forEach((element) => {
           pdi.push({
             id: id,
-            set: true,
             title:
               "Vaga - " +
               ("0" + new Date(parseInt(element.inicio)).getHours()).slice(-2) +
@@ -57,7 +55,7 @@ class CreateVaga extends Component {
           });
           id++;
         });
-        this.setState({ oldEvents: pdi });
+        this.setState({ events: pdi });
       });
     });
 
@@ -75,7 +73,6 @@ class CreateVaga extends Component {
             start,
             end,
             title,
-            set: false,
           },
         ],
       });
@@ -92,10 +89,12 @@ class CreateVaga extends Component {
   }
 
   handleSubmit() {
-    this.state.events.forEach((element) => {
-      createVaga(element.start, element.end, this.state.user);
-    });
-    this.setState({ state: 1 });
+    deleteAllVagas(this.state.user).then((r) => {
+      this.state.events.forEach((element) => {
+        createVaga(element.start, element.end, this.state.user);
+      });
+      this.setState({ state: 1 });
+    })
   }
 
   render() {
@@ -111,7 +110,7 @@ class CreateVaga extends Component {
                   selectable
                   localizer={localizer}
                   style={{ height: 700, width: "120%" }}
-                  events={this.state.oldEvents.concat(this.state.events)}
+                  events={this.state.events}
                   defaultView={Views.WEEK}
                   scrollToTime={new Date(1970, 1, 1, 6)}
                   onSelectEvent={(event) => this.remove(event)}

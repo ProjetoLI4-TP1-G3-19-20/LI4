@@ -169,6 +169,7 @@ class VisitReqForm extends Component {
             this.setState({ state: 1 });
           }
         });
+        //deleteVaga(this.state.selectedPdi.label, this.state.selectedEvent.start)
       });
     }
   }
