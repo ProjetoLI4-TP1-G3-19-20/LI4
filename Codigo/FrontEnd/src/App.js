@@ -283,10 +283,7 @@ class App extends Component {
       default: {
         return (
           <React.Fragment>
-            <div className="wrapper">
-              <main className="container">Oops! Este página não existe!</main>
-            </div>
-            <Footer />
+            <main className="container">Oops! Esta página não existe!</main>
           </React.Fragment>
         );
       }

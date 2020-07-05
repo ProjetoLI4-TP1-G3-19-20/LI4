@@ -297,4 +297,65 @@ public class VisitanteDAO
 
         return name;
     }
+
+    public string getPhoneNumber(int id) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+        string phone = "";
+        try {
+            msc.Open();
+            string query = "SELECT Telemóvel FROM visitante WHERE id = @id";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@id", id);
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read()) {
+                phone = mr.GetString("Telemóvel");
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        return phone;
+    }
+
+    public string getNextVisit(int id) {
+        MySqlConnection msc = new MySqlConnection(Connection);
+        string str = "";
+        try {
+            msc.Open();
+            string query = "SELECT * FROM visitas WHERE idUser = @id AND estado = 0 ORDER BY dataInicio;";
+            MySqlCommand mc = new MySqlCommand(query, msc);
+            mc.Parameters.AddWithValue("@id", id);
+            MySqlDataReader mr = mc.ExecuteReader();
+
+            if (mr.Read()) {
+                str = "{\"visitado\" : \"" + mr.GetString("visitado") + "\", \"data\" : \"" + mr.GetDateTime("dataInicio").Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\"}";
+            }  
+            else {
+                str = "{\"visitado\" : \"-1\"}";
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.ToString());
+        }
+        finally {
+            try {
+                msc.Close();
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+
+        return str;
+    }
 }

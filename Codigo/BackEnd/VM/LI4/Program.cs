@@ -13,7 +13,7 @@ using LI4;
             bd.Open();
 
             Console.WriteLine("A iniciar servidor");
-            HTTPServer server = new HTTPServer("C:", 80, cs);
+            HTTPServer server = new HTTPServer("C:", 443, cs);
 
            
             bd.Close();

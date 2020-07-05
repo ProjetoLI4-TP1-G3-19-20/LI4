@@ -37,3 +37,4 @@ C:\LI4\Codigo\BackEnd\VM\LI4\bin\Debug\System.Runtime.CompilerServices.Unsafe.xm
 C:\LI4\Codigo\BackEnd\VM\LI4\obj\Debug\LI4.csproj.CopyComplete
 C:\LI4\Codigo\BackEnd\VM\LI4\obj\Debug\LI4.exe
 C:\LI4\Codigo\BackEnd\VM\LI4\obj\Debug\LI4.pdb
+C:\LI4\Codigo\BackEnd\VM\LI4\bin\Debug\Settings.job
