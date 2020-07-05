@@ -188,6 +188,7 @@ class IFvisits extends Component {
               </div>
               {this.renderButton()}
             </form>
+            <hr style={{ height: "40pt", visibility: "hidden" }} />
           </div>
         );
       } else if (this.state.state === 1) {

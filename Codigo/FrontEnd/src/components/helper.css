@@ -1,13 +1,18 @@
-.jumbotron {
-  margin-bottom: 0px;
-  background-image: url(./prettycolors.png);
-  background-position: 0% 25%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: white;
-  text-shadow: black 0.3em 0.3em 0.3em;
-  height: 75px;
+:root {
+  --mainDark: #343a40;
+  --mainGrey: rgba(109, 109, 109);
+  --mainLightGrey: rgba(172, 172, 172);
+  --mainWhite: #fff;
+  --mainBlue: #007bff;
 }
+
+.heading {
+  font-weight: 700;
+}
+.subheading {
+  font-weight: 300;
+}
+
 .inputEmail {
   color: white;
   text-shadow: black;
@@ -29,4 +34,8 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
   -moz-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 8px;
+}
+
+.wrapper {
+  min-height: calc(100vh - 170px);
 }
