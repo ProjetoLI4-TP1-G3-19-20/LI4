@@ -68,6 +68,7 @@ class VisitHistory extends Component {
               />
             </div>
           </form>
+          <hr style={{ height: "40pt", visibility: "hidden" }} />
         </div>
       );
     } else {

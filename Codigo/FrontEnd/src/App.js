@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import LoginForm from "./components/loginForm";
-import UserLatNavBar from "./components/userLatNavBar";
+import UserMain from "./components/UserMain";
 import UserRegForm from "./components/userRegForm";
 import VisitHistory from "./components/VisitHistory";
 import AdminRegForm from "./components/AdminRegForm";
@@ -19,6 +19,11 @@ import LoginNavBar from "./components/LoginNavBar";
 import AdminNavBar from "./components/AdminNavBar";
 import InternoNavBar from "./components/InternoNavBar";
 import InternoDataUpdate from "./components/InternoDataUpdate";
+import FooterA from "./components/FooterA";
+import FooterI from "./components/FooterI";
+import FooterU from "./components/FooterU";
+import Footer from "./components/Footer";
+import InfoComponente from "./components/InfoComponent";
 
 class App extends Component {
   constructor(props) {
@@ -31,161 +36,247 @@ class App extends Component {
       case "/": {
         return (
           <React.Fragment>
-            <LoginNavBar />
-            <main className="container">
-              <LoginForm login={this.login} />
-            </main>
-            ;
+            <div className="wrapper">
+              <LoginNavBar />
+              <main className="container">
+                <LoginForm login={this.login} />
+              </main>
+            </div>
+            <Footer />
           </React.Fragment>
         );
       }
       case "/main": {
         return (
           <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <UserLatNavBar name={this.state.currentUser} />
-            </main>
+            <div className="wrapper">
+              <NavBar />
+              <main className="container">
+                <UserMain name={this.state.currentUser} />
+              </main>
+            </div>
+            <FooterU />
           </React.Fragment>
         );
       }
       case "/regUser": {
         return (
           <React.Fragment>
-            <LoginNavBar />
-            <main className="container">
-              <UserRegForm />
-            </main>
+            <div className="wrapper">
+              <LoginNavBar />
+              <main className="container">
+                <UserRegForm />
+              </main>
+            </div>
+            <Footer />
           </React.Fragment>
         );
       }
       case "/userHistory": {
         return (
           <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <VisitHistory />
-            </main>
+            <div className="wrapper">
+              <NavBar />
+              <main className="container">
+                <VisitHistory />
+              </main>
+            </div>
+            <FooterU />
           </React.Fragment>
         );
       }
       case "/regAdmin": {
         return (
           <React.Fragment>
-            <AdminNavBar />
-            <main className="container">
-              <AdminRegForm />
-            </main>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <AdminRegForm />
+              </main>
+            </div>
+            <FooterA />
           </React.Fragment>
         );
       }
       case "/colabRegForm": {
         return (
           <React.Fragment>
-            <AdminNavBar />
-            <main className="container">
-              <ColabRegForm />
-            </main>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <ColabRegForm />
+              </main>
+            </div>
+            <FooterA />
           </React.Fragment>
         );
       }
       case "/visitReq": {
         return (
           <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <VisitReqForm />
-            </main>
+            <div className="wrapper">
+              <NavBar />
+              <main className="container">
+                <VisitReqForm />
+              </main>
+            </div>
+            <FooterU />
           </React.Fragment>
         );
       }
       case "/AcceptVisit": {
         return (
           <React.Fragment>
-            <InternoNavBar />
-            <main className="container">
-              <AcceptVisitForm />
-            </main>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <AcceptVisitForm />
+              </main>
+            </div>
+            <FooterI />
           </React.Fragment>
         );
       }
       case "/newInst": {
         return (
           <React.Fragment>
-            <AdminNavBar />
-            <main className="container">
-              <NewInstForm />
-            </main>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <NewInstForm />
+              </main>
+            </div>
+            <FooterA />
           </React.Fragment>
         );
       }
       case "/newDep": {
         return (
           <React.Fragment>
-            <AdminNavBar />
-            <main className="container">
-              <NewDepForm />
-            </main>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <NewDepForm />
+              </main>
+            </div>
+            <FooterA />
           </React.Fragment>
         );
       }
       case "/createVaga": {
         return (
           <React.Fragment>
-            <InternoNavBar />
-            <main className="container">
-              <CreateVaga />
-            </main>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <CreateVaga />
+              </main>
+            </div>
+            <FooterI />
           </React.Fragment>
         );
       }
       case "/internoMain": {
         return (
           <React.Fragment>
-            <InternoNavBar />
-            <main className="container">
-              <InternoMain />
-            </main>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <InternoMain />
+              </main>
+            </div>
+            <FooterI />
           </React.Fragment>
         );
       }
       case "/internoDataUpdate": {
         return (
           <React.Fragment>
-            <InternoNavBar />
-            <main className="container">
-              <InternoDataUpdate />
-            </main>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <InternoDataUpdate />
+              </main>
+            </div>
+            <FooterI />
           </React.Fragment>
         );
       }
       case "/adminMain": {
         return (
           <React.Fragment>
-            <AdminNavBar />
-            <main className="container">
-              <AdminMain />
-            </main>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <AdminMain />
+              </main>
+            </div>
+            <FooterA />
           </React.Fragment>
         );
       }
       case "/userDataUpdate": {
         return (
           <React.Fragment>
-            <NavBar />
-            <main className="container">
-              <UserDataUpdate />
-            </main>
+            <div className="wrapper">
+              <NavBar />
+              <main className="container">
+                <UserDataUpdate />
+              </main>
+            </div>
+            <FooterU />
           </React.Fragment>
         );
       }
       case "/IFvisits": {
         return (
           <React.Fragment>
-            <InternoNavBar />
-            <main className="container">
-              <IFvisits />
-            </main>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <IFvisits />
+              </main>
+            </div>
+            <FooterI />
+          </React.Fragment>
+        );
+      }
+      case "/infoI": {
+        return (
+          <React.Fragment>
+            <div className="wrapper">
+              <InternoNavBar />
+              <main className="container">
+                <InfoComponente />
+              </main>
+            </div>
+            <FooterI />
+          </React.Fragment>
+        );
+      }
+      case "/infoA": {
+        return (
+          <React.Fragment>
+            <div className="wrapper">
+              <AdminNavBar />
+              <main className="container">
+                <InfoComponente />
+              </main>
+            </div>
+            <FooterA />
+          </React.Fragment>
+        );
+      }
+      case "/infoU": {
+        return (
+          <React.Fragment>
+            <div className="wrapper">
+              <NavBar />
+              <main className="container">
+                <InfoComponente />
+              </main>
+            </div>
+            <FooterU />
           </React.Fragment>
         );
       }

@@ -1,5 +1,5 @@
 export async function login(email, password) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "login",
     email: email,
@@ -13,7 +13,7 @@ export async function login(email, password) {
 }
 
 export async function loginAdmin(email, password) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "loginAdmin",
     email: email,
@@ -27,7 +27,7 @@ export async function loginAdmin(email, password) {
 }
 
 export async function loginInterno(email, password) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "loginInterno",
     email: email,
@@ -40,8 +40,60 @@ export async function loginInterno(email, password) {
   });
 }
 
+export async function getPhoneNumber(uid) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getPhoneNumber",
+    id: uid,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getNextVisit(id) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getNextVisit",
+    id: id,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getNextVisitInterno(nome) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getNextVisitInterno",
+    nome: nome,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getNumberOfRequests(nome) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getNumberOfRequests",
+    nome: nome,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
 export async function createUser(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -59,7 +111,7 @@ export async function createUser(state) {
 }
 
 export async function updateUser(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "PUT",
@@ -78,7 +130,7 @@ export async function updateUser(state) {
 }
 
 export async function updateInterno(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "PUT",
@@ -97,7 +149,7 @@ export async function updateInterno(state) {
 }
 
 export async function finishVisita(user, aval, date) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "PUT",
@@ -112,7 +164,7 @@ export async function finishVisita(user, aval, date) {
 }
 
 export async function initVisita(user, date) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "PUT",
@@ -126,7 +178,7 @@ export async function initVisita(user, date) {
 }
 
 export async function createAdmin(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -143,7 +195,7 @@ export async function createAdmin(state) {
 }
 
 export async function createColab(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -161,7 +213,7 @@ export async function createColab(state) {
 }
 
 export async function createPedido(state, u) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -180,7 +232,7 @@ export async function createPedido(state, u) {
 }
 
 export async function createInst(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -195,7 +247,7 @@ export async function createInst(state) {
 }
 
 export async function createDep(state) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -209,7 +261,7 @@ export async function createDep(state) {
 }
 
 export async function createVaga(start, end, user) {
-  const url = "http://137.117.143.214:80";
+  const url = "https://li4li4li4.tk:443";
 
   return fetch(url, {
     method: "POST",
@@ -224,10 +276,10 @@ export async function createVaga(start, end, user) {
 }
 
 export async function deleteAllVagas(user) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "deleteAllVagas",
-    user: user
+    user: user,
   });
 
   return fetch(url, {
@@ -237,7 +289,7 @@ export async function deleteAllVagas(user) {
 }
 
 export async function getAllInsts() {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "insts",
   });
@@ -249,7 +301,7 @@ export async function getAllInsts() {
 }
 
 export async function getDepartamentosByInst(inst) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "depsByInst",
     inst: inst,
@@ -262,7 +314,7 @@ export async function getDepartamentosByInst(inst) {
 }
 
 export async function getPessoasByDepartamento(inst, dep) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "pesByDep",
     inst: inst,
@@ -276,7 +328,7 @@ export async function getPessoasByDepartamento(inst, dep) {
 }
 
 export async function getVagas(name) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "vagas",
     name: name,
@@ -289,7 +341,7 @@ export async function getVagas(name) {
 }
 
 export async function getPedidos(name) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "pedidos",
     name: name,
@@ -302,7 +354,7 @@ export async function getPedidos(name) {
 }
 
 export async function getVisitas(id) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "visitas",
     user: id,
@@ -315,7 +367,7 @@ export async function getVisitas(id) {
 }
 
 export async function validateMe(id) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "validate",
     user: id,
@@ -329,7 +381,7 @@ export async function validateMe(id) {
 }
 
 export async function validateMeAdmin(id) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "validateAdmin",
     user: id,
@@ -343,7 +395,7 @@ export async function validateMeAdmin(id) {
 }
 
 export async function validateMePI(name) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "validateName",
     user: name,
@@ -374,7 +426,7 @@ export async function sendSMS(message, phone) {
 }
 
 export async function getUserName(id) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "userName",
     id: id,
@@ -387,7 +439,7 @@ export async function getUserName(id) {
 }
 
 export async function aceitePedido(accepted, idVisita) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "aceitePedido",
     accepted: accepted,
@@ -401,7 +453,7 @@ export async function aceitePedido(accepted, idVisita) {
 }
 
 export async function getVisitasMarcadas(visitado) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "visitasMarcadas",
     visitado: visitado,
@@ -414,7 +466,7 @@ export async function getVisitasMarcadas(visitado) {
 }
 
 export async function getUserFullInfo(user) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "userInfo",
     user: user,
@@ -427,7 +479,7 @@ export async function getUserFullInfo(user) {
 }
 
 export async function getInternoFullInfo(user) {
-  let url = new URL("http://137.117.143.214:80");
+  let url = new URL("https://li4li4li4.tk:443");
   url.search = new URLSearchParams({
     t: "internoInfo",
     user: user,

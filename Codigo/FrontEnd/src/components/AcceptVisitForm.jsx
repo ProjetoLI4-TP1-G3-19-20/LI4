@@ -4,6 +4,8 @@ import {
   getUserName,
   aceitePedido,
   getVisitasMarcadas,
+  getPhoneNumber,
+  sendSMS,
 } from "../HTTPRequests";
 import PedidoVisitaComponent from "./PedidoVisitaComponent";
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -58,6 +60,28 @@ class AcceptVisitForm extends Component {
         this.setState({ panel: 0 });
       }
     );
+
+    getPhoneNumber(this.state.pedidos[this.state.selectedEvent.id].uid).then(
+      (r) => {
+        r.json().then((r) => {
+          var date = new Date(this.state.selectedEvent.start);
+          sendSMS(
+            "Informamos que a sua visita com " +
+              this.state.user +
+              ", dia " +
+              ("0" + date.getDate()).slice(-2) +
+              "/" +
+              ("0" + date.getMonth()).slice(-2) +
+              ", pelas " +
+              ("0" + date.getHours()).slice(-2) +
+              ":" +
+              ("0" + date.getMinutes()).slice(-2) +
+              ", foi confirmada com sucesso. Esperamos vê-lo brevemente. \n\nEzVisits",
+            r.phone.slice(-9)
+          );
+        });
+      }
+    );
   }
 
   handleRefuse() {
@@ -66,7 +90,7 @@ class AcceptVisitForm extends Component {
       this.state.pedidos[this.state.selectedEvent.id].id
     ).then((r) => {
       this.updatePedidos();
-      console.log(this.state.selectedEvent)
+      console.log(this.state.selectedEvent);
       this.setState({ panel: 0 });
     });
   }
@@ -76,7 +100,9 @@ class AcceptVisitForm extends Component {
     var id = 0;
     getPedidos(this.state.user).then((r) => {
       r.json().then((rr) => {
+        console.log(rr);
         rr.forEach((element) => {
+          element.uid = element.visitante;
           getUserName(element.visitante).then((r) => {
             r.text().then((r) => {
               element.visitante = r;
@@ -180,10 +206,10 @@ class AcceptVisitForm extends Component {
                 Verificar
               </button>
             </form>
+            <hr style={{ height: "40pt", visibility: "hidden" }} />
           </div>
         );
       } else if (this.state.panel === 1) {
-        console.log(this.state.pedidos);
         return (
           <div>
             <PedidoVisitaComponent
