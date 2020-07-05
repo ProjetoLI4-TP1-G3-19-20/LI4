@@ -66,6 +66,32 @@ export async function getNextVisit(id) {
   });
 }
 
+export async function getNextVisitInterno(nome) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getNextVisitInterno",
+    nome: nome,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
+export async function getNumberOfRequests(nome) {
+  let url = new URL("https://li4li4li4.tk:443");
+  url.search = new URLSearchParams({
+    t: "getNumberOfRequests",
+    nome: nome,
+  });
+
+  return fetch(url, {
+    method: "GET",
+    headers: new Headers(),
+  });
+}
+
 export async function createUser(state) {
   const url = "https://li4li4li4.tk:443";
 
