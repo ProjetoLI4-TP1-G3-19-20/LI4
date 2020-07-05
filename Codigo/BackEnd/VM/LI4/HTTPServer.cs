@@ -194,6 +194,12 @@ class HTTPServer {
             case "getNextVisit":
                 ProcessGetNextVisit(context);
                 break;
+            case "getNextVisitInterno":
+                ProcessGetNextVisitInterno(context);
+                break;
+            case "getNumberOfRequests":
+                ProcessGetNumberOfRequests(context);
+                break;
             default:
                 processDefault(context);
                 break;
@@ -810,6 +816,38 @@ class HTTPServer {
         int id = int.Parse(context.Request.QueryString["id"]);
 
         reply = visitanteDAO.getNextVisit(id);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
+    void ProcessGetNextVisitInterno(HttpListenerContext context) {
+        string reply = "";
+
+        string nome = context.Request.QueryString["nome"];
+
+        reply = pessoaDeInteresseDAO.getNextVisit(nome);
+
+        int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
+
+        context.Response.ContentType = "text/simple";
+        context.Response.ContentLength64 = size;
+        context.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        context.Response.OutputStream.Write(System.Text.Encoding.UTF8.GetBytes(reply), 0, size);
+
+    }
+
+    void ProcessGetNumberOfRequests(HttpListenerContext context) {
+        string reply = "";
+
+        string nome = context.Request.QueryString["nome"];
+
+        reply = pessoaDeInteresseDAO.getNumberOfRequests(nome);
 
         int size = System.Text.Encoding.UTF8.GetBytes(reply).Length;
 

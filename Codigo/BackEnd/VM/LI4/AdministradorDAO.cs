@@ -108,10 +108,6 @@ public class AdministradorDAO
 
                 mr.Close();
 
-                string query2 = "SELECT * FROM departamentos WHERE id_inst=`id_inst` ";
-                MySqlCommand mc2 = new MySqlCommand(query2, msc);
-                MySqlDataReader mr2 = mc2.ExecuteReader();
-
             }
         }
         catch (Exception e)

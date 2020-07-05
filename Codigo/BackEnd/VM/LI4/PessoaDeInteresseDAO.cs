@@ -223,5 +223,67 @@ namespace LI4 {
             return teste;
         }
 
+
+        public string getNextVisit(string nome) {
+            MySqlConnection msc = new MySqlConnection(Connection);
+            string str = "";
+            try {
+                msc.Open();
+                string query = "SELECT * FROM visitas WHERE visitado = @nome AND estado = 0 ORDER BY dataInicio;";
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Parameters.AddWithValue("@nome", nome);
+                MySqlDataReader mr = mc.ExecuteReader();
+
+                if (mr.Read()) {
+                    str = "{\"visitante\" : \"" + mr.GetString("idUser") + "\", \"data\" : \"" + mr.GetDateTime("dataInicio").Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds + "\"}";
+                }
+                else {
+                    str = "{\"visitante\" : \"-1\"}";
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return str;
+        }
+
+        public string getNumberOfRequests(string nome) {
+            MySqlConnection msc = new MySqlConnection(Connection);
+            string str = "";
+            try {
+                msc.Open();
+                string query = "SELECT COUNT(*) FROM pedidovisita WHERE visitado = @nome";
+                MySqlCommand mc = new MySqlCommand(query, msc);
+                mc.Parameters.AddWithValue("@nome", nome);
+                MySqlDataReader mr = mc.ExecuteReader();
+
+                if (mr.Read()) {
+                    str = mr.GetInt32("COUNT(*)").ToString();
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+            }
+            finally {
+                try {
+                    msc.Close();
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            return str;
+        }
+
     }
 }
